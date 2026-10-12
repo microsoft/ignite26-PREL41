@@ -35,7 +35,7 @@ Fill in the sections below yourself, then:
 ## 🔥PREL41: Unify operational and real-time data estates with Microsoft Fabric
 ### Session description
 
-Add your session description here. Keep it concise — 2-3 sentences about what attendees will learn and why it matters.
+Learn how to connect, ingest, mirror, and virtualize data across your organization using shortcuts, mirroring, Eventstream, and Data Factory in Microsoft Fabric. In this four-hour hands-on lab, you'll work with multiple internal and external data sources to build a unified data estate in OneLake using ETL/ELT pipelines, zero-copy shortcuts, and mirroring. Discover how to eliminate data silos, reduce duplication, and create an AI-ready foundation for analytics at enterprise scale.
 
 ### 🚀 Getting started
 
