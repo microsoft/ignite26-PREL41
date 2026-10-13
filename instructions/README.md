@@ -68,11 +68,67 @@ and explain how the database data is available in OneLake.
 
 ## Exercise 1.2: Link supplier documents
 
-Create a OneLake shortcut to the Supplier Quality content in SharePoint without
-copying the source files.
+The supplier certificates and recall procedure remain in SharePoint. In this
+exercise, you will make that content available in OneLake without copying it or
+creating an ingestion pipeline.
+
+### Check for an existing shortcut
+
+1. In the lakehouse **Explorer** pane, expand **Files**.
+1. Look for a shortcut named **SupplierQuality**.
+1. If the shortcut exists, open it and verify that you can see the supplier
+   certificate content and recall procedure, then continue to the completion
+   check.
+
+> [!Note] This state check makes the exercise safe to resume. Do not create a
+> second shortcut with a different name.
+
+### Start the shortcut
+
+1. In the **Explorer** pane, select the ellipsis (**...**) next to **Files**.
+1. Select **New shortcut**.
+1. In the **New shortcut** window, under **External sources**, select
+   **SharePoint Folder**.
+
+> [!Knowledge] A shortcut is a pointer to the source location. The files remain
+> in SharePoint, and deleting the shortcut does not delete the source content.
+
+### Select the supplier content
+
+1. On the connection page, select **Existing connection**.
+1. Select the connection supplied for the Contoso Fresh Supplier Quality
+   content.
+1. Select **Next**.
+1. Browse to the **Supplier Quality** library or folder.
+1. Select the checkbox next to the folder that contains the supplier
+   certificates and recall procedure.
+1. Select **Next**.
+
+> [!Alert] Use only the connection supplied in the lab. If the connection is
+> missing or Fabric asks you to create or sign in to a connection, stop and
+> notify the instructor.
+
+### Create and inspect the shortcut
+
+1. On the **Transform** page, select **Skip**. You will transform the
+   certificate metadata in Exercise 1.3.
+1. On the review page, select the pencil icon for the shortcut.
+1. For the shortcut name, enter ++SupplierQuality++, and then save the name.
+1. Verify that the selected source is the Supplier Quality content, and then
+   select **Create**.
+1. Wait for the lakehouse to refresh and display **SupplierQuality** under
+   **Files**.
+1. Open **SupplierQuality** and verify that you can browse the supplier
+   certificates and recall procedure.
+
+> [!Help] If the shortcut appears but its content is unavailable, refresh the
+> lakehouse. If the problem continues, confirm that you selected the Supplier
+> Quality folder and notify the instructor so the supplied SharePoint access can
+> be checked.
 
 **Completion check:** The supplier certificates and recall procedure are
-visible through the lakehouse **Files** area.
+visible under **Files** > **SupplierQuality**, and no source files were copied
+into the lakehouse.
 
 ## Exercise 1.3: Prepare certificate data
 

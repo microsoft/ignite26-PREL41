@@ -14,7 +14,10 @@ Record evidence for every completed test.
 | Narrow instruction pane | Tables, callouts, and lists remain readable at the target pane width. | Needs Studio verification | Requires Skillable preview. |
 | Fresh launch | A learner can complete the full workshop using a new instance. | Needs Studio verification | Requires provisioned Lab Profile. |
 | Resume | A learner can resume after each module without hidden state assumptions. | Needs Studio verification | Requires launched and resumed instances. |
-| SharePoint shortcut | Exercise 1.2 creates a readable shortcut without copying the source files. | Needs Studio verification | Requires the supplied SharePoint connection and content. |
+| SharePoint shortcut - fresh state | Exercise 1.2 creates `SupplierQuality` under **Files** without copying the source files. | Needs Studio verification | Requires the supplied SharePoint connection and content. |
+| SharePoint shortcut - resumed state | An existing readable `SupplierQuality` shortcut is reused without creating a duplicate. | Needs Studio verification | Requires a resumed or premodified instance. |
+| SharePoint shortcut - missing connection | The learner is told to stop instead of creating or signing in to a personal connection. | Needs Studio verification | Remove or deny the supplied connection in a test profile. |
+| SharePoint shortcut - source access | The shortcut exposes the supplier certificates and recall procedure. | Needs Studio verification | Confirm the provisioned SharePoint permissions and folder selection. |
 | Spark capacity and fallback | The notebook completes in time or the documented fallback allows progress. | Needs Studio verification | Requires concurrent launch testing. |
 | Eventstream replay | Telemetry arrives and supports the temperature-breach result. | Needs Studio verification | Requires live Fabric items. |
 | Security identities | Manager and partner identities return the intended rows and columns. | Needs Studio verification | Environment design is still open. |

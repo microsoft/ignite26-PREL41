@@ -29,6 +29,26 @@ Activities.
 | Rayfin starter | Runs in the supplied environment | Needs Studio verification |
 | OneLake Read API | Available to the starter application | Needs Studio verification |
 
+## Exercise 1.2 configuration
+
+Exercise 1.2 relies on the cooking-show environment described in `plan.md`.
+Studio and Fabric provisioning must satisfy these requirements:
+
+| Contract | Required configuration |
+|---|---|
+| Destination | A writable lakehouse with a visible **Files** area. |
+| Source type | **SharePoint Folder** in the OneLake shortcut flow. |
+| Connection | A preconfigured existing connection available to the learner without an additional sign-in. |
+| Source content | A **Supplier Quality** library or folder containing supplier certificates and the recall procedure. |
+| Shortcut name | `SupplierQuality` |
+| Transformation | Skipped in Exercise 1.2; transformation is reserved for Exercise 1.3. |
+| Resume state | If `SupplierQuality` already exists and is readable, the learner does not create a duplicate. |
+
+The learner path intentionally does not create a new cloud connection or collect
+a SharePoint site URL. If the provisioned connection is unavailable, the
+exercise must stop with instructor intervention rather than silently use a
+personal connection.
+
 ## Tokens and variables
 
 The learner instructions currently contain no active `@lab.*` replacement
