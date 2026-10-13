@@ -1,0 +1,18 @@
+CONTOSO FRESH SUPPLIER QUALITY CERTIFICATE
+
+Certificate ID: CERT-2025-027
+Supplier ID: SUP-027
+Supplier name: Woodgrove Creamery
+Certification: FSSC 22000
+Certificate number: FSSC-WGC-2025-0734
+Certifying body: Contoso Quality Assurance Services
+Issued date: 2025-10-01
+Expiration date: 2026-09-30
+Status: Expired
+Audit score: 88
+Product scope: Cheese and dairy ingredients
+
+The certificate is no longer current. New purchasing and shipment releases
+require an approved exception or a renewed certificate.
+
+This is synthetic workshop content and is not a real certification record.

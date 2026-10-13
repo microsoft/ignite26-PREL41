@@ -1,0 +1,33 @@
+SUPPLIER QUALITY NOTICE
+
+Notice ID: RCL-2026-1013-01
+Issued: 2026-10-13 06:00 Europe/Paris
+Supplier ID: SUP-014
+Supplier name: Alpine Valley Dairy Cooperative
+Product: Contoso Fresh Greek Yogurt 500 g
+Affected lot: YG-2291
+Production window: 2026-10-11 22:00 through 2026-10-12 02:00
+Notice type: Precautionary recall investigation
+Status: Open
+
+Reason for notice
+
+A supplier quality test identified a possible contamination risk associated
+with the affected production window. Contoso Fresh must identify all affected
+inventory and shipments while the supplier completes confirmatory testing.
+
+Required Contoso Fresh actions
+
+1. Place remaining inventory for lot YG-2291 on hold.
+2. Identify stores and distribution locations that received the lot.
+3. Identify trucks and routes that carried the lot.
+4. Review temperature telemetry for affected shipments.
+5. Confirm the supplier certification status.
+6. Restrict recall data to approved regional and partner roles.
+
+Supplier contact
+
+Use the pre-provisioned workshop identity and communication channels. This
+synthetic notice contains no real contact details.
+
+This is fictional workshop content and is not a real recall notice.

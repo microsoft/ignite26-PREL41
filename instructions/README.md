@@ -99,7 +99,7 @@ creating an ingestion pipeline.
 1. Select the connection supplied for the Contoso Fresh Supplier Quality
    content.
 1. Select **Next**.
-1. Browse to the **Supplier Quality** library or folder.
+1. Browse to the **supplierQuality** library or folder.
 1. Select the checkbox next to the folder that contains the supplier
    certificates and recall procedure.
 1. Select **Next**.
@@ -114,7 +114,7 @@ creating an ingestion pipeline.
    certificate metadata in Exercise 1.3.
 1. On the review page, select the pencil icon for the shortcut.
 1. For the shortcut name, enter ++SupplierQuality++, and then save the name.
-1. Verify that the selected source is the Supplier Quality content, and then
+1. Verify that the selected source is the **supplierQuality** content, and then
    select **Create**.
 1. Wait for the lakehouse to refresh and display **SupplierQuality** under
    **Files**.
@@ -123,8 +123,8 @@ creating an ingestion pipeline.
 
 > [!Help] If the shortcut appears but its content is unavailable, refresh the
 > lakehouse. If the problem continues, confirm that you selected the Supplier
-> Quality folder and notify the instructor so the supplied SharePoint access can
-> be checked.
+> **supplierQuality** folder and notify the instructor so the supplied
+> SharePoint access can be checked.
 
 **Completion check:** The supplier certificates and recall procedure are
 visible under **Files** > **SupplierQuality**, and no source files were copied

@@ -1,0 +1,22 @@
+CONTOSO FRESH SUPPLIER QUALITY CERTIFICATE
+
+Certificate ID: CERT-2025-021
+Supplier ID: SUP-021
+Supplier name: Northwind Frozen Foods
+Certification: BRCGS Food Safety
+Certificate number: BRC-NFF-2025-1182
+Certifying body: Contoso Quality Assurance Services
+Issued date: 2025-12-01
+Expiration date: 2026-11-30
+Status: Expiring soon
+Audit score: 91
+Product scope: Frozen prepared foods
+
+The certifying body confirms that the supplier quality system met the stated
+certification requirements on the issue date. Continued approval depends on
+maintaining the certified controls and reporting material changes.
+
+The Contoso Fresh supplier quality team must complete renewal review before the
+expiration date.
+
+This is synthetic workshop content and is not a real certification record.

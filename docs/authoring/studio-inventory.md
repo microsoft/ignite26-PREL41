@@ -39,7 +39,7 @@ Studio and Fabric provisioning must satisfy these requirements:
 | Destination | A writable lakehouse with a visible **Files** area. |
 | Source type | **SharePoint Folder** in the OneLake shortcut flow. |
 | Connection | A preconfigured existing connection available to the learner without an additional sign-in. |
-| Source content | A **Supplier Quality** library or folder containing supplier certificates and the recall procedure. |
+| Source content | A **supplierQuality** library or folder containing supplier certificates and the recall procedure. |
 | Shortcut name | `SupplierQuality` |
 | Transformation | Skipped in Exercise 1.2; transformation is reserved for Exercise 1.3. |
 | Resume state | If `SupplierQuality` already exists and is readable, the learner does not create a duplicate. |
