@@ -16,7 +16,7 @@ and data access concepts. Product-specific actions remain guided.
 
 | Outcome | Acceptance criteria |
 |---|---|
-| Unify operational and document data | Operational records and Supplier Quality files are visible through OneLake without a learner-built copy pipeline. |
+| Unify operational and document data | Operational records and Supplier Quality files are visible through OneLake without a learner-built copy pipeline. The document shortcut is zero-copy; certificate transformation materializes a managed Delta table. |
 | Add interoperable historical data | The supplied Spark flow produces Apache Iceberg tables that are accessible through OneLake. |
 | Add and interpret a real-time signal | Truck telemetry identifies shipments above 4 C for more than 20 minutes. |
 | Govern data access | Regional manager and logistics partner identities receive the intended rows and columns. |
@@ -64,6 +64,16 @@ Module 1 uses the seven current-state tables in the
 [shared data model](contoso-fresh-data-model.md) to identify current inventory.
 These tables contain neither orders nor shipments. Module 2 owns shipment
 history and answers which stores received affected products in the past.
+
+The supplied operational source must expose its seven reference tables through
+a SQL analytics endpoint under `dbo`. This is a separate endpoint from the
+destination lakehouse; provisioning must not place unowned current-state
+tables in that lakehouse's `dbo` schema, where Module 2 creates its Iceberg
+tables. Both representations use the same committed reference data.
+
+Exercise 1.3 creates `dbo.supplier_certificates` in the destination lakehouse.
+This additional Delta table is not owned or rewritten by Module 2 and is not
+one of the nine operational/history tables selected for its recall agent.
 
 ## Resource ownership
 

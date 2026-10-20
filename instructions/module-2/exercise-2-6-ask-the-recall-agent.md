@@ -46,15 +46,16 @@ Cell 26 adds the lakehouse to the agent, but none of its tables. You choose whic
 
 1. In the left navigation, select the workspace, then open **contoso_recall_agent**. Its type is **Data agent**.
 
-    ![contoso_recall_agent in the workspace item list, with type Data agent](media/exercise-2-6-open-agent.png)
+1. In the **Explorer** pane, select these nine tables explicitly:
 
-1. In the **Explorer** pane, make sure all 9 tables in `dbo` and `history` are ticked. If the lakehouse shows **No tables selected yet**, tick the lakehouse to select all 9.
+   - In `dbo`: **suppliers**, **products**, **locations**, **carriers**,
+     **trucks**, **lots**, and **store_inventory**.
+   - In `history`: **lot_history** and **shipment_history**.
 
-    ![The agent Explorer pane with the lakehouse ticked and its 9 tables selected](media/exercise-2-6-select-tables.png)
+   Leave **supplier_certificates** and any later-module tables unselected.
+   Selecting the entire lakehouse could include those additional tables.
 
 1. If **Standard runtime supports up to 25 tables** opens, select **Continue with Standard**.
-
-    ![The Standard runtime supports up to 25 tables window with Continue with Standard](media/exercise-2-6-standard-runtime.png)
 
 ## Ask the recall questions
 
@@ -67,8 +68,6 @@ The two questions need different tables: store inventory for where the lot is no
 
 1. Select **Expand response** > **Steps completed**, then expand the step.
 
-    ![Steps completed expanded to show the SQL the agent ran](media/exercise-2-6-steps-completed.png)
-
     The step shows the SQL the agent wrote and the tables it queried.
 
 > [!Help] If an answer gives a different count, check that all 9 tables are ticked, then ask again.
@@ -79,8 +78,6 @@ A data agent has two versions. The draft is what you edit and what the chat box 
 
 1. Select **Publish**.
 1. In the window that asks for a description, keep the description cell 26 set, or enter ++Answers recall questions about Contoso Fresh lots, stores, and shipments.++ if it's empty. Then select **Publish**.
-
-    ![The Publish window for contoso_recall_agent with its description](media/exercise-2-6-publish.png)
 
     The published version now queries the same 9 tables you tested. You can keep changing the draft without changing what regional managers see.
 

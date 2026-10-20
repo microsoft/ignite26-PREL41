@@ -61,7 +61,10 @@ the account, and its Admin role and capacity assignment were verified:
 - [x] Export the deployed notebook and verify all cell types and sources match
   the repository. Both normalized SHA-256 cell digests are
   `869eb233c33fbfb0c4bacfb5bf9ff8ac388f29ce5edf96133ab0025d2a6c14c2`.
-- [ ] Attach the lakehouse and execute the notebook in a standard session.
+- [x] Attach the lakehouse through the learner UI and verify the saved
+  lakehouse name, ID, and workspace ID through Fabio's notebook export.
+- [ ] Complete the full learner notebook, including package-based cells,
+  in a standard session.
 - [x] Complete a native standard-session run of existing cells 1-15 in an
   author validation copy, filling cell 13 with the documented learner answer.
 - [x] Execute the existing SQL endpoint refresh and AI Functions cells in a
@@ -104,18 +107,47 @@ account is `alvidela.local@cadata2612.onmicrosoft.com` in the requested
 tenant, and `fabio workspace show` successfully reads the isolated workspace.
 Continue using Fabio for Fabric operations.
 
-The notebook UI displayed the attached `contoso_fresh` lakehouse, but its
-saved binding still needs verification. The Add data items menu screenshot
-was captured and visually checked. The embedded browser's constrained
-viewport produced clipped or blank captures for other steps; those files
-were discarded rather than presented as usable screenshots. Ten Module 2
-image targets remain missing.
+Fabio's saved notebook export confirms that the learner UI attachment
+persisted with the correct lakehouse name, ID, and workspace ID. The Add data
+items menu screenshot was captured and visually checked. The embedded
+browser's constrained viewport produced clipped or blank captures for other
+steps; those files were discarded. Ten absent image placeholders were removed
+while preserving self-contained learner steps.
 
-The integrated browser still prompts for sign-in; browser and CLI sessions
-are separate. CLI-backed Fabric API access is working. AI/OneLake settings,
-workload execution, SharePoint access, and Skillable access remain unverified.
+The integrated browser now opens the workspace and notebook; browser and CLI
+sessions remain separate. Native core and AI execution are verified.
+OneLake SAS settings, package-based paths, SharePoint access, and Skillable
+access remain unverified. Fabio found no accessible SharePoint or Supplier
+Quality connection matching the workshop source.
 High-concurrency notebook execution is enabled in the workspace; the
 existing Module 2 contract requires a standard session for its package cells.
+
+The Module 1 instructions now include the CSV-only certificate transformation,
+its managed-copy semantics, resume checks, and exact inventory SQL. That SQL
+returned nine stores against the matching Module 2 data: eight North and one
+East. The separate operational source and SharePoint transformation are not
+yet validated. The certificate table is explicitly excluded from Module 2's
+nine-table agent selection.
+
+Module 4 now documents supported role names, reader-only identities, user
+identity endpoint mode, separate table rules, cost-column exclusions, raw-file
+restrictions, and negative tests. Owner queries confirmed eight North receiving
+stores and eight CAR-02 lines reaching eight stores for YG-2291. These checks
+establish expected results, not effective authorization; restricted-identity
+testing is still required.
+
+Both role definitions are committed under `infra/onelake/` and were created
+through Fabio without assigning any identities. Read-back assertions verified
+their complete permissions, row constraints, partner column allowlist, and
+empty memberships against the files. An explicitly empty `columns` constraint
+array initially caused BadRequest; omitting that unused field resolved the
+error. The corrected source is the form accepted by Fabric.
+
+DefaultReader's permissions and membership are unchanged. Its server-assigned
+ID changed during provisioning, so verification compares policy content rather
+than treating IDs as stable. The owner still reads 13 receiving stores through
+SQL, and the production agent still answers with the original nine current
+stores. No restricted-identity pass is claimed.
 
 ## Phase 1: Consolidate the workshop contract
 
@@ -135,7 +167,7 @@ existing Module 2 contract requires a standard session for its package cells.
 
 ## Phase 2: Complete all learner modules
 
-- [ ] Welcome: environment checks, prerequisites, recall questions, and both
+- [x] Document welcome environment checks, prerequisites, recall questions, and both
   guided and self-paced starting paths.
 - [ ] Module 1: operational recall data, supplier-document shortcut,
   transformations, completion checks, and downstream handoff.
@@ -145,6 +177,10 @@ existing Module 2 contract requires a standard session for its package cells.
   above-4-C-for-more-than-20-minutes rule, shipment joins, and expected results.
 - [ ] Module 4: regional-manager and logistics-partner access, row/column
   restrictions, denied-access checks, and identity-specific expected results.
+- [x] Implement and deploy unassigned OneLake policy definitions for North and
+  CAR-02, and assert their saved content while preserving default permissions.
+- [ ] Supply and exercise actual restricted reader identities against those
+  policies, the SQL endpoint, documents, telemetry, and console.
 - [ ] Module 5: Recall Console starter and complete flow, governed OneLake
   reads, inventory/history/temperature/document views, and access verification.
 - [ ] Wrap-up: demonstrate answers to all scenario questions and document
@@ -156,7 +192,9 @@ existing Module 2 contract requires a standard session for its package cells.
 
 - [ ] Provide one canonical attendee entry point and verify Skillable
   navigation for all exercises.
-- [ ] Complete screenshots and remove broken image/link references.
+- [x] Retain the visually checked menu screenshot and replace missing
+  Module 2 image placeholders with self-contained instructions.
+- [ ] Verify remaining repository-relative links and Skillable navigation.
 - [x] Correct the known PR #10 loop-body indentation and remove its two
   missing screenshot references without replacing them with invented images.
 - [ ] Verify all examples.

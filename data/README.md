@@ -6,7 +6,10 @@ documents for the SharePoint-backed workshop exercises.
 ## Upload the Supplier Quality content
 
 Upload the contents of `data/sharepoint/` to the SharePoint library or folder
-named `supplierQuality`. Preserve this folder structure:
+named `supplierQuality`, with one exception: upload only
+`metadata/supplier-certificates.csv` from the metadata folder. Keep the JSON
+alternative in the repository, not alongside the CSV in the transformation's
+source folder. Preserve this folder structure:
 
 ```text
 supplierQuality/
@@ -16,9 +19,11 @@ supplierQuality/
   procedures/
 ```
 
-Exercise 1.2 creates a OneLake shortcut to this content. Exercise 1.3 uses the
-CSV or JSON file in `metadata/` to create a queryable supplier certificate
-table.
+Exercise 1.2 creates a OneLake shortcut to this content. Exercise 1.3 transforms
+the CSV in `metadata/` into `dbo.supplier_certificates`, a managed Delta table
+with four rows. Its `document_path` values remain relative to the
+`SupplierQuality` document shortcut. The transformation materializes and
+synchronizes data; only the untransformed document shortcut is zero-copy.
 
 All company names, certification records, audit results, and recall details in
 this dataset are fictional and intended only for the workshop.

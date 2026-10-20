@@ -18,14 +18,14 @@ Activities.
 | Dependency | Required behavior | Status |
 |---|---|---|
 | Fabric workspace | Contains the Contoso Fresh workshop items | Exact name required |
-| Operational data source | Contains the seven current-state tables in the shared data model; orders and shipments are not part of this source | Provisioning and exact name require verification |
+| Operational data source | Separate source with the seven current-state tables exposed as `dbo` tables through its SQL analytics endpoint; uses the committed reference data and does not prepopulate Module 2's destination `dbo` tables | Provisioning and exact name require verification |
 | Target lakehouse | Accepts learner-created shortcuts and later module output | Exact name required |
 | SharePoint connection | Preconfigured for the Supplier Quality content | Exact name required |
 | SharePoint permissions | Learner can read the target library or folder | Needs Studio verification |
 | Module 2 notebook | Imported from `src/notebooks/module-2-shipment-history.ipynb`; see Module 2 configuration | Needs Studio verification |
 | Spark fallback table | Allows the workshop to continue after capacity or startup failure | Needs Studio verification |
 | Eventstream | Replays supplied truck telemetry | Needs Studio verification |
-| Security test identities | Demonstrate regional and partner access | Open environment decision |
+| Security test identities | Separate reader-only North manager and CAR-02 partner accounts, without broader grants or access to the separate operational source | Identities and effective permissions require verification |
 | Rayfin starter | Runs in the supplied environment | Needs Studio verification |
 | OneLake Read API | Available to the starter application | Needs Studio verification |
 
@@ -50,6 +50,23 @@ a SharePoint site URL. If the provisioned connection is unavailable, the
 exercise must stop with instructor intervention rather than silently use a
 personal connection.
 
+## Exercise 1.3 configuration
+
+- Provision `supplierQuality/metadata/` with only
+  `supplier-certificates.csv`; do not upload the repository's JSON alternative
+  to the same folder.
+- Allow the supplied connection to read that folder when creating a table
+  shortcut, in addition to the document shortcut.
+- The learner creates `dbo.supplier_certificates` with CSV transformation,
+  comma separation, and a header row. Expect four records.
+- Transformation uses Fabric Spark compute and materializes a managed Delta
+  table. Its completion time and refresh behavior need live validation; the
+  ordinary document shortcut's zero-copy behavior does not apply.
+- Keep the table outside Module 2's nine-table agent selection.
+
+The supported transformation flow is described in
+[Transform structured files into Delta tables](https://learn.microsoft.com/fabric/onelake/shortcuts/transformations).
+
 ## Module 2 configuration
 
 All of Module 2 runs in one notebook that writes Iceberg tables to the
@@ -71,6 +88,46 @@ lakehouse. Studio and Fabric provisioning must satisfy these requirements:
 
 [The Contoso Fresh data model](contoso-fresh-data-model.md) describes every
 table and the results the data must produce.
+
+## Module 4 configuration
+
+- The [infrastructure role definitions](../../infra/README.md) reproduce the
+  table and column scopes without assigning any identities. Both were created
+  and read back through Fabio in the consolidation workspace; effective
+  reader access is still unverified.
+- Use the alphanumeric role names `RegionalManagerNorth` and
+  `LogisticsPartner`. The partner scope is Wide World Logistics, `CAR-02`.
+- Provision distinct restricted identities, not additional aliases for the
+  engineer. Do not grant those identities Admin, Member, Contributor,
+  ReadWrite, or an overriding ReadAll permission.
+- Configure the destination SQL analytics endpoint for **User's identity
+  access mode** before the workshop. Do not silently change a populated
+  author's endpoint: switching access modes can remove inline metadata
+  objects. Confirm the effect during provisioning.
+- Regional RLS applies separately to locations, inventory, and shipment
+  history. North is `STR-001` through `STR-016` in this snapshot; OneLake RLS
+  does not support joining the location dimension in a row rule.
+- Partner RLS limits shipment, truck, and carrier tables to `CAR-02`.
+  Shipment CLS hides `supplier_cost_eur`. Do not grant the partner lot tables
+  containing `supplier_unit_cost_eur`, raw reference/history folders, or the
+  separate operational source.
+- Review DefaultReader and every other effective grant. The role model is
+  additive, so narrower rules do not cancel wider access from another role.
+- As the North manager, expect eight current stores and eight historical
+  receiving stores for YG-2291. As the partner, expect eight shipment lines
+  for that lot reaching eight stores. These are dataset expectations, not
+  proof that the identities have passed access checks.
+- Allow up to five minutes for SQL endpoint security synchronization, then
+  rerun the positive and negative identity checks in Exercise 4.3.
+- Telemetry and console authorization remain separate checks. Do not assume
+  that table-role configuration proves application or data-agent identity
+  propagation.
+
+Product behavior is described in:
+
+- [Create and manage OneLake security roles](https://learn.microsoft.com/fabric/onelake/security/create-manage-roles)
+- [Row-level security syntax](https://learn.microsoft.com/fabric/onelake/security/row-level-security-syntax)
+- [SQL analytics endpoint access modes](https://learn.microsoft.com/fabric/onelake/security/sql-analytics-endpoint-onelake-security)
 
 ## Tokens and variables
 
@@ -94,8 +151,10 @@ are declared.
 
 ## Assets and external dependencies
 
-The canonical learner path references Module 2 screenshots under
-`instructions/module-2/media/`; those screenshots are still outstanding.
+The canonical learner path includes a visually checked Add data items menu
+screenshot under `instructions/module-2/media/`. Missing image placeholders
+were removed; the steps use explicit control names and observable results
+without depending on unavailable captures.
 The retained automotive contribution also references images under
 `instructions/media/`. These must be checked and adapted before integration
 into the Contoso Fresh path.

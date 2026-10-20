@@ -1,0 +1,51 @@
+{
+  "name": "RegionalManagerNorth",
+  "kind": "Policy",
+  "decisionRules": [
+    {
+      "effect": "Permit",
+      "permission": [
+        {
+          "attributeName": "Path",
+          "attributeValueIncludedIn": [
+            "/Tables/dbo/locations",
+            "/Tables/dbo/store_inventory",
+            "/Tables/history/shipment_history",
+            "/Tables/dbo/suppliers",
+            "/Tables/dbo/products",
+            "/Tables/dbo/carriers",
+            "/Tables/dbo/trucks",
+            "/Tables/dbo/lots",
+            "/Tables/history/lot_history",
+            "/Tables/dbo/supplier_certificates",
+            "/Files/SupplierQuality"
+          ]
+        },
+        {
+          "attributeName": "Action",
+          "attributeValueIncludedIn": ["Read"]
+        }
+      ],
+      "constraints": {
+        "rows": [
+          {
+            "tablePath": "/Tables/dbo/locations",
+            "value": "SELECT * FROM dbo.locations WHERE region = 'North'"
+          },
+          {
+            "tablePath": "/Tables/dbo/store_inventory",
+            "value": "SELECT * FROM dbo.store_inventory WHERE location_id IN ('STR-001', 'STR-002', 'STR-003', 'STR-004', 'STR-005', 'STR-006', 'STR-007', 'STR-008', 'STR-009', 'STR-010', 'STR-011', 'STR-012', 'STR-013', 'STR-014', 'STR-015', 'STR-016')"
+          },
+          {
+            "tablePath": "/Tables/history/shipment_history",
+            "value": "SELECT * FROM history.shipment_history WHERE store_id IN ('STR-001', 'STR-002', 'STR-003', 'STR-004', 'STR-005', 'STR-006', 'STR-007', 'STR-008', 'STR-009', 'STR-010', 'STR-011', 'STR-012', 'STR-013', 'STR-014', 'STR-015', 'STR-016')"
+          }
+        ]
+      }
+    }
+  ],
+  "members": {
+    "fabricItemMembers": [],
+    "microsoftEntraMembers": []
+  }
+}

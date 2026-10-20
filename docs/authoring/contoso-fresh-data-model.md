@@ -139,9 +139,17 @@ that holds Module 1's `SupplierQuality` shortcut. Skillable sets its name.
 | History files and the correction file | `Files/history/` | CSV |
 | suppliers, products, locations, carriers, trucks, lots, store_inventory | `dbo` schema | Apache Iceberg |
 | lot_history, shipment_history | `history` schema | Apache Iceberg |
+| supplier_certificates | `dbo` schema | Managed Delta table from the SharePoint CSV transformation |
 
 Module 2 builds its `dbo` tables from `Files/reference/` and doesn't read
 Module 1's copy of the current state.
+
+Module 1's `supplier_certificates` table is separate from the seven reference
+tables. It contains the four rows from
+[`supplier-certificates.csv`](../../data/sharepoint/metadata/supplier-certificates.csv).
+Its key is `certificate_id`; `supplier_id` links to suppliers and lots.
+`document_path` resolves relative to `Files/SupplierQuality/`, not the metadata
+folder. Keep this table outside Module 2's explicit nine-table agent selection.
 
 Spark writes each table to the lakehouse **Tables** folder, at
 `Tables/<schema>/<table>`. Other engines read the tables through the OneLake

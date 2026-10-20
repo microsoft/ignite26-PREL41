@@ -43,6 +43,10 @@ OneLake takes from a few seconds to 2 minutes to show a new table through the RE
 1. Run the next code cell.
 1. Check that the table lists `carriers`, `locations`, `lots`, `products`, `store_inventory`, `suppliers` and `trucks`.
 
+    The listing may also contain `supplier_certificates` from Module 1.
+    The check requires the seven current-state tables, not exactly seven
+    entries in the schema.
+
     Spark wrote these tables as files, and the REST catalog now lists them. Any engine with the lakehouse's REST address and a token can find them the same way.
 
 ## Cell 5: Read lot YG-2291
@@ -72,4 +76,4 @@ Cell 7 asks Exercise 1.4's question of the Iceberg tables. It joins store invent
 
     This is the current state: where the lot is now. In Exercise 2.3, you add where it has been.
 
-**Completion check:** Cell 4 listed 7 `dbo` tables through the OneLake REST catalog, and cell 7 printed `9 stores hold YG-2291`.
+**Completion check:** Cell 4 listed all seven current-state `dbo` tables through the OneLake REST catalog, and cell 7 printed `9 stores hold YG-2291`.

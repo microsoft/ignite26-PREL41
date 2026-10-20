@@ -6,7 +6,7 @@ Record evidence for every completed test.
 | Test | Expected result | Status | Evidence |
 |---|---|---|---|
 | Markdown structure | Headings, lists, tables, code fences, callouts, and page breaks are structurally valid. | Pass | Source inspection of `instructions/README.md`. |
-| Local links | All repository-relative links resolve. | Fail | Module 2 still references missing screenshots; see the screenshots check. |
+| Local links | Learner and supporting-content repository-relative file targets resolve. | Pass | Manually checked Markdown targets under the root README, instructions, authoring docs, data, source, and infrastructure against existing files and folders, including the root banner image. Skillable navigation remains a separate check. |
 | Placeholder scan | Learner instructions contain no template placeholders or unresolved author notes. | Pass | Source inspection of `instructions/README.md`. |
 | Token inventory | Every active `@lab.*` reference is listed and configured. | Not applicable | No active tokens are present. |
 | Activity inventory | Every Activity alias resolves to a configured Studio Activity. | Not applicable | No Activity aliases are present. |
@@ -18,6 +18,8 @@ Record evidence for every completed test.
 | SharePoint shortcut - resumed state | An existing readable `SupplierQuality` shortcut is reused without creating a duplicate. | Needs Studio verification | Requires a resumed or premodified instance. |
 | SharePoint shortcut - missing connection | The learner is told to stop instead of creating or signing in to a personal connection. | Needs Studio verification | Remove or deny the supplied connection in a test profile. |
 | SharePoint shortcut - source access | The shortcut exposes the supplier certificates and recall procedure. | Needs Studio verification | Confirm the provisioned SharePoint permissions and folder selection. |
+| Certificate transformation | The CSV-only metadata folder produces four rows in `dbo.supplier_certificates`, with readable document paths. | Needs Studio verification | Full learner steps and source-folder requirements are documented. No applicable supplied SharePoint connection was visible to the requested account through Fabio. |
+| Current inventory | The source query returns nine stores: eight North and one East. | Needs Studio verification | The exact query passed against the matching Module 2 representation in the consolidation workspace. The separate operational source remains unverified. |
 | Module 2 - notebook import | **module-2-shipment-history** is in the workspace, cell 1 reads **Input is hidden**, and Exercise 2.1 attaches the lakehouse from the OneLake catalog. | Needs Studio verification | Passed in a development workspace on 2026-10-20. |
 | Module 2 - bundled Iceberg | On the workspace default Runtime 2.0, with no Environment, cell 2 prints `Iceberg 1.11.0`. | Needs Studio verification | Passed in a development workspace on 2026-10-20. |
 | Module 2 - Iceberg row-level changes | On bundled Iceberg 1.11.0, cells 11 to 13 insert 3 lines, update 1, and delete 20. Cell 14 counts 12 stores at the first snapshot and 13 at the latest. | Needs Studio verification | Passed in a development workspace on 2026-10-20. |
@@ -28,10 +30,10 @@ Record evidence for every completed test.
 | Module 2 - SQL endpoint refresh | Cell 25 lists each table's `_delta_log` folder, which starts OneLake's Delta conversion, and the endpoint reads all 9 tables within 5 minutes. The learner has the Contributor role. | Needs Studio verification | Took about 40 seconds in a development workspace on 2026-10-20. |
 | Module 2 - recall agent | Cell 26 publishes `contoso_recall_agent`. After the learner selects the 9 tables, the agent answers that 9 stores hold YG-2291 and 13 received it. The learner then publishes the agent from its page, so the published version has the 9 tables. | Needs Studio verification | Passed in a development workspace on 2026-10-20, except the learner's publish step. |
 | Module 2 - exercise links | Each Module 2 link in `instructions/README.md` opens its exercise file in the Skillable pane. | Needs Studio verification | Skillable doesn't document links between instruction files. |
-| Module 2 - screenshots | Every image link under `instructions/module-2/` resolves. | Fail | The Add data items menu screenshot is captured and visually checked. The other 10 image targets are still missing; clipped or blank captures were discarded. |
+| Module 2 - screenshots | Every image link under `instructions/module-2/` resolves. | Pass | The retained Add data items menu image is present and visually checked. Ten missing image placeholders were removed; the surrounding steps remain self-contained. |
 | Spark capacity and fallback | The notebook completes in time or the documented fallback allows progress. | Needs Studio verification | Requires concurrent launch testing. |
 | Eventstream replay | Telemetry arrives and supports the temperature-breach result. | Needs Studio verification | Requires live Fabric items. |
-| Security identities | Manager and partner identities return the intended rows and columns. | Needs Studio verification | Environment design is still open. |
+| Security identities | Manager and partner identities return the intended rows and columns. | Needs Studio verification | Reader-only identities, endpoint access mode, role scopes, cost exclusions, and negative checks are documented. Restricted identities are not yet supplied or exercised. |
 | Recall Console | The application reads OneLake data and respects OneLake Security. | Needs Studio verification | Requires Rayfin and OneLake Read API access. |
 | Keyboard and zoom | Required actions remain usable with keyboard navigation and zoom. | Needs Studio verification | Requires learner UI and product UI testing. |
 | Independent learner QA | A reviewer completes the workshop verbatim within 240 minutes. | Needs Studio verification | Independent run not yet performed. |
@@ -49,7 +51,11 @@ not replace Skillable validation or lower-privilege identity checks.
 | SQL analytics endpoint | Pass | Existing cell 25 completed in job `80912c76-1fb7-4a18-b7e5-510fa05f1649`. Independent Fabio SQL queries returned 9 current stores and 13 receiving stores. |
 | Published data-agent service | Pass | Fabio created `contoso_recall_agent`, configured its instructions, selected nine tables, and published it. Published queries returned the expected 9 and 13 stores with store IDs. |
 | Learner SDK and DuckDB paths | Needs Studio verification | The runtime probe found neither `duckdb` nor `fabric-data-agent-sdk` installed. No packages were installed. Native Fabio agent provisioning is not evidence that cells 16-20 or 24-26 have passed. |
-| Default lakehouse binding | Pass | Omitting the complete native execution binding triggered the notebook's explicit starting check. Bound native runs completed. The learner's Explorer attachment step still needs UI verification. |
+| Default lakehouse binding | Pass | The learner UI attachment persisted: Fabio's saved notebook export contains the expected lakehouse ID, name, and workspace ID. Bound native validation runs also completed. |
+| Module 1 inventory query | Pass | The exact learner SQL returned nine positive-inventory stores against the Module 2 reference representation: eight North and one East. The separate Module 1 source was not exercised. |
+| Restricted-result expectations | Pass | Owner-run SQL confirmed eight North receiving stores and eight CAR-02 shipment lines reaching eight stores for YG-2291. These are dataset checks, not authorization tests. |
+| OneLake policy provisioning | Pass | Fabio created the unassigned RegionalManagerNorth and LogisticsPartner policies. Read-back assertions matched the committed path grants, row rules, fourteen permitted partner shipment columns, and empty memberships. DefaultReader permissions and membership were unchanged. |
+| Post-policy owner behavior | Pass | SQL still returned 13 receiving stores; the production data agent still listed the original nine current stores after role creation. This is not restricted-identity evidence. |
 | Diagnostic session cleanup | Pass | The separate diagnostic Livy session was stopped and confirmed `killed`. Livy lacks the notebook's mounted default lakehouse and is not a substitute for this learner path. |
 
 The first unchanged core run stopped at cell 13's intentional

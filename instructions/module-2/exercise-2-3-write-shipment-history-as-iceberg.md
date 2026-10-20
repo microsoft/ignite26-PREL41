@@ -6,7 +6,9 @@ In this exercise, you write five years of lot and shipment history as Iceberg ta
 
 ## Check your starting point
 
-Cell 4 listed 7 `dbo` tables. If you haven't run it, finish Exercise 2.2 first.
+Cell 4 listed the seven current-state `dbo` tables. It may also show the
+certificate table from Module 1. If you haven't run it, finish Exercise 2.2
+first.
 
 ## Cell 8: Write the history tables
 
@@ -60,8 +62,6 @@ The 20 `delete` rows are the lines of shipments `SHP-208999` and `SHP-209240`. T
 
 1. In cell 13, find the line `condition = None`.
 1. Replace `None` with a SQL condition, as a Python string, that matches the 20 `delete` rows in `corrections` on both `shipment_id` and `line_no`.
-
-    ![Cell 13 with the condition line ready to edit](media/exercise-2-3-cell-13-condition.png)
 
 1. Run the cell.
 1. Check that it prints `20 rows deleted`.

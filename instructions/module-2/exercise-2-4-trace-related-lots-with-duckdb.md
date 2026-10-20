@@ -22,7 +22,9 @@ DuckDB isn't part of the Fabric runtime, so cell 16 installs it for this session
 Cell 17 loads DuckDB's Iceberg extension and attaches the OneLake REST catalog as a database named `onelake`. It signs in with your Fabric token, taken from the notebook. For each table DuckDB reads, the REST catalog hands it short-lived storage credentials, called vended credentials, so DuckDB needs no storage keys.
 
 1. Run the next code cell.
-1. Check that it lists 9 tables: 7 in `dbo`, plus `lot_history` and `shipment_history` in `history`.
+1. Check that the listing includes the seven current-state tables in `dbo`,
+   plus `lot_history` and `shipment_history` in `history`. Additional tables
+   such as Module 1's certificate metadata may also appear.
 
     These are the tables you wrote with Spark. In DuckDB, their names start with `onelake`, such as `onelake.history.lot_history`.
 
