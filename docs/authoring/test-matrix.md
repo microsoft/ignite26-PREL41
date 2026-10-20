@@ -32,7 +32,7 @@ Record evidence for every completed test.
 | Module 2 - exercise links | Each Module 2 link in `instructions/README.md` opens its exercise file in the Skillable pane. | Needs Studio verification | Skillable doesn't document links between instruction files. |
 | Module 2 - screenshots | Every image link under `instructions/module-2/` resolves. | Pass | The retained Add data items menu image is present and visually checked. Ten missing image placeholders were removed; the surrounding steps remain self-contained. |
 | Spark capacity and fallback | The notebook completes in time or the documented fallback allows progress. | Needs Studio verification | Requires concurrent launch testing. |
-| Eventstream replay | Telemetry arrives and supports the temperature-breach result. | Needs Studio verification | Native custom inlet through Eventstream to actual Delta output passed in the consolidation workspace. All 34 canonical fixture payloads and six boundary outcomes matched. Learner replay control, full-fleet coverage, and fresh Skillable launch remain unverified. |
+| Eventstream replay | Telemetry arrives and supports the temperature-breach result. | Needs Studio verification | The shipped producer sent 35 messages through the native custom inlet and all 35 appeared in actual Delta output. Canonical events remain 34 after replay. The supplied SQL returns all 13 affected shipments and preserves six boundary outcomes. Terminal/control delivery, full-fleet coverage, and fresh Skillable launch remain unverified. |
 | Security identities | Manager and partner identities return the intended rows and columns. | Needs Studio verification | Reader-only identities, endpoint access mode, role scopes, cost exclusions, and negative checks are documented. Restricted identities are not yet supplied or exercised. |
 | Recall Console | The application reads OneLake data and respects OneLake Security. | Needs Studio verification | Requires Rayfin and OneLake Read API access. |
 | Keyboard and zoom | Required actions remain usable with keyboard navigation and zoom. | Needs Studio verification | Requires learner UI and product UI testing. |
@@ -61,6 +61,12 @@ not replace Skillable validation or lower-privilege identity checks.
 | Telemetry shipment matching | Pass | All 35 fixture rows matched the six intended shipment/truck contexts within their delivery intervals: zero unmatched journeys and zero out-of-interval readings. Shipment-line context was deduplicated before joining. |
 | Telemetry duration boundaries | Pass | Native SQL returned longest continuous hot durations of 25, 20, 0, 15, 5, and 25 minutes in fixture order. It confirmed two breaches, preserved exactly-4-C and exactly-20-minute boundaries, did not sum separated hot intervals, and handled out-of-order arrival and identical retries. |
 | Telemetry coverage uncertainty | Pass | The two confirmed breaches remain breaches; the other four partial journeys report insufficient data rather than whole-delivery compliance. The gap case also reports insufficient data over its observed window. |
+| Shipped replay producer | Pass | `src/telemetry/replay.py` accepted 35 sends. SQL found 35 newly enqueued rows after the implementation run began, with latest enqueue time `2026-10-20T21:13:06.713Z`. Total raw rows reached 105 across three fixture sends; canonical IDs stayed 34. |
+| Producer validation and failure behavior | Pass | Focused standard-library probes rejected malformed events, conflicting IDs/readings, non-UTC or excessive-precision timestamps, nonfinite/oversized/nonnumeric temperatures, and six invalid connection cases. A mocked send preserved all 35 original payloads and ordering; partial network failure surfaced its accepted count without credentials. Editor diagnostics report no errors. |
+| Exact learner SQL and missing sensors | Pass | The committed-path batch ran natively before and after shipped-producer replay. It returned all 13 affected shipments: two breaches, four partial observed journeys with insufficient coverage, and seven zero-reading shipments with null duration and insufficient data. |
+| SQL rejection guards | Pass | Inline, nonpersisted fixtures raised the intended SQL errors 50001-50007 for empty telemetry, invalid fields/timestamps, conflicting event IDs, conflicting journey readings, unmatched journeys, inconsistent history context, and inaccessible affected-lot history. Actual lakehouse data was not modified. |
+| SQL precision and complete coverage | Pass | Inline native fixtures classified 20 minutes plus one microsecond as a breach, a fully covered exactly-20-minute hot interval as no breach, a fully covered cold journey as no breach, and a coverage gap as insufficient data. |
+| SQL transaction ownership and failure cleanup | Pass | The final transactional batch still returned 13 shipments, two breaches, and seven zero-reading journeys. An invalid-input probe raised 50002 with transaction count zero after rollback. An already-open transaction raised 50008 and preserved the caller's count of one until the validation harness explicitly rolled it back. |
 | Telemetry cold start and learner timing | Needs Studio verification | Initial table materialization took several minutes despite a 30-second batching setting. Pre-warm and verify actual output before launch; learner replay control, complete-fleet throughput, and module timing are not validated by the six-case fixture. |
 | Diagnostic session cleanup | Pass | The separate diagnostic Livy session was stopped and confirmed `killed`. Livy lacks the notebook's mounted default lakehouse and is not a substitute for this learner path. |
 
@@ -69,11 +75,21 @@ The first unchanged core run stopped at cell 13's intentional
 operation. Automated author validation must apply the answer documented in
 Exercise 2.3 without removing the exercise from the learner notebook.
 
-Telemetry input validity and payload fidelity were checked for the supplied
-fixture. Invalid timestamps, null or nonnumeric temperatures, conflicting
-event IDs, conflicting readings at one journey timestamp, and late-arrival
-windowing still require explicit rejection tests in the learner producer and
-analysis implementation. The fixture pass is not evidence those paths exist.
+Producer and SQL rejection paths were exercised separately from the valid
+fixture pass. The SQL analytics endpoint does not support table-variable
+fixtures, so validation used inline derived tables instead; no persistent
+objects or telemetry records were changed. Event-time stream windowing and
+late-arrival configuration remain separate from the SQL batch's observation-time
+ordering and require Studio validation if added to the learner path.
+
+The SQL batch uses an explicit read transaction so input validation and
+calculation share a snapshot during live ingestion. It rejects an existing
+transaction instead of taking ownership of it and rolls back its own
+transaction on failure. Fabric's transaction-level snapshot behavior is
+documented in [Transactions in Fabric Data Warehouse](https://learn.microsoft.com/fabric/data-warehouse/transactions#snapshot-isolation),
+which also applies to SQL analytics endpoints. The endpoint rejected
+`SET XACT_ABORT`; the supplied batch uses supported `TRY`/`CATCH` rollback
+handling instead.
 
 ## Release gate
 

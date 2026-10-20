@@ -300,7 +300,9 @@ lakehouse.
 
 1. Locate **contoso_truck_telemetry** and confirm that its lakehouse destination
    is **dbo.truck_temperature_events** in the supplied lakehouse.
-1. Start the Eventstream and use the replay control supplied by the lab.
+1. Start the Eventstream and use the replay control supplied by the lab,
+   or [run the supplied replay utility](#run-the-supplied-replay-utility)
+   in its authorized terminal.
    If the control or producer is missing, stop and notify the instructor or lab
    support; do not create a personal connection or paste endpoint keys into
    browser code.
@@ -331,6 +333,48 @@ registration; do not substitute a local file upload.
 with the expected distinct IDs, shipment IDs, observation times, and
 temperatures.
 
+### Run the supplied replay utility
+
+Use this path only in the lab's authorized terminal with an existing Python
+3.9 or newer interpreter, Fabio, and supplied account. Do not install tools or sign in
+with a personal account to compensate for missing lab provisioning.
+
+From the repository root, first validate the complete input:
+
+```bash
+python3 src/telemetry/replay.py \
+  --input data/telemetry/replay-contract.jsonl --validate-only
+```
+
+Expect `validated_messages: 35`. Set `WORKSPACE_ID`, `EVENTSTREAM_ID`, and
+`SOURCE_ID` to the supplied workspace, **contoso_truck_telemetry** item, and
+**truck_replay** inlet IDs. Check the destination is **Running** before
+publishing:
+
+```bash
+fabio eventstream get-topology \
+  --workspace "$WORKSPACE_ID" --id "$EVENTSTREAM_ID" \
+  --query 'destinations[].{name:name,status:status}'
+```
+
+Pipe the source connection directly into the producer. Never print, save,
+or paste this response into application code:
+
+```bash
+set -o pipefail
+fabio eventstream get-source-connection \
+  --workspace "$WORKSPACE_ID" --id "$EVENTSTREAM_ID" --source-id "$SOURCE_ID" \
+  --query '{fullyQualifiedNamespace:fullyQualifiedNamespace,eventHubName:eventHubName,accessKeys:{primaryConnectionString:accessKeys.primaryConnectionString}}' \
+  | python3 src/telemetry/replay.py \
+      --input data/telemetry/replay-contract.jsonl
+```
+
+Expect `accepted_messages: 35`. The accompanying
+`destination_verified: false` is intentional: return to the SQL check above
+to verify actual output. If publishing fails partway through, resolve the
+reported problem and replay the same file. Do not change retry IDs or delete
+the destination table. Do not enable shell tracing or verbose HTTP logging.
+
 ## Exercise 3.2: Identify temperature breaches
 
 Find shipments that remained above **4 C** for more than 20 minutes and join
@@ -338,6 +382,15 @@ them to the affected lots.
 
 The rule is strict: **4 C is not above 4 C**, and **20 minutes is not more
 than 20 minutes**.
+
+Open [the supplied temperature-status SQL](../src/sql/module-3-temperature-status.sql)
+and run the complete batch in the lakehouse's SQL analytics endpoint.
+It validates input before producing a result. If it reports an error, stop
+and investigate that message rather than deleting its validation statements.
+Run it outside an existing transaction: it uses its own read transaction so
+validation and calculation see the same snapshot while new events arrive.
+This is the engineer's investigation query; it does not grant reader
+identities access to the raw telemetry table.
 
 1. Deduplicate exact event retries before calculating duration. Conflicting
    payloads for one event ID, or different readings at the same journey
@@ -370,6 +423,12 @@ to flag a shipment, but a partial window without a breach does not prove that
 the entire delivery stayed cold. For these fixtures, **SHP-209403** and
 **SHP-209415** are breached; the other four shipments have **Insufficient
 data** for a whole-journey conclusion.
+
+The query includes **all 13 shipments carrying YG-2291**, including the seven
+without any fixture observations. Those seven also report **Insufficient
+data**, with zero readings and no calculated hot duration. A shipment must
+not disappear from the recall investigation just because its sensor is
+missing.
 
 **Completion check:** Your investigation distinguishes a confirmed breach,
 no breach over a fully observed journey, and insufficient data. It does not

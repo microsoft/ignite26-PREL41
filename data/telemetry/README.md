@@ -56,8 +56,11 @@ journey coverage is required; otherwise report **Insufficient data**.
 
 ## Replay and publication requirements
 
-An authorized producer must send each JSON line as an event through the
-Eventstream custom endpoint. Retrieve endpoint credentials only through the
+The [supplied producer](../../src/telemetry/replay.py) sends each JSON line as
+an event through the Eventstream custom endpoint.
+[The replay procedure](../../infra/README.md#replay-with-the-supplied-producer)
+validates the complete file before retrieving credentials. Retrieve endpoint
+credentials only through the
 approved author environment; never commit them, print them in instructions,
 or place them in browser code.
 
@@ -69,3 +72,10 @@ Before declaring replay successful, verify the actual destination table,
 distinct event counts, shipment/truck/time matches, duplicate behavior, and all
 six boundary outcomes. Merely uploading this file to OneLake, creating an
 Eventstream, or seeing a running inlet is not a replay pass.
+
+Run [the supplied SQL batch](../../src/sql/module-3-temperature-status.sql)
+against actual ingested output. It returns all 13 shipments carrying YG-2291,
+not just the six with fixture observations. The seven without observations
+have zero readings, no calculated hot duration, and `insufficient_data`.
+The batch rejects invalid or conflicting observations instead of silently
+filtering them out.

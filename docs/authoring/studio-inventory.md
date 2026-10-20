@@ -98,9 +98,12 @@ table and the results the data must produce.
 - Write JSON observations to `dbo.truck_temperature_events` in the same
   schema-enabled lakehouse. This is managed Delta output, separate from the
   nine Module 2 Iceberg tables and their agent selection.
-- Supply a secure, usable replay control for both attendee paths. Its
-  implementation and Studio delivery remain outstanding; a private author
-  validation publisher is not a learner asset.
+- The supplied `src/telemetry/replay.py` producer requires only the existing
+  Python 3.9+ standard library and a Fabio connection piped on stdin. The exact
+  shipped producer sent 35 messages and all 35 were observed in actual sink
+  output. Supply an authorized terminal with those existing tools and the
+  workspace/Eventstream/inlet IDs, or wire the utility into the Lab Profile's
+  replay control. Studio delivery for both attendee paths remains unverified.
 - The [boundary fixture](../../data/telemetry/README.md) has 35 messages,
   34 stable event IDs, and six real shipment contexts. It proves threshold,
   continuity, retry, and ordering behavior, not full-fleet coverage.
@@ -113,8 +116,12 @@ table and the results the data must produce.
 - Establish the governed derived-result table and application identity path
   before console integration. Existing restricted roles do not grant the raw
   telemetry table.
-- Verify fresh launch, replay/resume, invalid-input handling, and complete-fleet
-  expected results. None is implied by the owner-run six-case validation.
+- The supplied read-only SQL batch validates IDs, timestamps, temperatures,
+  retry consistency, journey matches, and history consistency before
+  calculating statuses. It returns all 13 YG-2291 shipments, including seven
+  without telemetry.
+- Verify fresh launch, learner replay/resume, and complete-fleet expected
+  results. Native owner checks do not establish the Studio delivery path.
 
 ## Module 4 configuration
 

@@ -124,6 +124,45 @@ fabio eventstream pause \
   --workspace "$WORKSPACE_ID" --id "$EVENTSTREAM_ID"
 ```
 
+### Replay with the supplied producer
+
+Use the existing Python 3.9 or newer interpreter in the authorized author environment;
+this utility requires no package installation. Validate all events before
+retrieving credentials:
+
+```bash
+python3 src/telemetry/replay.py \
+  --input data/telemetry/replay-contract.jsonl --validate-only
+```
+
+Resume the Eventstream, verify the destination is Running, and set `SOURCE_ID`
+to the custom inlet ID returned by Fabio's topology command. Then pipe only
+the needed connection fields directly into the producer:
+
+```bash
+set -o pipefail
+fabio eventstream get-source-connection \
+  --workspace "$WORKSPACE_ID" --id "$EVENTSTREAM_ID" --source-id "$SOURCE_ID" \
+  --query '{fullyQualifiedNamespace:fullyQualifiedNamespace,eventHubName:eventHubName,accessKeys:{primaryConnectionString:accessKeys.primaryConnectionString}}' \
+  | python3 src/telemetry/replay.py \
+      --input data/telemetry/replay-contract.jsonl
+```
+
+Do not enable shell tracing, verbose HTTP logging, or pipe the connection
+response through `tee`. The producer rejects non-managed hosts, mismatched
+connection endpoints, redirects, malformed events, nonfinite temperatures,
+conflicting IDs, and conflicting journey timestamps. It preserves input
+order, timestamps, and retry IDs.
+
+An accepted-message count is transport evidence only: the output explicitly
+reports `destination_verified: false`. Verify actual distinct payloads in the
+lakehouse and run the complete
+[temperature analysis](../src/sql/module-3-temperature-status.sql).
+On a partial failure, resolve the reported error and replay the same file;
+do not generate new IDs for retries.
+
+### Idle-state verification
+
 Verify the destination is **Paused**. The managed custom inlet can still report
 **Running**; that alone does not mean the lakehouse sink is consuming events.
 The learner replay control and complete-fleet coverage still require Lab

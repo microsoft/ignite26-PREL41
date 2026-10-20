@@ -183,8 +183,12 @@ stores. No restricted-identity pass is claimed.
   join real shipment/truck/time intervals without fan-out.
 - [x] Compare persisted canonical payloads with the complete fixture and
   verify all six continuous-duration and whole-journey coverage outcomes.
-- [ ] Deliver the learner replay control, complete-fleet data, executable
-  analysis path, governed result materialization, and console integration.
+- [x] Deliver the standard-library replay producer, validate rejection and
+  partial-failure paths, and verify all 35 shipped-producer events persisted.
+- [x] Deliver and natively execute the guarded SQL analysis, including all
+  13 affected shipments and seven missing-sensor cases.
+- [ ] Verify learner terminal/replay-control delivery, complete-fleet data,
+  governed result materialization, and console integration.
 - [ ] Module 4: regional-manager and logistics-partner access, row/column
   restrictions, denied-access checks, and identity-specific expected results.
 - [x] Implement and deploy unassigned OneLake policy definitions for North and
@@ -270,9 +274,10 @@ or successful test results:
 - Distinct restricted North manager and CAR-02 partner identities, with an
   approved sign-in method. The deployed roles intentionally have no members.
 - Skillable Studio/Lab Profile access and the provisioned operational source.
-- The telemetry replay producer and Rayfin starter/preview access. Neither
-  implementation is in the repository or its current open contribution
-  branches. Fabio's Power Apps AppBackend is not established as Rayfin.
+- Rayfin starter/preview access and the learner terminal/replay-control
+  provisioning. The telemetry producer and SQL analysis are now supplied;
+  the application starter remains absent. Fabio's Power Apps AppBackend is
+  not established as Rayfin.
 - A provisioned environment satisfying the existing package-based Module 2
   path; DuckDB and the Data Agent SDK remain uninstalled and unverified.
 
@@ -298,12 +303,26 @@ persisted canonical payload set matched **34 events, zero missing, zero
 unexpected**. At one read there were 49 raw rows; accepted-send totals are
 not a guarantee of raw sink row counts during startup or replay.
 
-The native SQL analysis returned longest hot intervals of **25, 20, 0, 15,
+The supplied native SQL analysis returned longest hot intervals of **25, 20, 0, 15,
 5, and 25 minutes** for SHP-209403, SHP-209404, SHP-209408, SHP-209410,
 SHP-209414, and SHP-209415 respectively. Only the first and last are
 confirmed breaches. The other four have insufficient whole-journey coverage.
 Fixture-to-history validation found zero unmatched journeys and zero
 out-of-journey observations across all 35 fixture rows.
+
+The shipped `src/telemetry/replay.py` then published a third 35-message replay.
+SQL observed all 35 new rows, with latest enqueue time
+`2026-10-20T21:13:06.713Z`; total raw rows reached 105 and distinct IDs remained
+34. Re-running the exact supplied SQL preserved the results and returned all
+13 affected shipments, including seven without observations. Focused native
+derived-table checks passed all seven rejection guards, complete-cold coverage,
+the strict twenty-minute boundary, a one-microsecond excess, and missing-data
+behavior. Producer probes passed malformed/conflicting input, invalid managed
+connections, numeric extremes, payload/order preservation, and partial-send
+failure checks. The analysis uses one read transaction for validation and
+calculation; native probes verified failure rollback and rejection of a
+caller's existing transaction without rolling it back. This is implementation
+validation, not the final red-team.
 
 Cold-start materialization took several minutes despite a 30-second batch
 setting. Fresh-launch timing and producer recovery still require testing.
