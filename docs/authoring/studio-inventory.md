@@ -23,7 +23,7 @@ Activities.
 | SharePoint connection | Preconfigured for the Supplier Quality content | Exact name required |
 | SharePoint permissions | Learner can read the target library or folder | Needs Studio verification |
 | Module 2 notebook | Imported from `src/notebooks/module-2-shipment-history.ipynb`; see Module 2 configuration | Needs Studio verification |
-| Spark fallback table | Allows the workshop to continue after capacity or startup failure | Needs Studio verification |
+| Spark fallback data | `contoso_recall_fallback` supports read-only historical investigation during Spark session repair, without claiming the skipped technology exercises passed | Nine independent Delta tables and native recall checks verified; fresh-launch delivery and later-module handoff remain unverified; not a capacity-wide outage fallback |
 | Eventstream | Replays supplied truck telemetry | Needs Studio verification |
 | Security test identities | Separate reader-only North manager and CAR-02 partner accounts, without broader grants or access to the separate operational source | Identities and effective permissions require verification |
 | Rayfin starter | Runs in the supplied environment | Starter and deployment toolchain absent; native AppBackend item creation succeeded |

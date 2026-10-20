@@ -123,6 +123,77 @@ identities must not receive access to this unfiltered source or its staging
 CSV files. Their governed reads use the destination lakehouse and require
 separate identity tests.
 
+## Independent Spark-recovery data
+
+**contoso_recall_fallback** is a schema-enabled lakehouse containing the seven
+reference tables plus `history.lot_history` and `history.shipment_history`,
+independently loaded as managed Delta. Its purpose is read-only historical
+investigation while an instructor repairs a Spark session, not a claim that
+the notebook's technology exercises have completed.
+
+### Provision before learner launch
+
+1. Complete and validate the corrections in an author source. Do not export
+   the uncorrected 12-store snapshot.
+1. Create the separate fallback lakehouse through Fabio, with schemas enabled.
+1. Load the seven committed reference CSVs into its `dbo` schema using the
+   operational-source recipe, substituting the fallback item ID.
+1. Export the SQL-visible corrected history and load it through Fabio's native
+   `upload-table` operation into the fallback's `history` schema. Use CSV
+   headers and the logical columns in the shared data model.
+1. Refresh SQL endpoint metadata and run
+   [the supplied acceptance query](../src/sql/fallback-recall-checks.sql).
+1. Compare every logical column in both directions against the corrected
+   source, as well as row counts and duplicate keys. Do not treat matching
+   recall totals alone as full-data fidelity.
+
+A whole-history TDS export timed out during validation. Export bounded
+calendar-month partitions instead, verify each partition's row count against
+the source, and combine them with one CSV header. Use half-open timestamp
+ranges, for example:
+
+```sql
+SELECT shipment_id, line_no, shipped_at_utc, delivered_at_utc,
+       origin_dc_id, store_id, carrier_id, truck_id, lot_id,
+       product_id, supplier_id, cases, supplier_cost_eur, status, driver_note
+FROM history.shipment_history
+WHERE shipped_at_utc >= '2026-10-01T00:00:00'
+  AND shipped_at_utc < '2026-11-01T00:00:00';
+```
+
+Explicitly select these fifteen business columns. The SQL endpoint can expose
+an engine-generated `partition_col_MONTH_shipped_at_utc` column for Iceberg;
+it is not part of the portable logical schema and CSV inference changes its
+representation. Do not materialize that physical partition metadata as a
+business column.
+
+Do not use raw Iceberg directory copying as an independent fallback. In a
+bounded test, Fabio copied the files but the metadata's table location and
+manifest pointers still referenced the original lakehouse. That copy was
+rejected; its five unused files were removed only after verifying that the
+replacement Delta table referenced its own data file.
+
+### Verified contents and limitations
+
+All nine fallback tables were checked against the corrected source. Both
+native `EXCEPT` directions returned no missing or unexpected logical rows.
+The shipment fallback contains all 1,165,374 corrected lines and the lot
+fallback all 16,961 lots. The acceptance query returns 9 current stores,
+13 receiving stores, 13 related lots, 45 reached stores in five regions,
+and zero duplicate shipment keys or deleted duplicate-shipment lines.
+
+The fallback is a fixed scenario snapshot, not a live replica. Its decimal
+amounts must be compared at the model's two-decimal precision after CSV
+loading. No fallback snapshot or package result should be presented as
+proof of Iceberg, DuckDB, AI Functions, or the SDK path.
+
+Keep this item and any staging exports unavailable to restricted manager and
+partner identities until equivalent policy and identity validation are
+explicitly provisioned. The item uses the same F8 capacity and cannot recover
+from a capacity-wide outage. Later modules require an explicit validated
+handoff: the fallback does not automatically move the SharePoint shortcut,
+Eventstream destination, data agent, security roles, or console connectors.
+
 ## Truck telemetry Eventstream
 
 The author workspace now has a native Eventstream named

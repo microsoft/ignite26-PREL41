@@ -60,6 +60,8 @@ the account, and its Admin role and capacity assignment were verified:
 | Recall Console item | contoso_recall_console, 451acf30-8346-491b-aba6-b7ab95ddc71c; AppBackend metadata only |
 | Operational source | contoso_operations, aad9a5d8-7742-41b3-befa-84f34be2a46c |
 | Operational SQL endpoint | 37b5c6b2-da51-4d64-9195-02d563ab09b6; separate from Module 2 |
+| Spark-recovery data | contoso_recall_fallback, 36ab1f02-106b-4266-a68d-e49ed78a5e7e |
+| Fallback SQL endpoint | 57210129-b6ad-4fb4-a409-832d5616d68a |
 
 - [x] Create the schema-enabled lakehouse and verify SQL endpoint provisioning.
 - [x] Import the existing Module 2 notebook without changing its cells.
@@ -216,6 +218,11 @@ stores. No restricted-identity pass is claimed.
   supported continuation paths.
 - [ ] Provide documented recovery, resume, rerun, and fallback behavior
   wherever required by the lab contract.
+- [x] Provision independent corrected fallback reference/history data and
+  validate the read-only historical recovery checks without claiming the
+  skipped Spark/Iceberg/DuckDB/AI exercises passed.
+- [ ] Verify fallback delivery in a fresh learner environment and any
+  deliberate handoff to later-module connections, roles, and app bindings.
 
 ## Phase 3: Instructions and delivery
 
@@ -426,6 +433,31 @@ these source-provisioning operations. The
 creation, resume safeguards, and restricted-identity exclusions. SharePoint
 content, certificate transformation, and a fresh Skillable launch remain
 separate outstanding checks.
+
+### Independent historical fallback
+
+The separate schema-enabled **contoso_recall_fallback** now contains all seven
+reference tables plus the corrected lot and shipment history as independently
+loaded Delta data. A raw directory-copy experiment was rejected after its
+Iceberg metadata still pointed to the source item. Only five unused files
+from that experiment were cleaned up, after checking the replacement Delta
+table's independent data-file reference.
+
+A full shipment TDS export timed out. Bounded monthly exports then verified
+all source partition counts and produced all 1,165,374 corrected rows.
+Native two-direction EXCEPT comparisons matched all reference tables, all
+16,961 lot rows, and all fifteen logical shipment-history columns. The
+engine-generated Iceberg month-partition field was excluded from the final
+portable table schema.
+
+The [same acceptance query](src/sql/fallback-recall-checks.sql) passed against
+both original and fallback endpoints with the expected 9/13/13/45 recall
+counts, five reached regions, both history row counts, zero duplicate keys,
+and zero deleted duplicate-shipment lines. Learner instructions now provide
+a bounded read-only investigation path while Spark is repaired. The fallback
+does not complete the skipped technology exercises, solve a capacity-wide
+outage, or automatically rebind later-module resources. Fresh-launch and
+handoff testing remain outstanding.
 
 Cold-start materialization took several minutes despite a 30-second batch
 setting. Fresh-launch timing and producer recovery still require testing.

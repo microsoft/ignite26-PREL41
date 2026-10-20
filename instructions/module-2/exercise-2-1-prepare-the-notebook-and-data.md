@@ -28,6 +28,11 @@ In this exercise, you connect the Module 2 notebook to your lakehouse and genera
 
 You should run the code cells in order, one at a time. To run a cell, select it, then select **Run cell** to its left. Wait for a cell to finish before you run the next one.
 
+If the session cannot start or a cell fails, retain the error and follow
+[the bounded recovery path](../README.md#recover-from-an-unavailable-spark-session)
+with the instructor. Do not attach this notebook to the fallback lakehouse:
+its independent Delta tables are not the notebook's owned Iceberg tables.
+
 > [!Note] Each section below matches a cell in the notebook, and **Run the next code cell** moves you one code cell down.
 
 ## Cell 1: Generate data

@@ -286,6 +286,37 @@ the exercises in order:
 
 After Exercise 2.6, return to this page and continue with the next module.
 
+## Recover from an unavailable Spark session
+
+If Spark cannot start or an exercise fails, keep the error and ask the
+instructor to check the supplied environment. Do not repeatedly select
+**Run all**, switch runtimes, install replacement packages, or delete tables.
+
+The supplied **contoso_recall_fallback** lakehouse contains independently
+loaded, corrected Delta data for the historical investigation. With
+instructor approval:
+
+1. Open that lakehouse's **SQL analytics endpoint**, not the notebook.
+1. Run [the fallback recall checks](../src/sql/fallback-recall-checks.sql).
+1. Confirm nine current stores, thirteen receiving stores, thirteen related
+   lots, forty-five reached stores in five regions, 16,961 lot rows,
+   1,165,374 shipment rows, and zero duplicate shipment keys or removed
+   duplicate lines.
+1. Continue the read-only historical investigation with the instructor while
+   the notebook environment is repaired.
+
+This path supplies corrected answers, not Spark execution, Iceberg snapshots,
+DuckDB credential vending, AI Functions, or SDK validation. Record those
+exercises as not completed rather than claiming a pass from fallback results.
+Do not attach the exercise notebook to the fallback or copy its Delta tables
+over the notebook's owned Iceberg tables.
+
+The fallback is on the same Fabric capacity and does not solve a capacity-wide
+outage. It also does not automatically rebind later-module telemetry, document
+shortcuts, application connectors, or reader permissions. The instructor must
+verify any recovery handoff before continuing those modules; do not silently
+substitute a different endpoint.
+
 ===
 
 # Check temperature telemetry
