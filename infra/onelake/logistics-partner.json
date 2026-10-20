@@ -9,6 +9,7 @@
           "attributeName": "Path",
           "attributeValueIncludedIn": [
             "/Tables/history/shipment_history",
+            "/Tables/dbo/recall_temperature_status",
             "/Tables/dbo/carriers",
             "/Tables/dbo/trucks",
             "/Tables/dbo/products",
@@ -35,6 +36,10 @@
           {
             "tablePath": "/Tables/dbo/trucks",
             "value": "SELECT * FROM dbo.trucks WHERE carrier_id = 'CAR-02'"
+          },
+          {
+            "tablePath": "/Tables/dbo/recall_temperature_status",
+            "value": "SELECT * FROM dbo.recall_temperature_status WHERE carrier_id = 'CAR-02'"
           }
         ],
         "columns": [

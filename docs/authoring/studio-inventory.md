@@ -119,9 +119,15 @@ table and the results the data must produce.
 - Pre-warm and verify actual Delta output before learner launch. Cold-start
   table creation took several minutes; the 30-second destination batch setting
   does not bound provisioning time.
-- Establish the governed derived-result table and application identity path
-  before console integration. Existing restricted roles do not grant the raw
-  telemetry table.
+- The governed derived table `dbo.recall_temperature_status` is provisioned
+  and verified against all 13 analysis rows. It contains `lot_id` and
+  `analysis_time_utc` and is an author-refreshed snapshot, not an automatic
+  streaming result. Its [refresh procedure](../../infra/README.md#governed-temperature-snapshot)
+  must run after the intended replay, with actual output verification.
+- Separate North-store and CAR-02 row rules for the snapshot are deployed in
+  the unassigned roles. Raw telemetry and staging files remain excluded.
+  Application identity propagation and restricted-reader checks are still
+  required before console integration.
 - The supplied read-only SQL batch validates IDs, timestamps, temperatures,
   retry consistency, journey matches, and history consistency before
   calculating statuses. It returns all 13 YG-2291 shipments, including seven

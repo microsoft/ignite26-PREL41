@@ -232,6 +232,84 @@ do not generate new IDs for retries.
 Verify the destination is **Paused**. The managed custom inlet can still report
 **Running**; that alone does not mean the lakehouse sink is consuming events.
 The learner replay control and complete-fleet coverage still require Lab
-Profile provisioning. The existing restricted roles intentionally do not
-grant raw telemetry access; governed enrichment and identity tests remain
-required before exposing it through the console.
+Profile provisioning. The existing restricted roles intentionally do not grant raw telemetry access.
+They now grant only the derived snapshot described below, with separate row
+rules. Identity tests remain required before exposing it through the console.
+
+## Governed temperature snapshot
+
+`dbo.recall_temperature_status` contains the validated analysis output for
+all 13 YG-2291 shipments. It is a managed Delta snapshot, not a live view or a
+streaming update pipeline. `lot_id` identifies the investigation and
+`analysis_time_utc` identifies when analysis ran. The console must display
+that timestamp and must not describe the snapshot as live telemetry.
+
+The snapshot contains shipment/truck/carrier/store IDs, journey times, reading
+counts, observed coverage, longest confirmed hot duration, and both status
+fields. It contains no raw event payloads, supplier costs, or endpoint
+credentials. Empty observation timestamps and durations remain null for the
+seven shipments without readings.
+
+### Create or refresh an author-owned snapshot
+
+Use the destination lakehouse and its SQL endpoint, not **contoso_operations**.
+Before first creation, confirm that no authored table exists at
+`dbo.recall_temperature_status`. On refresh, confirm it is this workshop's
+snapshot and inspect its current schema. Never overwrite an unrelated table.
+Run after the intended replay has persisted and before the console validation:
+
+```bash
+(
+  SNAPSHOT_FILE=$(mktemp) || exit 1
+  trap 'rm -f "$SNAPSHOT_FILE"' EXIT
+  fabio sql-endpoint query \
+    --workspace "$WORKSPACE_ID" --id "$SQL_ENDPOINT_ID" \
+    --sql @src/sql/module-3-temperature-status.sql \
+    --output csv > "$SNAPSHOT_FILE" || exit 1
+  fabio lakehouse upload-table \
+    --workspace "$WORKSPACE_ID" --id "$LAKEHOUSE_ID" \
+    --source-path "$SNAPSHOT_FILE" \
+    --table recall_temperature_status --schema dbo --format Csv \
+    --mode Overwrite --lro-timeout 600 || exit 1
+)
+```
+
+The SQL batch fails explicitly on invalid or inconsistent input before
+exporting any result. It uses one read transaction for validation and
+calculation. Do not remove the guards, convert an error response to data,
+append successive snapshots, or upload raw fixture events as a shortcut.
+
+Refresh ordinary SQL metadata if needed, then verify the actual table:
+
+```sql
+SELECT
+    COUNT(*) AS affected_shipments,
+    SUM(CASE WHEN shipment_temperature_status = 'breach' THEN 1 ELSE 0 END)
+        AS breached_shipments,
+    SUM(CASE WHEN distinct_readings = 0 THEN 1 ELSE 0 END)
+        AS missing_sensor_shipments,
+    MIN(analysis_time_utc) AS oldest_analysis_utc,
+    MAX(analysis_time_utc) AS newest_analysis_utc
+FROM dbo.recall_temperature_status
+WHERE lot_id = 'YG-2291';
+```
+
+For the boundary fixture, expect **13**, **2**, and **7** respectively.
+Compare every persisted row and column with the analysis output, not only
+these counts. A replay does not refresh this table automatically. If analysis,
+export, load, or verification fails, report the failure and do not present an
+older snapshot as the new result.
+
+### Row scopes and verification
+
+The unassigned `RegionalManagerNorth` role permits only the eight North
+shipment results; `LogisticsPartner` permits only the eight CAR-02 results.
+Both saved policies were compared with the committed definitions, including
+the new derived-table row rule. DefaultReader permission and membership
+semantics were preserved. Raw telemetry and staging CSV paths remain outside
+both roles.
+
+These are saved-policy and owner-data checks, not effective-identity passes.
+Keep the two roles unassigned until the approved reader identities are
+available. When refreshing an existing role, preserve its actual memberships;
+do not overwrite an assigned role using the empty-membership templates.

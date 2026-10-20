@@ -149,7 +149,9 @@ coverage AS (
     FROM intervals
     GROUP BY shipment_id, truck_id
 )
-SELECT journey.shipment_id, journey.truck_id,
+SELECT @affected_lot AS lot_id,
+    CAST(SYSUTCDATETIME() AS datetime2(6)) AS analysis_time_utc,
+    journey.shipment_id, journey.truck_id,
     journey.carrier_id, journey.store_id,
     journey.shipped_at_utc, journey.delivered_at_utc,
     COALESCE(coverage.distinct_readings, 0) AS distinct_readings,

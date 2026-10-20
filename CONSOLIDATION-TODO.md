@@ -193,7 +193,10 @@ stores. No restricted-identity pass is claimed.
 - [x] Deliver and natively execute the guarded SQL analysis, including all
   13 affected shipments and seven missing-sensor cases.
 - [ ] Verify learner terminal/replay-control delivery, complete-fleet data,
-  governed result materialization, and console integration.
+  snapshot refresh delivery, and console integration.
+- [x] Materialize all 13 guarded analysis rows in a cost-free derived snapshot,
+  verify every persisted column, and deploy scoped unassigned row rules
+  without granting raw telemetry or changing DefaultReader semantics.
 - [ ] Module 4: regional-manager and logistics-partner access, row/column
   restrictions, denied-access checks, and identity-specific expected results.
 - [x] Implement and deploy unassigned OneLake policy definitions for North and
@@ -350,6 +353,28 @@ application project is present. No packages were installed and no replacement
 application scaffold was generated. The item description explicitly says
 application content is not yet deployed. Hosting, connectors, identity
 propagation, and the actual recall experience are not validated.
+
+### Governed temperature snapshot
+
+The guarded query now includes `lot_id` and `analysis_time_utc`. Its validated
+13-row output was materialized through Fabio as managed Delta
+`dbo.recall_temperature_status`. Every persisted row and column matched,
+including the null fields for seven missing-sensor journeys. Two shipments
+remain breached and eleven have insufficient whole-journey data.
+
+The previously unassigned North and partner policies were updated individually
+with access only to this derived table, constrained by North store IDs and
+CAR-02 respectively. Their complete saved definitions matched source after
+excluding service-managed IDs, etags, and row-type annotations. DefaultReader
+permission/membership semantics were unchanged; raw telemetry and staging
+files remain excluded. Owner dataset expectations are eight North and eight
+CAR-02 rows, not proof of effective authorization.
+
+This is an explicitly timestamped author-refreshed snapshot, not an automatic
+streaming result. The [refresh procedure](infra/README.md#governed-temperature-snapshot)
+requires output validation and prevents silent continuation after failure.
+Console binding, freshness presentation, actual restricted identities, and
+Lab Profile refresh delivery remain outstanding.
 
 ### Separate operational-source evidence
 

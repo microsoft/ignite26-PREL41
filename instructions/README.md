@@ -502,11 +502,26 @@ it is not a substitute for a restricted identity.
 
    OneLake row rules do not support a join to `locations`. These lists are
    specific to the workshop snapshot, not a dynamic production-region policy.
+1. Include `dbo.recall_temperature_status` and apply the same North
+   `store_id` list in its own rule:
+
+   ```sql
+   SELECT * FROM dbo.recall_temperature_status
+   WHERE store_id IN (
+       'STR-001', 'STR-002', 'STR-003', 'STR-004',
+       'STR-005', 'STR-006', 'STR-007', 'STR-008',
+       'STR-009', 'STR-010', 'STR-011', 'STR-012',
+       'STR-013', 'STR-014', 'STR-015', 'STR-016'
+   )
+   ```
+
+   If the table is missing, have the instructor create and verify the derived
+   snapshot. Do not substitute access to `dbo.truck_temperature_events`.
 1. Include the shared reference tables `dbo.suppliers`, `dbo.products`,
    `dbo.carriers`, `dbo.trucks`, `dbo.lots`, and `history.lot_history`,
    plus `dbo.supplier_certificates` and **Files/SupplierQuality**. These
    references describe products and suppliers rather than regional activity.
-   Do not grant **Files/reference** or **Files/history**: those raw CSVs
+   Do not grant **Files/reference**, **Files/history**, or **Files/.staging**: those raw CSVs
    would bypass table row rules.
 1. Add only the supplied North manager identity and save the role.
 1. Review that identity's other grants, including **DefaultReader** and any
@@ -515,7 +530,7 @@ it is not a substitute for a restricted identity.
    conflicting grant for the test identity; do not delete a shared default
    role or change unrelated users' permissions.
 
-**Completion check:** The role has three explicit regional table rules,
+**Completion check:** The role has four explicit regional table rules,
 shared-reference access only where required, and the supplied manager as its
 restricted member. Effective access is checked in Exercise 4.3.
 
@@ -540,17 +555,25 @@ supplied separately from the North manager account.
 1. Include `dbo.carriers` and `dbo.trucks`, each with a rule restricting its
    own `carrier_id` to `CAR-02`. Use that table's actual schema-qualified
    name in each `SELECT` rule.
+1. Include the cost-free derived table `dbo.recall_temperature_status` with:
+
+   ```sql
+   SELECT * FROM dbo.recall_temperature_status WHERE carrier_id = 'CAR-02'
+   ```
+
+   Do not include the raw `dbo.truck_temperature_events` table.
 1. Allow the nonfinancial reference tables `dbo.products` and
    `dbo.locations`, and the supplier certificate table and document shortcut.
    These provide product, destination, and certification context.
 1. Do **not** include `dbo.lots`, `history.lot_history`,
-   `dbo.store_inventory`, **Files/reference**, or **Files/history**. The lot
+   `dbo.store_inventory`, **Files/reference**, **Files/history**, or
+   **Files/.staging**. The lot
    tables contain `supplier_unit_cost_eur`, and raw source files do not
    inherit table column restrictions.
 1. Add only the supplied partner identity. Check that no other role or
    inherited permission grants it broader access.
 
-**Completion check:** The role limits shipment, truck, and carrier records
+**Completion check:** The role limits shipment, truck, carrier, and derived-temperature records
 to CAR-02, hides shipment costs, and grants no alternative route to lot costs
 or raw shipment data.
 
@@ -581,6 +604,14 @@ cached result or access token for a restricted account.
    history and reference file folders are also unavailable.
 1. Confirm that each permitted identity can still open a required supplier
    certificate through the document shortcut.
+1. Query `dbo.recall_temperature_status` without adding region or carrier
+   filters. The North manager must see only eight North rows, and the
+   partner only eight CAR-02 rows. Explicitly request an out-of-scope store
+   or carrier and verify that no rows are returned.
+1. As either restricted identity, request `dbo.truck_temperature_events`
+   and the snapshot staging files. Neither may be readable. A missing raw
+   table is not a denial pass: have the engineer confirm that the resource
+   exists before testing access.
 
 Allow up to five minutes for SQL analytics endpoint security synchronization
 after a policy change. Refresh the restricted session and repeat the checks.
@@ -650,6 +681,15 @@ the signed-in identity is explicitly authorized. The engineer's investigation
 SQL is not a deployed governed-result service. The console must read a
 provisioned governed result, or a verified user-identity query path, rather
 than broadening the existing roles just to make a page load.
+
+The provisioned derived table is **dbo.recall_temperature_status**. It contains
+all 13 affected shipments with no raw events or supplier costs. Display its
+`analysis_time_utc` as the analysis timestamp: this is a snapshot, not a
+continuously refreshed feed. Have the instructor refresh and verify it after
+the intended replay. A successful replay alone does not update this table.
+The North and CAR-02 roles have separate row rules for the snapshot, but
+their actual application identity propagation still requires the next
+exercise's checks.
 
 **Completion check:** The console displays the current recall data from
 OneLake.

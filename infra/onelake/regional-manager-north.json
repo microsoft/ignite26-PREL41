@@ -11,6 +11,7 @@
             "/Tables/dbo/locations",
             "/Tables/dbo/store_inventory",
             "/Tables/history/shipment_history",
+            "/Tables/dbo/recall_temperature_status",
             "/Tables/dbo/suppliers",
             "/Tables/dbo/products",
             "/Tables/dbo/carriers",
@@ -39,6 +40,10 @@
           {
             "tablePath": "/Tables/history/shipment_history",
             "value": "SELECT * FROM history.shipment_history WHERE store_id IN ('STR-001', 'STR-002', 'STR-003', 'STR-004', 'STR-005', 'STR-006', 'STR-007', 'STR-008', 'STR-009', 'STR-010', 'STR-011', 'STR-012', 'STR-013', 'STR-014', 'STR-015', 'STR-016')"
+          },
+          {
+            "tablePath": "/Tables/dbo/recall_temperature_status",
+            "value": "SELECT * FROM dbo.recall_temperature_status WHERE store_id IN ('STR-001', 'STR-002', 'STR-003', 'STR-004', 'STR-005', 'STR-006', 'STR-007', 'STR-008', 'STR-009', 'STR-010', 'STR-011', 'STR-012', 'STR-013', 'STR-014', 'STR-015', 'STR-016')"
           }
         ]
       }

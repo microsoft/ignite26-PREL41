@@ -144,6 +144,7 @@ that holds Module 1's `SupplierQuality` shortcut. Skillable sets its name.
 | lot_history, shipment_history | `history` schema | Apache Iceberg |
 | supplier_certificates | `dbo` schema | Managed Delta table from the SharePoint CSV transformation |
 | truck_temperature_events | `dbo` schema | Managed Delta table written by the telemetry Eventstream |
+| recall_temperature_status | `dbo` schema | Author-refreshed managed Delta snapshot of guarded temperature analysis |
 
 Module 2 builds its `dbo` tables from `Files/reference/` and doesn't read
 Module 1's copy of the current state.
@@ -193,8 +194,12 @@ The six fixtures establish two breaches and four journeys with insufficient
 whole-trip coverage. They are partial observation windows, not complete fleet
 telemetry. Full-journey compliance requires complete coverage without gaps.
 Keep the raw telemetry table outside Module 2's agent selection and the
-existing restricted role grants until governed enrichment and identity tests
-are complete.
+existing restricted role grants. Instead, `dbo.recall_temperature_status`
+materializes the guarded analysis for all 13 affected shipments. Its
+`analysis_time_utc` must be displayed as snapshot age; it is not an automatic
+live refresh. Separate North-store and CAR-02 row rules were deployed for this
+derived table without granting raw-event access. Effective-identity tests and
+application binding remain outstanding.
 
 ## Recall answer
 
