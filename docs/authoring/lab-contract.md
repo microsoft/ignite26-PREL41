@@ -135,3 +135,9 @@ manager and partner identities.
 | Interpret the real-time signal | 3.1-3.2 | Temperature breach status is joined to affected shipments. |
 | Govern access | 4.1-4.3 | Test identities return different permitted rows and columns. |
 | Build the recall experience | 5.1-5.3 | The Recall Console displays governed recall data. |
+
+The learner wrap-up provides an explicit five-question evidence table and
+handoff sequence. Correct owner-account dataset results are necessary but
+not sufficient: the deployed console, document path, actual restricted
+identities, negative reads, and data freshness must be demonstrated. A
+fallback or skipped runtime path must remain visible in the completion record.

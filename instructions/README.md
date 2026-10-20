@@ -783,6 +783,42 @@ governed access to that data, and used it in a recall console.
 Confirm that the recall console answers all five questions from the opening
 scenario.
 
+| Recall question | Evidence to demonstrate |
+|---|---|
+| Which stores have the affected lot? | Nine stores currently hold YG-2291: eight North and one East. Keep this current-inventory answer separate from historical deliveries. |
+| Where else has the supplier's product traveled? | Thirteen stores received YG-2291 after the carrier corrections. The thirteen related production lots reached forty-five stores across five regions. |
+| Were the trucks kept within the cold-chain rule? | After complete-recall replay, SHP-209403 and SHP-209415 have a confirmed continuous breach; the other eleven deliveries have full no-breach coverage. Exactly 4 C and exactly twenty minutes are not breaches. Before the supplement, preserve insufficient-data results. |
+| Which users can see each part? | The North manager sees eight permitted current stores and eight derived shipment results. The CAR-02 partner sees only its carrier's shipments and eight derived results, without supplier costs or raw-event access. Demonstrate denied reads, not only visible page filters. |
+| Can managers investigate through one console? | The deployed app shows the signed-in identity, governed inventory/history/temperature results, analysis timestamp, and authorized supplier-document links. A workspace app item without deployed content does not satisfy this question. |
+
+Use the fixed investigation clock, **2026-10-13 04:00 UTC**, when explaining
+the historical recall. Keep the temperature snapshot's actual analysis time
+separate from observation time and from that fixed scenario clock.
+
+## Hand off the recall
+
+1. State which lot, supplier, production line, and production window are
+   affected: **YG-2291**, **SUP-014**, **AVD-L2**, and
+   **2026-10-11 20:00 to 2026-10-12 00:00 UTC**.
+1. Show current stock, historical delivery reach, and the wider related-lot
+   investigation as distinct results. Do not count every historical receiving
+   store as a current holder.
+1. Show the two confirmed temperature breaches and the evidence coverage used
+   to classify the other deliveries. Do not present a partial or stale
+   snapshot as live complete telemetry.
+1. Open an authorized certificate and the recall procedure through the
+   supplied document path.
+1. Switch to each supplied restricted identity and repeat the positive and
+   negative access checks. Confirm that the browser receives no out-of-scope
+   rows or hidden costs.
+1. Record any skipped exercise, missing resource, failed sign-in, or
+   unverified integration. Do not mark the workshop complete if the app or
+   effective-identity checks were replaced by engineer-only queries.
+
+If you used the historical fallback, identify which technology exercises were
+not completed and which endpoint supplied the investigation results. A correct
+fallback answer does not retrospectively validate an unavailable runtime.
+
 ## Optional extensions
 
 If the instructor confirms that the optional resources are available, explore

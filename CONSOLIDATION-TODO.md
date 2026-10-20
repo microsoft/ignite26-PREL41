@@ -214,8 +214,10 @@ stores. No restricted-identity pass is claimed.
   documentation and create the native AppBackend item through Fabio.
 - [ ] Deploy actual application content and its services; item creation alone
   is not a running console.
-- [ ] Wrap-up: demonstrate answers to all scenario questions and document
-  supported continuation paths.
+- [x] Provide the wrap-up's five-question evidence table, concrete expected
+  results, handoff sequence, and supported optional continuation paths.
+- [ ] Execute that complete wrap-up through the actual console, documents,
+  and restricted identities; do not substitute owner SQL results.
 - [ ] Provide documented recovery, resume, rerun, and fallback behavior
   wherever required by the lab contract.
 - [x] Provision independent corrected fallback reference/history data and
@@ -270,6 +272,10 @@ stores. No restricted-identity pass is claimed.
 
 ## Phase 5: Red-team after feature completion
 
+- [x] Run a bounded interim security review of implemented replay, SQL, role
+  definitions, and directly related guidance. No actionable high-confidence
+  vulnerabilities were reported; unavailable integrations and effective
+  restricted-identity access remain outside this check.
 - [ ] Perform an independent correctness and cross-module integration review.
 - [ ] Perform a security review covering credentials, authentication,
   authorization, OneLake data access, row/column leakage, AI/data-agent
