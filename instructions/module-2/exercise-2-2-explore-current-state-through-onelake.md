@@ -1,12 +1,17 @@
 # Exercise 2.2: Explore current state through OneLake
 
-Apache Iceberg is an open table format. Any engine with an Iceberg library can read an Iceberg table, so Contoso Fresh can keep one copy of its data and let each team query it with the engine it already uses. OneLake publishes a lakehouse's Iceberg tables through an Iceberg REST catalog, the standard API those engines use to find tables and their files.
+Apache Iceberg is an open table format. Any engine with an Iceberg library can read an Iceberg table, so Contoso Fresh can keep one copy of its data and let each team query it with the engine it already uses. 
+
+OneLake publishes a lakehouse's Iceberg tables through an Iceberg REST catalog, the standard API those engines use to find tables and their files.
 
 In this exercise, you write the current-state CSV files as Iceberg tables, then read them back through the OneLake REST catalog, the way an engine outside Fabric would. You finish by asking Module 1's question of the Iceberg tables: which stores hold YG-2291?
 
 ## Check your starting point
 
-In the notebook's **Explorer** pane, expand the lakehouse, then **Files**. If there's no **history** folder, finish Exercise 2.1 first.
+1. In the notebook's **Explorer** pane, right-click the lakehouse, then select **Refresh**.
+
+1. Expand the lakehouse, then **Files**. If there's no **history** folder, finish Exercise 2.1 first.
+
 
 ## Cell 2: Start Spark
 
