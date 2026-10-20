@@ -56,9 +56,14 @@ The Skillable environment must provide:
 - Any identities required to validate OneLake Security.
 - The Rayfin starter and OneLake Read API access required by Module 5.
 
-Exact workspace, item, connection, identity, and SharePoint names are not
-available in `plan.md` and must be reconciled with the Lab Profile before
-release.
+Exact learner workspace, item, connection, identity, and SharePoint names must
+be reconciled with the Lab Profile before release. The author-only
+consolidation workspace does not establish the learner provisioning contract.
+
+Module 1 uses the seven current-state tables in the
+[shared data model](contoso-fresh-data-model.md) to identify current inventory.
+These tables contain neither orders nor shipments. Module 2 owns shipment
+history and answers which stores received affected products in the past.
 
 ## Resource ownership
 

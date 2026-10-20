@@ -18,7 +18,7 @@ Activities.
 | Dependency | Required behavior | Status |
 |---|---|---|
 | Fabric workspace | Contains the Contoso Fresh workshop items | Exact name required |
-| Operational database | Contains orders, shipments, and store inventory | Exact name required |
+| Operational data source | Contains the seven current-state tables in the shared data model; orders and shipments are not part of this source | Provisioning and exact name require verification |
 | Target lakehouse | Accepts learner-created shortcuts and later module output | Exact name required |
 | SharePoint connection | Preconfigured for the Supplier Quality content | Exact name required |
 | SharePoint permissions | Learner can read the target library or folder | Needs Studio verification |
@@ -31,7 +31,8 @@ Activities.
 
 ## Exercise 1.2 configuration
 
-Exercise 1.2 relies on the cooking-show environment described in `plan.md`.
+Exercise 1.2 relies on the pre-provisioned environment in the
+[lab contract](lab-contract.md).
 Studio and Fabric provisioning must satisfy these requirements:
 
 | Contract | Required configuration |
@@ -73,8 +74,14 @@ table and the results the data must produce.
 
 ## Tokens and variables
 
-The learner instructions currently contain no active `@lab.*` replacement
-tokens, variables, conditional displays, or text fields.
+The canonical learner path in `instructions/README.md` and `instructions/module-2/`
+currently contains no active `@lab.*` replacement tokens, variables, conditional
+displays, or text fields.
+
+The retained automotive contribution,
+`instructions/1-ingest-operational-data-from-sharepoint.md`, is not linked from
+that path. It contains credential and lab-instance tokens that must be
+reconciled with Studio before any of its instructions are incorporated.
 
 Before introducing a token, record its exact Studio alias, producer, first
 availability, consumers, resume behavior, and fallback path.
@@ -87,8 +94,11 @@ are declared.
 
 ## Assets and external dependencies
 
-No learner-facing images or external includes are currently referenced, except
-the Module 2 screenshots under `instructions/module-2/media/`.
+The canonical learner path references Module 2 screenshots under
+`instructions/module-2/media/`; those screenshots are still outstanding.
+The retained automotive contribution also references images under
+`instructions/media/`. These must be checked and adapted before integration
+into the Contoso Fresh path.
 Product behavior for OneDrive and SharePoint shortcuts is based on:
 
 - [Create a OneDrive or SharePoint shortcut](https://learn.microsoft.com/fabric/onelake/shortcuts/create-onedrive-sharepoint-shortcut)

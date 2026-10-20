@@ -60,11 +60,22 @@ OneLake view without building a copy pipeline.
 
 ## Exercise 1.1: Explore operations
 
-Explore the supplied Contoso Fresh SQL database and identify the orders,
-shipments, and store inventory data needed for the recall.
+Explore the supplied Contoso Fresh current-state data and identify the lots,
+products, suppliers, locations, and store inventory needed for the recall.
+
+1. Open the supplied operational data source.
+1. Find lot **YG-2291** and identify its product and supplier.
+1. Find the store inventory records for that lot.
+1. Use the location records to identify each store's region.
+
+Current-state inventory answers which stores hold the lot now. It does not
+contain orders or shipment records. In Module 2, you will use historical
+shipments to find every store that received the lot, including stores that no
+longer hold it.
 
 **Completion check:** You can locate the affected lot in the operational data
-and explain how the database data is available in OneLake.
+and explain the difference between stock currently held and historical
+deliveries.
 
 ## Exercise 1.2: Link supplier documents
 

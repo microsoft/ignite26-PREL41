@@ -1,5 +1,11 @@
 # Ingest Operational Data from SharePoint into OneLake
 
+> [!IMPORTANT]
+> This automotive walkthrough is retained as authoring material during
+> consolidation. It is not part of the Contoso Fresh learner path. Its source
+> data, provisioning steps, images, and Skillable tokens must be reconciled
+> before reuse. Start the workshop from the [attendee instructions](README.md).
+
 In this part of the lab, you will learn how to ingest operational data from SharePoint into OneLake by assisting **Contoso Automotive** bring their operational data into a centralized data lake for better analysis and reporting.
 
 ## Task 1: Explore SharePoint Data
@@ -9,8 +15,6 @@ In this part of the lab, you will learn how to ingest operational data from Shar
 1. When prompted, sign in with the following credentials:
    - **Username:** `@lab.CloudPortalCredential(User1).Username`
    - **Tap:** `@lab.CloudPortalCredential(User1).TAP!`
-
-    ![Sign In](./media/sign-in.png)
 
 1. On the left hand navigation pane, select the **OperationalData** library to explore the operational data available for ingestion into OneLake.
 
@@ -27,8 +31,6 @@ In this part of the lab, you will learn how to ingest operational data from Shar
 1. You should be already signed in but if prompted, sign in with the same credentials used for SharePoint.
 
 1. In **Fabric**, select the **Workspaces** option from the left-hand navigation pane and then select **+ New Workspace** button.
-
-    ![New Workspace](./media/new-workspace.png)
 
 1. Enter a name for the new workspace, such as `ContosoOperationalData_@lab.LabInstanceIdId`. Scroll to the bottom of the pane and ensure a fabric capacity is selected under the **Advanced** section then select **Apply**.
 
@@ -96,7 +98,7 @@ In this part of the lab, you will learn how to ingest operational data from Shar
     # before reading them as CSV.
     print("Listing files under:", base_path)
     for f in notebookutils.fs.ls(base_path):
-    print(f.path)
+        print(f.path)
 
     # Read equipment master data
     equipment_raw = (

@@ -48,10 +48,23 @@ the account, and its Admin role and capacity assignment were verified:
 | Capacity SKU and state | F8, Active |
 | Region | Sweden Central |
 | Initial item inventory | Empty, confirmed through the Fabric items API |
+| Lakehouse | contoso_fresh, fe4cab6e-b5e6-4590-a0e4-6b33437d6c15 |
+| Lakehouse schema and SQL endpoint | dbo; SQL endpoint provisioning succeeded |
+| Notebook | module-2-shipment-history, ece07e95-467e-41c8-8077-05277ddd8292 |
+| Existing Spark runtime | 2.0, inspected without changing it |
+
+- [x] Create the schema-enabled lakehouse and verify SQL endpoint provisioning.
+- [x] Import the existing Module 2 notebook without changing its cells.
+- [x] Export the deployed notebook and verify all cell types and sources match
+  the repository. Both normalized SHA-256 cell digests are
+  `869eb233c33fbfb0c4bacfb5bf9ff8ac388f29ce5edf96133ab0025d2a6c14c2`.
+- [ ] Attach the lakehouse and execute the notebook in a standard session.
 
 The integrated browser still prompts for sign-in; browser and CLI sessions
 are separate. CLI-backed Fabric API access is working. AI/OneLake settings,
 workload execution, SharePoint access, and Skillable access remain unverified.
+High-concurrency notebook execution is enabled in the workspace; the
+existing Module 2 contract requires a standard session for its package cells.
 
 ## Phase 1: Consolidate the workshop contract
 
@@ -62,7 +75,7 @@ workload execution, SharePoint access, and Skillable access remain unverified.
   data flows with recall-relevant flows.
 - [ ] Define one pre-provisioned environment, lakehouse layout, naming
   convention, and resource ownership contract.
-- [ ] Separate current-inventory questions in Module 1 from shipment-history
+- [x] Separate current-inventory questions in Module 1 from shipment-history
   questions in Module 2; resolve references to operational orders/shipments.
 - [ ] Agree shared identifiers, schemas, expected results, scenario clock,
   security identities, and downstream data requirements.
@@ -93,7 +106,13 @@ workload execution, SharePoint access, and Skillable access remain unverified.
 - [ ] Provide one canonical attendee entry point and verify Skillable
   navigation for all exercises.
 - [ ] Complete screenshots and remove broken image/link references.
-- [ ] Correct known PR #10 code-example indentation and verify all examples.
+- [x] Correct the known PR #10 loop-body indentation and remove its two
+  missing screenshot references without replacing them with invented images.
+- [ ] Verify all examples.
+- [x] Clearly label the retained automotive walkthrough as authoring material,
+  not part of the canonical Contoso Fresh learner path.
+- [x] Reconcile the Studio inventory's token and image claims with the
+  canonical instructions and the retained automotive contribution.
 - [ ] Reconcile all Skillable aliases and credentials placeholders with the
   actual Lab Profile; do not substitute real secrets into repository files.
 - [ ] Complete provisioning inventory, data model, authoring guidance, and
