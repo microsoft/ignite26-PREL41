@@ -89,6 +89,33 @@ lakehouse. Studio and Fabric provisioning must satisfy these requirements:
 [The Contoso Fresh data model](contoso-fresh-data-model.md) describes every
 table and the results the data must produce.
 
+## Module 3 configuration
+
+- Provision **contoso_truck_telemetry** with custom inlet **truck_replay**,
+  default stream **truck_replay-stream**, and lakehouse destination
+  **truck_telemetry_lakehouse**. The [Fabio recipe](../../infra/README.md#truck-telemetry-eventstream)
+  was exercised in the consolidation workspace.
+- Write JSON observations to `dbo.truck_temperature_events` in the same
+  schema-enabled lakehouse. This is managed Delta output, separate from the
+  nine Module 2 Iceberg tables and their agent selection.
+- Supply a secure, usable replay control for both attendee paths. Its
+  implementation and Studio delivery remain outstanding; a private author
+  validation publisher is not a learner asset.
+- The [boundary fixture](../../data/telemetry/README.md) has 35 messages,
+  34 stable event IDs, and six real shipment contexts. It proves threshold,
+  continuity, retry, and ordering behavior, not full-fleet coverage.
+- Preserve observation timestamps and deduplicate retries. Join shipment and
+  truck context before calculating delivery coverage; do not infer carrier
+  or regional authorization from producer-supplied fields.
+- Pre-warm and verify actual Delta output before learner launch. Cold-start
+  table creation took several minutes; the 30-second destination batch setting
+  does not bound provisioning time.
+- Establish the governed derived-result table and application identity path
+  before console integration. Existing restricted roles do not grant the raw
+  telemetry table.
+- Verify fresh launch, replay/resume, invalid-input handling, and complete-fleet
+  expected results. None is implied by the owner-run six-case validation.
+
 ## Module 4 configuration
 
 - The [infrastructure role definitions](../../infra/README.md) reproduce the

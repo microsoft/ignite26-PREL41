@@ -56,3 +56,77 @@ authorization.
 The certificate transformation, document shortcut, telemetry, and console
 still require their own provisioning and effective-identity checks. Adding a
 new table does not automatically grant it through these selected-path roles.
+
+## Truck telemetry Eventstream
+
+The author workspace now has a native Eventstream named
+**contoso_truck_telemetry**, with this topology:
+
+```text
+truck_replay (CustomEndpoint)
+  -> truck_replay-stream (DefaultStream)
+  -> truck_telemetry_lakehouse (Lakehouse)
+  -> dbo.truck_temperature_events
+```
+
+### Provision the topology
+
+First inspect the workspace for an existing matching Eventstream. On resume,
+reuse it after checking its inlet, destination lakehouse, and table; do not
+create a duplicate or replace an unrelated item.
+
+For a new authorized lab workspace, create the item through Fabio and use its
+returned ID as `EVENTSTREAM_ID`:
+
+```bash
+fabio eventstream create \
+  --workspace "$WORKSPACE_ID" --name contoso_truck_telemetry
+
+fabio eventstream add-source \
+  --workspace "$WORKSPACE_ID" --id "$EVENTSTREAM_ID" \
+  --name truck_replay --source-type CustomEndpoint
+
+fabio eventstream add-destination \
+  --workspace "$WORKSPACE_ID" --id "$EVENTSTREAM_ID" \
+  --name truck_telemetry_lakehouse --destination-type Lakehouse \
+  --input-node truck_replay-stream \
+  --properties "{\"workspaceId\":\"$WORKSPACE_ID\",\"itemId\":\"$LAKEHOUSE_ID\",\"schema\":\"dbo\",\"deltaTable\":\"truck_temperature_events\",\"minimumRows\":1000,\"maximumDurationInSeconds\":30,\"inputSerialization\":{\"type\":\"Json\",\"properties\":{\"encoding\":\"UTF8\"}}}"
+```
+
+The lakehouse must have schemas enabled. This destination creates a separate
+Delta table; it must not overwrite Module 2's Iceberg tables. The explicit
+nine-table data-agent selection excludes this additional table.
+
+### Validate actual ingestion
+
+Use the [telemetry fixtures](../data/telemetry/README.md) with an authorized
+producer. Source connection responses contain secrets: never print them,
+commit them, pass them in process arguments, or expose them in browser code.
+Fabio manages the Fabric topology and credential retrieval; event payloads use
+the managed Event Hubs-compatible data-plane endpoint.
+
+In the consolidation workspace, two controlled sends of the 35-event fixture
+were accepted. The actual Delta table was then compared against every distinct
+fixture payload: **34 canonical events, zero missing, zero unexpected**.
+Raw row counts increase on replay and are not the completion criterion.
+
+Cold-start materialization took several minutes even with a 30-second batching
+setting. That setting is not an initial table-creation SLA. Pre-warm the source
+and destination and verify a real persisted event before learner launch.
+Inspect OneLake's table files separately from SQL endpoint registration; use
+Fabio's metadata refresh only after the Delta table exists. Do not hide a failed
+stream by uploading or loading the fixture directly into the table.
+
+After bounded author validation, pause the Eventstream:
+
+```bash
+fabio eventstream pause \
+  --workspace "$WORKSPACE_ID" --id "$EVENTSTREAM_ID"
+```
+
+Verify the destination is **Paused**. The managed custom inlet can still report
+**Running**; that alone does not mean the lakehouse sink is consuming events.
+The learner replay control and complete-fleet coverage still require Lab
+Profile provisioning. The existing restricted roles intentionally do not
+grant raw telemetry access; governed enrichment and identity tests remain
+required before exposing it through the console.

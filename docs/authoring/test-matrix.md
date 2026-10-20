@@ -32,7 +32,7 @@ Record evidence for every completed test.
 | Module 2 - exercise links | Each Module 2 link in `instructions/README.md` opens its exercise file in the Skillable pane. | Needs Studio verification | Skillable doesn't document links between instruction files. |
 | Module 2 - screenshots | Every image link under `instructions/module-2/` resolves. | Pass | The retained Add data items menu image is present and visually checked. Ten missing image placeholders were removed; the surrounding steps remain self-contained. |
 | Spark capacity and fallback | The notebook completes in time or the documented fallback allows progress. | Needs Studio verification | Requires concurrent launch testing. |
-| Eventstream replay | Telemetry arrives and supports the temperature-breach result. | Needs Studio verification | Requires live Fabric items. |
+| Eventstream replay | Telemetry arrives and supports the temperature-breach result. | Needs Studio verification | Native custom inlet through Eventstream to actual Delta output passed in the consolidation workspace. All 34 canonical fixture payloads and six boundary outcomes matched. Learner replay control, full-fleet coverage, and fresh Skillable launch remain unverified. |
 | Security identities | Manager and partner identities return the intended rows and columns. | Needs Studio verification | Reader-only identities, endpoint access mode, role scopes, cost exclusions, and negative checks are documented. Restricted identities are not yet supplied or exercised. |
 | Recall Console | The application reads OneLake data and respects OneLake Security. | Needs Studio verification | Requires Rayfin and OneLake Read API access. |
 | Keyboard and zoom | Required actions remain usable with keyboard navigation and zoom. | Needs Studio verification | Requires learner UI and product UI testing. |
@@ -56,12 +56,24 @@ not replace Skillable validation or lower-privilege identity checks.
 | Restricted-result expectations | Pass | Owner-run SQL confirmed eight North receiving stores and eight CAR-02 shipment lines reaching eight stores for YG-2291. These are dataset checks, not authorization tests. |
 | OneLake policy provisioning | Pass | Fabio created the unassigned RegionalManagerNorth and LogisticsPartner policies. Read-back assertions matched the committed path grants, row rules, fourteen permitted partner shipment columns, and empty memberships. DefaultReader permissions and membership were unchanged. |
 | Post-policy owner behavior | Pass | SQL still returned 13 receiving stores; the production data agent still listed the original nine current stores after role creation. This is not restricted-identity evidence. |
+| Native telemetry persistence | Pass | Fabio provisioned Eventstream `27712fbe-9867-4894-8f6e-019c0bb53edb`. The custom inlet wrote actual Parquet files and Delta log commits under `Tables/dbo/truck_temperature_events`; SQL queries succeeded after metadata refresh. |
+| Telemetry payload fidelity | Pass | Two controlled sends of the 35-message fixture produced a persisted canonical set of 34 distinct payloads, with zero missing and zero unexpected. Raw rows were 49 at one observation; replay acceptance is not a raw-row-count assertion. |
+| Telemetry shipment matching | Pass | All 35 fixture rows matched the six intended shipment/truck contexts within their delivery intervals: zero unmatched journeys and zero out-of-interval readings. Shipment-line context was deduplicated before joining. |
+| Telemetry duration boundaries | Pass | Native SQL returned longest continuous hot durations of 25, 20, 0, 15, 5, and 25 minutes in fixture order. It confirmed two breaches, preserved exactly-4-C and exactly-20-minute boundaries, did not sum separated hot intervals, and handled out-of-order arrival and identical retries. |
+| Telemetry coverage uncertainty | Pass | The two confirmed breaches remain breaches; the other four partial journeys report insufficient data rather than whole-delivery compliance. The gap case also reports insufficient data over its observed window. |
+| Telemetry cold start and learner timing | Needs Studio verification | Initial table materialization took several minutes despite a 30-second batching setting. Pre-warm and verify actual output before launch; learner replay control, complete-fleet throughput, and module timing are not validated by the six-case fixture. |
 | Diagnostic session cleanup | Pass | The separate diagnostic Livy session was stopped and confirmed `killed`. Livy lacks the notebook's mounted default lakehouse and is not a substitute for this learner path. |
 
 The first unchanged core run stopped at cell 13's intentional
 `condition = None`. This is a learner-edit checkpoint, not a failed Iceberg
 operation. Automated author validation must apply the answer documented in
 Exercise 2.3 without removing the exercise from the learner notebook.
+
+Telemetry input validity and payload fidelity were checked for the supplied
+fixture. Invalid timestamps, null or nonnumeric temperatures, conflicting
+event IDs, conflicting readings at one journey timestamp, and late-arrival
+windowing still require explicit rejection tests in the learner producer and
+analysis implementation. The fixture pass is not evidence those paths exist.
 
 ## Release gate
 

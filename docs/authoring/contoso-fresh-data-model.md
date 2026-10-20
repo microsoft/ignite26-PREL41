@@ -106,7 +106,7 @@ holds about 110,000 shipments and 1.2 million lines. The key is
 | origin_dc_id | locations | |
 | store_id | locations | |
 | carrier_id | carriers | |
-| truck_id | trucks | Module 3 joins telemetry on truck and time. |
+| truck_id | trucks | Module 3 joins telemetry on shipment, truck, and journey time. |
 | lot_id | lot_history | |
 | product_id | products | |
 | supplier_id | suppliers | |
@@ -140,6 +140,7 @@ that holds Module 1's `SupplierQuality` shortcut. Skillable sets its name.
 | suppliers, products, locations, carriers, trucks, lots, store_inventory | `dbo` schema | Apache Iceberg |
 | lot_history, shipment_history | `history` schema | Apache Iceberg |
 | supplier_certificates | `dbo` schema | Managed Delta table from the SharePoint CSV transformation |
+| truck_temperature_events | `dbo` schema | Managed Delta table written by the telemetry Eventstream |
 
 Module 2 builds its `dbo` tables from `Files/reference/` and doesn't read
 Module 1's copy of the current state.
@@ -157,6 +158,33 @@ Iceberg REST catalog at `https://onelake.table.fabric.microsoft.com/iceberg`,
 with the warehouse `<workspace ID>/<lakehouse ID>`. The SQL analytics endpoint
 and Fabric data agents read the same files as Delta tables, which OneLake
 builds from the Iceberg metadata without copying data.
+
+## Telemetry observations
+
+Module 3's [boundary contract](../../data/telemetry/README.md) defines
+`event_id`, `shipment_id`, `truck_id`, `event_time_utc`, and `temperature_c`.
+An exact retry preserves its event ID and payload. Conflicting event IDs or
+readings at one journey timestamp require explicit rejection or resolution,
+not arbitrary deduplication.
+
+Match observations to distinct shipment/truck journeys and verify they fall
+inside shipped-to-delivered time. Never join a reading directly to every
+shipment line before calculating duration: that multiplies readings and can
+corrupt the result. Enrich carrier, store, region, and supplier context from
+governed history rather than trusting producer attributes.
+
+For the five-minute-cadence fixture, a reading applies until the next reading
+only when that observation is no more than five minutes later. A larger gap
+breaks continuity; the final observation alone proves no duration. A breach
+is one continuous period strictly above 4 C for strictly more than twenty
+minutes. Cooling breaks the run; separate hot intervals are not summed.
+
+The six fixtures establish two breaches and four journeys with insufficient
+whole-trip coverage. They are partial observation windows, not complete fleet
+telemetry. Full-journey compliance requires complete coverage without gaps.
+Keep the raw telemetry table outside Module 2's agent selection and the
+existing restricted role grants until governed enrichment and identity tests
+are complete.
 
 ## Recall answer
 

@@ -55,6 +55,8 @@ the account, and its Admin role and capacity assignment were verified:
 | Notebook | module-2-shipment-history, ece07e95-467e-41c8-8077-05277ddd8292 |
 | Existing Spark runtime | 2.0, inspected without changing it |
 | Recall data agent | contoso_recall_agent, 40669c9f-e1ee-49ee-91b5-2af42bfe30e8 |
+| Telemetry Eventstream | contoso_truck_telemetry, 27712fbe-9867-4894-8f6e-019c0bb53edb |
+| Telemetry destination | dbo.truck_temperature_events, managed Delta |
 
 - [x] Create the schema-enabled lakehouse and verify SQL endpoint provisioning.
 - [x] Import the existing Module 2 notebook without changing its cells.
@@ -175,6 +177,14 @@ stores. No restricted-identity pass is claimed.
   snapshots, REST catalog, DuckDB tracing, AI Functions, and data agent.
 - [ ] Module 3: supplied/replayable telemetry, Eventstream path, the
   above-4-C-for-more-than-20-minutes rule, shipment joins, and expected results.
+- [x] Deploy the native custom-endpoint-to-lakehouse Eventstream through
+  Fabio and verify real persisted Delta output, not just accepted sends.
+- [x] Supply 35 boundary-fixture events with 34 distinct IDs and verify all
+  join real shipment/truck/time intervals without fan-out.
+- [x] Compare persisted canonical payloads with the complete fixture and
+  verify all six continuous-duration and whole-journey coverage outcomes.
+- [ ] Deliver the learner replay control, complete-fleet data, executable
+  analysis path, governed result materialization, and console integration.
 - [ ] Module 4: regional-manager and logistics-partner access, row/column
   restrictions, denied-access checks, and identity-specific expected results.
 - [x] Implement and deploy unassigned OneLake policy definitions for North and
@@ -266,10 +276,40 @@ or successful test results:
 - A provisioned environment satisfying the existing package-based Module 2
   path; DuckDB and the Data Agent SDK remain uninstalled and unverified.
 
-Modules 3 and 5 are not implemented, restricted-identity and Skillable runs
-have not passed, and the final post-feature red-team has not started. Do not
+Module 3 has a live ingestion path and validated boundary fixtures, but its
+complete learner flow is not finished. Module 5 is not implemented.
+Restricted-identity and Skillable runs have not passed, and the final
+post-feature red-team has not started. Do not
 open the final PR or report publication readiness on the strength of the
 completed owner-account checks.
+
+### Live telemetry evidence
+
+Fabio created `contoso_truck_telemetry` with custom inlet `truck_replay`,
+default stream `truck_replay-stream`, and lakehouse destination
+`truck_telemetry_lakehouse`. The destination writes
+`dbo.truck_temperature_events` in the existing schema-enabled lakehouse.
+The [provisioning recipe](infra/README.md#truck-telemetry-eventstream) and
+[fixture contract](data/telemetry/README.md) describe the topology and semantics.
+
+Two controlled sends each accepted 35 messages. Actual OneLake Parquet files
+and Delta log versions were observed, SQL metadata was refreshed, and the
+persisted canonical payload set matched **34 events, zero missing, zero
+unexpected**. At one read there were 49 raw rows; accepted-send totals are
+not a guarantee of raw sink row counts during startup or replay.
+
+The native SQL analysis returned longest hot intervals of **25, 20, 0, 15,
+5, and 25 minutes** for SHP-209403, SHP-209404, SHP-209408, SHP-209410,
+SHP-209414, and SHP-209415 respectively. Only the first and last are
+confirmed breaches. The other four have insufficient whole-journey coverage.
+Fixture-to-history validation found zero unmatched journeys and zero
+out-of-journey observations across all 35 fixture rows.
+
+Cold-start materialization took several minutes despite a 30-second batch
+setting. Fresh-launch timing and producer recovery still require testing.
+The Eventstream was paused after validation; check sink status before
+resuming. The custom inlet/default stream can remain Running even when the
+destination is Paused. Raw telemetry remains outside the restricted roles.
 
 The consolidation branch is published. PRs #3, #4, and #9 were merged into it
 in dependency order with no textual merge conflicts; merged PR #10 is retained

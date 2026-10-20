@@ -36,3 +36,13 @@ and store inventory. All records are synthetic. The first code cell of the
 [Module 2 notebook](../src/notebooks/module-2-shipment-history.ipynb) generates
 them, and [the data model](../docs/authoring/contoso-fresh-data-model.md)
 describes each table.
+
+## Telemetry boundary fixtures
+
+[The telemetry contract](telemetry/README.md) provides 35 replay events for six
+real shipment/truck pairs in the synthetic history. Its 34 distinct event IDs
+cover strict threshold boundaries, cooling between hot intervals, missing
+observations, out-of-order arrival, and retries.
+
+These are partial-journey validation windows, not a complete fleet history.
+Do not declare an unobserved part of a delivery temperature-compliant.

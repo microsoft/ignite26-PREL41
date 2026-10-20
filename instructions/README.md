@@ -298,15 +298,82 @@ affected products remained within the cold-chain threshold.
 Start the supplied Eventstream and observe new truck telemetry arriving in the
 lakehouse.
 
-**Completion check:** New telemetry rows appear with truck, timestamp, and
-temperature values.
+1. Locate **contoso_truck_telemetry** and confirm that its lakehouse destination
+   is **dbo.truck_temperature_events** in the supplied lakehouse.
+1. Start the Eventstream and use the replay control supplied by the lab.
+   If the control or producer is missing, stop and notify the instructor or lab
+   support; do not create a personal connection or paste endpoint keys into
+   browser code.
+1. Confirm that the destination is running, then use the lakehouse SQL
+   analytics endpoint to inspect:
+
+   ```sql
+   SELECT
+       COUNT(*) AS raw_rows,
+       COUNT(DISTINCT event_id) AS distinct_events,
+       COUNT(DISTINCT shipment_id) AS shipments
+   FROM dbo.truck_temperature_events;
+   ```
+
+1. If the supplied replay uses the workshop boundary fixture, expect **34
+   distinct events for six shipments**. Its 35 input messages contain an
+   intentional retry. Replaying can increase raw rows without changing the
+   distinct events or their meaning.
+1. Confirm that records contain `event_id`, `shipment_id`, `truck_id`,
+   `event_time_utc`, and numeric `temperature_c`.
+
+The first write can take longer than an ordinary batch. A **Running** inlet or
+an accepted send is not proof that the destination table exists. If the table
+is missing, have the instructor check actual sink output and SQL metadata
+registration; do not substitute a local file upload.
+
+**Completion check:** The destination contains actual replay observations,
+with the expected distinct IDs, shipment IDs, observation times, and
+temperatures.
 
 ## Exercise 3.2: Identify temperature breaches
 
 Find shipments that remained above **4 C** for more than 20 minutes and join
 them to the affected lots.
 
-**Completion check:** Each affected shipment has a clear temperature status.
+The rule is strict: **4 C is not above 4 C**, and **20 minutes is not more
+than 20 minutes**.
+
+1. Deduplicate exact event retries before calculating duration. Conflicting
+   payloads for one event ID, or different readings at the same journey
+   timestamp, require investigation rather than an arbitrary choice.
+1. Order readings by `event_time_utc` within each shipment and truck, not by
+   arrival order. The boundary fixture uses a five-minute cadence.
+1. Treat a reading as applying until the next observation only when the gap
+   is at most five minutes. A larger gap breaks continuity. A final reading
+   without a successor has no demonstrated duration.
+1. Measure each uninterrupted above-threshold interval separately. A cooling
+   reading closes the interval; never sum separate hot intervals to cross
+   the twenty-minute threshold.
+1. Join journey context from shipment history using both `shipment_id` and
+   `truck_id`, checking observation times against the delivery interval.
+   Deduplicate the shipment's line-level context first so a reading is not
+   multiplied by the number of lots on that shipment.
+1. Compare the boundary fixture's observed-window results:
+
+   | Shipment | Longest confirmed hot interval | Expected window result |
+   |---|---:|---|
+   | SHP-209403 | 25 minutes | Breach |
+   | SHP-209404 | 20 minutes | No observed breach |
+   | SHP-209408 | 0 minutes | No observed breach; readings are exactly 4 C |
+   | SHP-209410 | 15 minutes | No observed breach; do not add its separate hot intervals |
+   | SHP-209414 | 5 minutes | Insufficient data across its observation gap |
+   | SHP-209415 | 25 minutes | Breach, despite out-of-order arrival and a retry |
+
+The fixture does not cover complete journeys. A confirmed breach is sufficient
+to flag a shipment, but a partial window without a breach does not prove that
+the entire delivery stayed cold. For these fixtures, **SHP-209403** and
+**SHP-209415** are breached; the other four shipments have **Insufficient
+data** for a whole-journey conclusion.
+
+**Completion check:** Your investigation distinguishes a confirmed breach,
+no breach over a fully observed journey, and insufficient data. It does not
+silently label missing telemetry as compliant.
 
 ===
 
