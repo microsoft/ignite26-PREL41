@@ -73,7 +73,7 @@ OneLake view without building a copy pipeline.
 Explore the supplied Contoso Fresh current-state data and identify the lots,
 products, suppliers, locations, and store inventory needed for the recall.
 
-1. Open the supplied operational data source.
+1. Open the supplied operational data source, **contoso_operations**.
 1. Find lot **YG-2291** and identify its product and supplier.
 1. Find the store inventory records for that lot.
 1. Use the location records to identify each store's region.
@@ -233,7 +233,7 @@ shortcut remains available.
 Use the SQL analytics endpoint to join the operational data and identify stores
 that currently hold lot **YG-2291**.
 
-1. Open the SQL analytics endpoint of the **supplied operational source**,
+1. Open the SQL analytics endpoint of **contoso_operations**, the supplied operational source,
    not the destination lakehouse that Module 2 has yet to populate.
 1. Create a SQL query and run:
 

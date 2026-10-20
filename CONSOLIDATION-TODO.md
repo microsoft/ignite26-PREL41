@@ -58,6 +58,8 @@ the account, and its Admin role and capacity assignment were verified:
 | Telemetry Eventstream | contoso_truck_telemetry, 27712fbe-9867-4894-8f6e-019c0bb53edb |
 | Telemetry destination | dbo.truck_temperature_events, managed Delta |
 | Recall Console item | contoso_recall_console, 451acf30-8346-491b-aba6-b7ab95ddc71c; AppBackend metadata only |
+| Operational source | contoso_operations, aad9a5d8-7742-41b3-befa-84f34be2a46c |
+| Operational SQL endpoint | 37b5c6b2-da51-4d64-9195-02d563ab09b6; separate from Module 2 |
 
 - [x] Create the schema-enabled lakehouse and verify SQL endpoint provisioning.
 - [x] Import the existing Module 2 notebook without changing its cells.
@@ -128,8 +130,8 @@ existing Module 2 contract requires a standard session for its package cells.
 The Module 1 instructions now include the CSV-only certificate transformation,
 its managed-copy semantics, resume checks, and exact inventory SQL. That SQL
 returned nine stores against the matching Module 2 data: eight North and one
-East. The separate operational source and SharePoint transformation are not
-yet validated. The certificate table is explicitly excluded from Module 2's
+East. The separate operational source is now provisioned and validated; the
+SharePoint transformation is not. The certificate table is explicitly excluded from Module 2's
 nine-table agent selection.
 
 Module 4 now documents supported role names, reader-only identities, user
@@ -174,6 +176,8 @@ stores. No restricted-identity pass is claimed.
   guided and self-paced starting paths.
 - [ ] Module 1: operational recall data, supplier-document shortcut,
   transformations, completion checks, and downstream handoff.
+- [x] Provision the separate seven-table operational source with native Fabio
+  CSV loads, compare all 1,990 rows/columns, and run the exact learner inventory query.
 - [ ] Module 2: historical-data generation, Iceberg writes and row changes,
   snapshots, REST catalog, DuckDB tracing, AI Functions, and data agent.
 - [ ] Module 3: supplied/replayable telemetry, Eventstream path, the
@@ -278,7 +282,8 @@ or successful test results:
   Fabio returned no matching accessible connection.
 - Distinct restricted North manager and CAR-02 partner identities, with an
   approved sign-in method. The deployed roles intentionally have no members.
-- Skillable Studio/Lab Profile access and the provisioned operational source.
+- Skillable Studio/Lab Profile access and fresh-instance provisioning of the
+  now-available operational source.
 - The actual Rayfin starter and a preconfigured deployment toolchain, plus
   learner terminal/replay-control provisioning. Fabric Apps is publicly
   documented as built on Rayfin, and native AppBackend creation now succeeds.
@@ -345,6 +350,25 @@ application project is present. No packages were installed and no replacement
 application scaffold was generated. The item description explicitly says
 application content is not yet deployed. Hosting, connectors, identity
 propagation, and the actual recall experience are not validated.
+
+### Separate operational-source evidence
+
+Fabio created the schema-enabled **contoso_operations** lakehouse and loaded
+the seven committed reference CSVs through native `upload-table` operations.
+Its SQL analytics endpoint provisioned successfully, and metadata refresh
+reported success for all seven tables. Type-normalized comparisons of every
+column and row matched the source CSVs: **1,990 records, zero missing, zero
+unexpected**. SQL timestamps carry additional zero padding; the comparison
+asserted that any discarded submicrosecond digits were zero.
+
+The exact Exercise 1.4 query then ran against this separate source endpoint
+and returned nine current stores, eight North and one East, with the documented
+IDs and positive quantities. No Module 2 table was loaded or overwritten by
+these source-provisioning operations. The
+[native recipe](infra/README.md#operational-source) documents new-source
+creation, resume safeguards, and restricted-identity exclusions. SharePoint
+content, certificate transformation, and a fresh Skillable launch remain
+separate outstanding checks.
 
 Cold-start materialization took several minutes despite a 30-second batch
 setting. Fresh-launch timing and producer recovery still require testing.

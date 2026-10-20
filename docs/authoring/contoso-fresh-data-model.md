@@ -52,7 +52,10 @@ euros with two decimals.
 
 Module 1 owns these tables. Module 2's generator writes them as CSV files in
 `data/reference/`, one file per table, such as `data/reference/lots.csv`. The
-files are committed to the repository, and Skillable loads them for Module 1.
+files are committed to the repository. The Lab Profile must load them for
+Module 1 into the separate **contoso_operations** source. This native source
+has been provisioned and validated in the author workspace, not yet through
+a fresh Skillable instance.
 The generator is the first code cell of
 [`module-2-shipment-history.ipynb`](../../src/notebooks/module-2-shipment-history.ipynb).
 To regenerate the files, run that cell outside Fabric from anywhere inside the
@@ -144,6 +147,13 @@ that holds Module 1's `SupplierQuality` shortcut. Skillable sets its name.
 
 Module 2 builds its `dbo` tables from `Files/reference/` and doesn't read
 Module 1's copy of the current state.
+
+Module 1's seven current-state tables are managed Delta tables in the separate
+**contoso_operations** lakehouse, loaded through Fabio's native CSV operations.
+All 1,990 rows were compared against the committed CSVs, including typed
+numbers, booleans, dates, and UTC timestamps. The current-inventory query
+passed against that source's own SQL endpoint. The author load process does
+not overwrite any Module 2 tables.
 
 Module 1's `supplier_certificates` table is separate from the seven reference
 tables. It contains the four rows from

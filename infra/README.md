@@ -57,6 +57,72 @@ The certificate transformation, document shortcut, telemetry, and console
 still require their own provisioning and effective-identity checks. Adding a
 new table does not automatically grant it through these selected-path roles.
 
+## Operational source
+
+Module 1 uses **contoso_operations**, a separate schema-enabled lakehouse
+containing seven managed Delta tables loaded from
+[the committed reference CSVs](../data/reference/). Module 2 writes its
+Iceberg tables to **contoso_fresh** instead. Do not use the destination
+lakehouse ID for this provisioning step.
+
+In a new authorized workspace, create the operational source:
+
+```bash
+fabio lakehouse create \
+  --workspace "$WORKSPACE_ID" --name contoso_operations --enable-schemas
+```
+
+Set `SOURCE_LAKEHOUSE_ID` to the returned ID. Before loading, inspect that
+item and confirm it is the newly created operational source, not the
+destination or an existing lakehouse with authored tables:
+
+```bash
+fabio lakehouse show \
+  --workspace "$WORKSPACE_ID" --id "$SOURCE_LAKEHOUSE_ID" \
+  --query '{id:id,name:displayName,sql:properties.sqlEndpointProperties.id}'
+```
+
+Only for that new, empty source, run from the repository root:
+
+```bash
+(
+for table in suppliers products locations carriers trucks lots store_inventory; do
+  fabio lakehouse upload-table \
+    --workspace "$WORKSPACE_ID" --id "$SOURCE_LAKEHOUSE_ID" \
+    --source-path "data/reference/$table.csv" \
+    --table "$table" --schema dbo --format Csv --mode Overwrite \
+    --lro-timeout 600 || exit 1
+done
+)
+```
+
+Check every result; do not proceed after an upload or load error. This is
+author provisioning, not a learner-built copy pipeline. On resume, compare
+the existing table schemas and data and reuse matching tables. Do not rerun
+overwrite mode on existing or unrelated tables without explicit approval.
+Use ordinary SQL endpoint metadata refresh if a successfully loaded table
+is not registered; do not recreate the endpoint.
+
+The consolidation source passed complete, type-normalized row comparisons
+against all seven CSVs:
+
+| Table | Rows |
+|---|---:|
+| suppliers | 4 |
+| products | 24 |
+| locations | 83 |
+| carriers | 4 |
+| trucks | 40 |
+| lots | 302 |
+| store_inventory | 1,533 |
+| **Total** | **1,990** |
+
+The exact Exercise 1.4 query ran against this source's own SQL endpoint and
+returned nine stores: eight North and one East. Restricted manager/partner
+identities must not receive access to this unfiltered source or its staging
+CSV files. Their governed reads use the destination lakehouse and require
+separate identity tests.
+
 ## Truck telemetry Eventstream
 
 The author workspace now has a native Eventstream named

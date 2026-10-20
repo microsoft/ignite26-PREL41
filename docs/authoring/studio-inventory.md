@@ -18,7 +18,7 @@ Activities.
 | Dependency | Required behavior | Status |
 |---|---|---|
 | Fabric workspace | Contains the Contoso Fresh workshop items | Exact name required |
-| Operational data source | Separate source with the seven current-state tables exposed as `dbo` tables through its SQL analytics endpoint; uses the committed reference data and does not prepopulate Module 2's destination `dbo` tables | Provisioning and exact name require verification |
+| Operational data source | `contoso_operations`, separate from the destination, exposes the seven committed current-state tables under `dbo` through its own SQL endpoint | Native source and all 1,990 rows verified; fresh Lab Profile provisioning still needs verification |
 | Target lakehouse | Accepts learner-created shortcuts and later module output | Exact name required |
 | SharePoint connection | Preconfigured for the Supplier Quality content | Exact name required |
 | SharePoint permissions | Learner can read the target library or folder | Needs Studio verification |
@@ -49,6 +49,12 @@ The learner path intentionally does not create a new cloud connection or collect
 a SharePoint site URL. If the provisioned connection is unavailable, the
 exercise must stop with instructor intervention rather than silently use a
 personal connection.
+
+The [operational-source provisioning recipe](../../infra/README.md#operational-source)
+uses Fabio's native CSV upload/load operations. In the consolidation workspace,
+all seven typed Delta tables matched the committed data, and the exact learner
+inventory query returned nine stores against that separate endpoint. Keep
+the source and its staging files inaccessible to the restricted test identities.
 
 ## Exercise 1.3 configuration
 
