@@ -430,6 +430,30 @@ data**, with zero readings and no calculated hot duration. A shipment must
 not disappear from the recall investigation just because its sensor is
 missing.
 
+### Complete the recall delivery coverage
+
+After checking the boundary cases, replay the supplied
+[coverage supplement](../data/telemetry/recall-coverage-supplement.jsonl)
+through the same Eventstream. Use the replay procedure above with
+`--input data/telemetry/recall-coverage-supplement.jsonl`. Validate first,
+then expect **404 accepted messages**. Do not delete the original fixture.
+
+1. Verify actual output now has **438 distinct event IDs for 13 shipments**.
+   Raw counts can be higher after retries.
+1. Run the complete temperature-status SQL again. Every affected delivery
+   should now have observations at its start and end, without a gap exceeding
+   five minutes.
+1. Confirm **two breaches**—SHP-209403 and SHP-209415—and **eleven
+   no-breach journeys**. SHP-209414 now has explicit readings in its formerly
+   missing window; its longest hot interval is ten minutes. SHP-209416
+   shares its truck's exactly-twenty-minute hot period and is not breached.
+1. Have the instructor refresh and verify the governed temperature snapshot
+   before continuing to the console.
+
+These are additional synthetic observations, not a fallback that assumes
+missing temperatures were safe. Without the supplement's actual persisted
+records, preserve the original insufficient-data results.
+
 **Completion check:** Your investigation distinguishes a confirmed breach,
 no breach over a fully observed journey, and insufficient data. It does not
 silently label missing telemetry as compliant.
@@ -673,7 +697,7 @@ Use only the starter's provisioned connector. Verify these results separately:
 | Current inventory | Nine stores currently hold YG-2291. |
 | Shipment history | Thirteen stores received YG-2291, including the correction-file shipment. |
 | Related products | Thirteen related lots reached 45 stores. |
-| Temperature investigation | SHP-209403 and SHP-209415 have confirmed breaches in the boundary fixture; the other 11 affected shipments have insufficient whole-journey data. |
+| Temperature investigation | After complete-recall replay, SHP-209403 and SHP-209415 have confirmed breaches and the other 11 affected shipments have complete no-breach coverage. With only the boundary fixture, those 11 must remain insufficient data. |
 | Supplier documents | Certificate links open the matching files through the supplied document access, not a public URL or embedded credential. |
 
 Keep raw telemetry and supplier costs out of the application response unless

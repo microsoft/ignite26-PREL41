@@ -113,6 +113,11 @@ table and the results the data must produce.
 - The [boundary fixture](../../data/telemetry/README.md) has 35 messages,
   34 stable event IDs, and six real shipment contexts. It proves threshold,
   continuity, retry, and ordering behavior, not full-fleet coverage.
+- After the boundary checks, the 404-event additive coverage supplement
+  completes all 13 affected journeys. Preserve both files' stable IDs.
+  The combined canonical count is 438, with consistent shared-truck readings.
+  Capture the missing-data results before replaying the supplement, then
+  validate complete coverage and refresh the governed snapshot afterward.
 - Preserve observation timestamps and deduplicate retries. Join shipment and
   truck context before calculating delivery coverage; do not infer carrier
   or regional authorization from producer-supplied fields.
@@ -132,8 +137,10 @@ table and the results the data must produce.
   retry consistency, journey matches, and history consistency before
   calculating statuses. It returns all 13 YG-2291 shipments, including seven
   without telemetry.
-- Verify fresh launch, learner replay/resume, and complete-fleet expected
-  results. Native owner checks do not establish the Studio delivery path.
+- Native replay and exact SQL results now pass for complete coverage of all
+  13 affected deliveries, including matching every one of the 438 persisted
+  canonical payloads. Verify fresh launch and learner replay/resume in the
+  Lab Profile; native owner checks do not establish the Studio delivery path.
 
 ## Module 4 configuration
 

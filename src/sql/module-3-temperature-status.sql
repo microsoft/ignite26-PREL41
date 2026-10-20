@@ -37,14 +37,14 @@ IF EXISTS (
     THROW 50003, 'Conflicting payloads share an event ID. Resolve the source error; do not choose an arbitrary retry.', 1;
 
 IF EXISTS (
-    SELECT shipment_id, truck_id,
+    SELECT truck_id,
         CONVERT(datetime2(6), event_time_utc, 127)
     FROM dbo.truck_temperature_events
-    GROUP BY shipment_id, truck_id,
+    GROUP BY truck_id,
         CONVERT(datetime2(6), event_time_utc, 127)
     HAVING MIN(temperature_c) <> MAX(temperature_c)
 )
-    THROW 50004, 'Conflicting temperatures share a journey timestamp. Resolve the readings before calculating duration.', 1;
+    THROW 50004, 'Conflicting temperatures share a truck timestamp. Resolve the readings before calculating duration.', 1;
 
 IF EXISTS (
     SELECT 1

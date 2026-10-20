@@ -193,6 +193,12 @@ minutes. Cooling breaks the run; separate hot intervals are not summed.
 The six fixtures establish two breaches and four journeys with insufficient
 whole-trip coverage. They are partial observation windows, not complete fleet
 telemetry. Full-journey compliance requires complete coverage without gaps.
+An additive 404-event coverage supplement provides explicit readings for all
+13 affected deliveries, including exact delivery endpoints and shared-truck
+consistency. Combined with the original fixture it has 438 canonical events.
+After actual ingestion, two shipments remain breached and eleven have
+complete no-breach coverage. The formerly missing gap is not assumed safe;
+the supplemental file supplies new synthetic observations.
 Keep the raw telemetry table outside Module 2's agent selection and the
 existing restricted role grants. Instead, `dbo.recall_temperature_status`
 materializes the guarded analysis for all 13 affected shipments. Its

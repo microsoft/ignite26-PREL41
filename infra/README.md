@@ -294,7 +294,11 @@ FROM dbo.recall_temperature_status
 WHERE lot_id = 'YG-2291';
 ```
 
-For the boundary fixture, expect **13**, **2**, and **7** respectively.
+For the boundary fixture alone, expect **13**, **2**, and **7** respectively.
+After the [complete-recall supplement](../data/telemetry/README.md#complete-the-affected-deliveries)
+has actually persisted, expect **13**, **2**, and **0**, with eleven
+`no_breach` journeys instead of eleven insufficient-data journeys. This
+change must follow new observations, not a manual status override.
 Compare every persisted row and column with the analysis output, not only
 these counts. A replay does not refresh this table automatically. If analysis,
 export, load, or verification fails, report the failure and do not present an

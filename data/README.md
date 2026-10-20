@@ -46,3 +46,8 @@ observations, out-of-order arrival, and retries.
 
 These are partial-journey validation windows, not a complete fleet history.
 Do not declare an unobserved part of a delivery temperature-compliant.
+The [additive coverage supplement](telemetry/README.md#complete-the-affected-deliveries)
+provides explicit additional observations for all 13 affected delivery
+intervals, while preserving the boundary events. Run the boundary checks
+before adding that coverage so learners observe why missing-data status
+changes only when evidence arrives.

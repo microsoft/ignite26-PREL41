@@ -192,8 +192,11 @@ stores. No restricted-identity pass is claimed.
   partial-failure paths, and verify all 35 shipped-producer events persisted.
 - [x] Deliver and natively execute the guarded SQL analysis, including all
   13 affected shipments and seven missing-sensor cases.
-- [ ] Verify learner terminal/replay-control delivery, complete-fleet data,
-  snapshot refresh delivery, and console integration.
+- [x] Supply and ingest additive coverage for all 13 affected deliveries,
+  verify every canonical payload and exact native duration/coverage result,
+  and refresh the governed snapshot to two breaches and eleven no-breach journeys.
+- [ ] Verify learner terminal/replay-control delivery, snapshot refresh delivery,
+  and console integration.
 - [x] Materialize all 13 guarded analysis rows in a cost-free derived snapshot,
   verify every persisted column, and deploy scoped unassigned row rules
   without granting raw telemetry or changing DefaultReader semantics.
@@ -375,6 +378,35 @@ streaming result. The [refresh procedure](infra/README.md#governed-temperature-s
 requires output validation and prevents silent continuation after failure.
 Console binding, freshness presentation, actual restricted identities, and
 Lab Profile refresh delivery remain outstanding.
+
+### Complete affected-delivery coverage
+
+The additive [coverage supplement](data/telemetry/recall-coverage-supplement.jsonl)
+adds 404 observations without modifying the original boundary events. It
+uses the actual 13 affected delivery intervals and preserves consistent
+shared-truck observations across overlapping shipment contexts. Combined
+input is 439 messages with 438 stable event IDs. This covers the complete
+affected recall deliveries, not unrelated five-year fleet history.
+
+The shipped producer accepted all 404 supplemental sends. Actual SQL output
+eventually contained all 438 canonical payloads, with zero missing and zero
+unexpected records. Intermediate reads showed only part of the supplement;
+no full-coverage claim or snapshot refresh was made until persistence passed.
+At the completed read the raw count was 509 across previous retries.
+
+The exact SQL batch verified every expected reading count, duration, and
+delivery endpoint: **two breaches and eleven no-breach journeys**, with no
+missing-sensor deliveries remaining. Explicit new observations fill the
+previously unknown windows; the data was not defaulted to compliant.
+Both producer and SQL also reject contradictory readings for the same truck
+timestamp across different shipments.
+
+The derived snapshot was refreshed using the documented procedure and
+compared again with the complete analysis. Its timestamp is
+`2026-10-20T22:01:07.382069Z`. Owner dataset checks found eight North rows
+with two breaches and eight CAR-02 rows with one breach. Actual restricted
+identity tests remain outstanding. The Eventstream destination was confirmed
+**Paused** after this completed validation; resume it before further replay.
 
 ### Separate operational-source evidence
 

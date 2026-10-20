@@ -44,6 +44,7 @@ def load_events(path: Path) -> list[str]:
 
     events: dict[str, dict[str, object]] = {}
     observations: dict[tuple[str, str, datetime], float] = {}
+    truck_observations: dict[tuple[str, datetime], float] = {}
     fields = {"event_id", "shipment_id", "truck_id", "event_time_utc", "temperature_c"}
     for number, payload in enumerate(payloads, 1):
         event = json.loads(payload, object_pairs_hook=unique_fields)
@@ -73,6 +74,13 @@ def load_events(path: Path) -> list[str]:
         if key in observations and observations[key] != temperature:
             raise ValueError(f"Event {number} conflicts with a journey timestamp.")
         observations[key] = temperature
+        truck_key = (event["truck_id"], observed_at)
+        if (
+            truck_key in truck_observations
+            and truck_observations[truck_key] != temperature
+        ):
+            raise ValueError(f"Event {number} conflicts with another shipment's truck timestamp.")
+        truck_observations[truck_key] = temperature
     return payloads
 
 

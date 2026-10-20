@@ -73,9 +73,62 @@ distinct event counts, shipment/truck/time matches, duplicate behavior, and all
 six boundary outcomes. Merely uploading this file to OneLake, creating an
 Eventstream, or seeing a running inlet is not a replay pass.
 
+## Complete the affected deliveries
+
+[recall-coverage-supplement.jsonl](recall-coverage-supplement.jsonl) adds
+**404 observations** covering the complete shipped-to-delivered intervals of
+all **13 YG-2291 shipments**. Replay it after the boundary fixture; do not
+replace or delete the original events.
+
+The combined dataset has **439 input messages and 438 distinct event IDs**.
+The original retry is retained. Existing observations are unchanged, and
+shared-truck observations agree across overlapping shipment contexts. Added
+readings fill the previously unknown portions of these synthetic journeys;
+they are new scenario evidence, not a claim that missing real-world readings
+can be inferred as cold.
+
+Every interval is at most five minutes, and each delivery has readings at its
+exact start and end. The two confirmed breaches remain unchanged. The other
+eleven shipments now have complete coverage and report `no_breach`.
+SHP-209414's formerly missing window is filled with explicit new observations;
+its longest confirmed hot interval becomes ten minutes. SHP-209416 shares
+TRK-012's exactly-twenty-minute hot period and is not breached.
+
+| Shipment | Distinct readings after both files | Longest hot interval | Whole-delivery result |
+|---|---:|---:|---|
+| SHP-209403 | 38 | 25 minutes | Breach |
+| SHP-209404 | 57 | 20 minutes | No breach |
+| SHP-209408 | 26 | 0 minutes | No breach |
+| SHP-209410 | 21 | 15 minutes | No breach |
+| SHP-209414 | 42 | 10 minutes | No breach |
+| SHP-209415 | 11 | 25 minutes | Breach |
+| SHP-209416 | 18 | 20 minutes | No breach |
+| SHP-209420 | 20 | 0 minutes | No breach |
+| SHP-209421 | 32 | 0 minutes | No breach |
+| SHP-209426 | 65 | 0 minutes | No breach |
+| SHP-209428 | 51 | 0 minutes | No breach |
+| SHP-209432 | 15 | 0 minutes | No breach |
+| SHP-209481 | 42 | 0 minutes | No breach |
+
+Use the same producer with the supplemental input:
+
+```bash
+python3 src/telemetry/replay.py \
+  --input data/telemetry/recall-coverage-supplement.jsonl --validate-only
+```
+
+Repeat the authorized Fabio connection pipe from the replay procedure,
+changing `--input` to the supplemental file. Expect 404 accepted messages,
+then verify actual persistence, 438 canonical IDs, all 13 journey matches,
+and the complete SQL result before refreshing the derived snapshot.
+
+This covers the complete **affected recall deliveries**, not the entire
+five-year shipment history or unrelated fleet movements.
+
 Run [the supplied SQL batch](../../src/sql/module-3-temperature-status.sql)
 against actual ingested output. It returns all 13 shipments carrying YG-2291,
 not just the six with fixture observations. The seven without observations
-have zero readings, no calculated hot duration, and `insufficient_data`.
+have zero readings, no calculated hot duration, and `insufficient_data` until
+the supplemental observations arrive.
 The batch rejects invalid or conflicting observations instead of silently
 filtering them out.
