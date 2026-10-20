@@ -249,6 +249,28 @@ stores. No restricted-identity pass is claimed.
 
 ## Current state
 
+### External resources still required
+
+The session owner was unavailable when these locations and identities were
+requested. Do not treat that as approval to invent resources, credentials,
+or successful test results:
+
+- An accessible Supplier Quality SharePoint connection and source library.
+  Fabio returned no matching accessible connection.
+- Distinct restricted North manager and CAR-02 partner identities, with an
+  approved sign-in method. The deployed roles intentionally have no members.
+- Skillable Studio/Lab Profile access and the provisioned operational source.
+- The telemetry replay producer and Rayfin starter/preview access. Neither
+  implementation is in the repository or its current open contribution
+  branches. Fabio's Power Apps AppBackend is not established as Rayfin.
+- A provisioned environment satisfying the existing package-based Module 2
+  path; DuckDB and the Data Agent SDK remain uninstalled and unverified.
+
+Modules 3 and 5 are not implemented, restricted-identity and Skillable runs
+have not passed, and the final post-feature red-team has not started. Do not
+open the final PR or report publication readiness on the strength of the
+completed owner-account checks.
+
 The consolidation branch is published. PRs #3, #4, and #9 were merged into it
 in dependency order with no textual merge conflicts; merged PR #10 is retained
 from main. These are integration results, not evidence of functional readiness.
