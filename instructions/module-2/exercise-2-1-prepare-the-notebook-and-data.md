@@ -16,7 +16,7 @@ In this exercise, you connect the Module 2 notebook to your lakehouse and genera
 
 1. In the **Explorer** pane, select **Add data items** > **From OneLake catalog**.
 
-    ![The Add data items menu in the notebook Explorer pane, with From OneLake catalog highlighted](media/exercise-2-1-add-data-items.png)
+    ![The Add data items menu in the notebook Explorer pane, showing From OneLake catalog](media/exercise-2-1-add-data-items.png)
 
 1. Find the lakehouse. Its name is listed twice: one row is the lakehouse and the other is its SQL analytics endpoint. Select the row with the lakehouse icon, then select **Add**.
 

@@ -98,6 +98,19 @@ explicit complete lakehouse execution binding failed the starting check.
 Subsequent validation runs supply lakehouse name, ID, and workspace ID.
 The diagnostic Livy session was stopped and confirmed `killed`.
 
+Fabio authentication was rechecked: `fabio auth status` reports
+`authenticated` with credential source `azure_cli`. The backing Azure CLI
+account is `alvidela.local@cadata2612.onmicrosoft.com` in the requested
+tenant, and `fabio workspace show` successfully reads the isolated workspace.
+Continue using Fabio for Fabric operations.
+
+The notebook UI displayed the attached `contoso_fresh` lakehouse, but its
+saved binding still needs verification. The Add data items menu screenshot
+was captured and visually checked. The embedded browser's constrained
+viewport produced clipped or blank captures for other steps; those files
+were discarded rather than presented as usable screenshots. Ten Module 2
+image targets remain missing.
+
 The integrated browser still prompts for sign-in; browser and CLI sessions
 are separate. CLI-backed Fabric API access is working. AI/OneLake settings,
 workload execution, SharePoint access, and Skillable access remain unverified.
