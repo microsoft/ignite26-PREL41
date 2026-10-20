@@ -17,7 +17,7 @@
 
 - [x] Confirm GitHub authentication and repository push permission.
 - [x] Create the consolidation branch from the latest main.
-- [ ] Publish the consolidation branch using the verified GitHub noreply
+- [x] Publish the consolidation branch using the verified GitHub noreply
   identity. The original private-email commit is preserved on the local
   `workshop/consolidation-preflight` branch without amendment.
 - [x] Verify access to the supplied Fabric workspace without modifying it.
@@ -42,7 +42,7 @@ were created.
 
 ## Phase 1: Consolidate the workshop contract
 
-- [ ] Integrate the scaffold, supplier exercise, and Module 2 contributions
+- [x] Integrate the scaffold, supplier exercise, and Module 2 contributions
   from PRs #3, #4, and #9 in dependency order.
 - [ ] Reconcile merged PR #10 with the Contoso Fresh recall scenario;
   preserve reusable walkthrough material and replace automotive-specific
@@ -126,9 +126,16 @@ were created.
 
 ## Current state
 
-Credential preflight is blocked on the requested Fabric local-account sign-in
-and suitable capacity access. The branch and initial TODO commit exist locally;
-the remote branch was not created because of GitHub email-privacy protection.
-Feature integration and live lab validation have not started. A zero-defect
-or security-free claim is not an acceptance
-substitute for recorded evidence and disclosed limitations.
+The consolidation branch is published. PRs #3, #4, and #9 were merged into it
+in dependency order with no textual merge conflicts; merged PR #10 is retained
+from main. These are integration results, not evidence of functional readiness.
+The original private-email commit remains on the local preflight branch;
+published consolidation commits use the verified GitHub noreply identity.
+
+Credential preflight remains blocked on the requested Fabric local-account
+sign-in and suitable capacity access. Attempts through both the Power BI and
+Fabric integrated-browser entry points failed during single sign-on.
+No cloud resources were created. Scenario reconciliation, remaining feature
+implementation, and live lab validation are outstanding. A zero-defect or
+security-free claim is not an acceptance substitute for recorded evidence and
+disclosed limitations.
