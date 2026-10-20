@@ -43,33 +43,75 @@ Learn how to connect, ingest, mirror, and virtualize data across your organizati
 
 If you're following along during a live session:
 
-1. Step 1
-2. Step 2
-3. Open [`instructions/`](instructions/README.md) when this session includes
-   attendee step-by-step guidance
+1. Open the supplied Skillable lab and sign in with its supplied account.
+   Open the pre-provisioned Contoso Fresh Fabric workspace.
+2. Open the [workshop instructions](instructions/README.md) and complete
+   **Prepare your environment**. Locate the supplied operational source,
+   lakehouse, Module 2 notebook, and SharePoint connection; confirm that the
+   telemetry replay, restricted test identities, and Recall Console starter
+   are available for later modules.
+3. Follow the instructor's checkpoints through the Contoso Fresh recall
+   investigation for lot **YG-2291**. Use each exercise's completion check
+   before moving to the next module.
 
 #### On your own
 
 If you're learning at your own pace:
 
-1. Clone this repository
-2. Set up your environment
-3. Follow the session guidance in [`instructions/`](instructions/README.md), or
-   use the linked docs-site entry point when this repository uses that pattern
+1. Open your supplied Skillable lab and sign in with its supplied account.
+   Self-paced delivery requires the same pre-provisioned environment as the
+   guided session; cloning this repository does not provide a runnable lab.
+2. Start at [the workshop instructions](instructions/README.md), complete
+   **Prepare your environment**, and review the five recall questions for
+   lot **YG-2291**.
+3. Work through the modules in order and complete each observable check before
+   continuing. When resuming an exercise, inspect its existing state as
+   directed rather than creating duplicate resources.
+
+### Workshop path and scope
+
+Use the [canonical workshop instructions](instructions/README.md) for both
+guided and self-paced delivery. Use only the accounts, connections, and
+resources supplied in the Skillable lab. If a required item, identity, or
+connection is missing, stop and notify the instructor or lab support; do not
+create personal replacements, additional capacities, tenants, or external
+accounts.
+
+This path uses pre-provisioned operational data, SharePoint document shortcuts
+and CSV transformation, Iceberg shipment history, Eventstream telemetry,
+OneLake governance, and Fabric Apps. It does not ask learners to build a
+mirroring or ETL pipeline.
+
+The target duration is **240 minutes**, including a 10-minute break; this is a
+planning target, not a measured completion time. End-to-end readiness remains
+under validation. Runtime behavior, service timing, restricted-identity access,
+and the deployed Recall Console's governed data path have not been confirmed
+as passed. Follow the completion checks and record any fallback or skipped
+exercise rather than treating it as completed.
 
 ### 🎯 Learning outcomes
 
 By the end of this session, you will be able to:
 
-- Outcome 1
-- Outcome 2
-- Outcome 3
+- Unify operational and reference data in OneLake with SharePoint document
+  shortcuts and CSV certificate-metadata transformation to support the
+  Contoso Fresh recall investigation.
+- Investigate five-year Iceberg shipment history with Spark, DuckDB, AI
+  Functions, and a data agent, and combine it with streaming cold-chain
+  signals to identify temperature breaches.
+- Apply OneLake row and column security, then use the governed Recall Console
+  to investigate inventory, shipments, temperature status, and supplier
+  documents with the supplied restricted identities.
 
 ### 💻 Technologies used
 
-- Technology 1
-- Technology 2
-- Technology 3
+- **Data estate:** Microsoft Fabric OneLake, lakehouse, and SQL analytics endpoint.
+- **Historical analysis:** Apache Spark, Apache Iceberg, and DuckDB.
+- **Supplier documents:** SharePoint document shortcuts and CSV transformation.
+- **Streaming telemetry:** Microsoft Fabric Eventstream.
+- **Governance:** OneLake Security for row and column access.
+- **Recall application:** Fabric Apps (preview), built on Rayfin, and the OneLake Read API.
+- **AI-assisted investigation:** Microsoft Fabric AI Functions and data agent.
 
 ### 📚 Continue your learning
 

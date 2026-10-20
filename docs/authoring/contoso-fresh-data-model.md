@@ -29,7 +29,9 @@ so the recall answer stays the same after the event.
 - History starts on 2021-10-13.
 - The last 90 days start at 2026-07-15 04:00 UTC.
 - Timestamps are stored in UTC. Queries compare production windows in
-  Europe/Paris time. Every date in scope falls in summer time, UTC+2.
+  Europe/Paris time. The related-lot query's fixed 90-day window falls entirely
+  in summer time, UTC+2. The full five-year history also spans winter time:
+  do not apply that fixed offset to arbitrary historical dates.
 
 ## Conventions
 

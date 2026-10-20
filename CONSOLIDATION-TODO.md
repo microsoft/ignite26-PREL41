@@ -165,14 +165,21 @@ stores. No restricted-identity pass is claimed.
 - [ ] Reconcile merged PR #10 with the Contoso Fresh recall scenario;
   preserve reusable walkthrough material and replace automotive-specific
   data flows with recall-relevant flows.
-- [ ] Define one pre-provisioned environment, lakehouse layout, naming
-  convention, and resource ownership contract.
+- [x] Define the canonical resource names, schema/layout references, and
+  author/learner ownership boundaries for fresh, resumed, and reset instances.
+  Studio implementation and actual reset verification remain separate gates.
 - [x] Separate current-inventory questions in Module 1 from shipment-history
   questions in Module 2; resolve references to operational orders/shipments.
 - [ ] Agree shared identifiers, schemas, expected results, scenario clock,
   security identities, and downstream data requirements.
-- [ ] Map every workshop objective to an exercise and observable evidence.
-- [ ] Confirm the four-hour core path and clearly label optional extensions.
+- [x] Map canonical workshop objectives to linked exercises and exact observable
+  evidence, distinguishing each engine's execution and restricted-identity reads.
+- [x] Document a 240-minute core run of show, learner checkpoints, and optional
+  extensions outside that allowance.
+- [ ] Measure and confirm the four-hour core path in a fresh learner instance.
+- [ ] Reconcile the authored session-description promise of mirroring and
+  ETL/ELT pipeline work with the canonical path, which has no such learner
+  exercises. Do not count CSV shortcut transformation as those features.
 
 ## Phase 2: Complete all learner modules
 
@@ -230,11 +237,15 @@ stores. No restricted-identity pass is claimed.
 
 ## Phase 3: Instructions and delivery
 
-- [ ] Provide one canonical attendee entry point and verify Skillable
-  navigation for all exercises.
+- [x] Provide one canonical attendee entry point for both guided and self-paced
+  delivery, using the supplied lab rather than a locally improvised environment.
+- [ ] Verify Skillable navigation for all exercises.
 - [x] Retain the visually checked menu screenshot and replace missing
   Module 2 image placeholders with self-contained instructions.
-- [ ] Verify remaining repository-relative links and Skillable navigation.
+- [x] Verify repository-relative Markdown, HTML image/link targets, and local
+  Markdown fragments across the nineteen content Markdown files: ninety local
+  targets and twenty-one fragments resolve.
+- [ ] Verify the corresponding navigation and rendering in Skillable.
 - [x] Correct the known PR #10 loop-body indentation and remove its two
   missing screenshot references without replacing them with invented images.
 - [ ] Verify all examples.
@@ -246,8 +257,10 @@ stores. No restricted-identity pass is claimed.
   actual Lab Profile; do not substitute real secrets into repository files.
 - [ ] Complete provisioning inventory, data model, authoring guidance, and
   expected-results documentation.
-- [ ] Populate README learning outcomes, technologies, owners, and delivery
-  links from confirmed content; do not invent metadata.
+- [x] Populate confirmed README getting-started directions, exactly three
+  learning outcomes, and technologies while preserving the authored description.
+- [ ] Confirm README content owners and delivery links; preserve unknown owner
+  placeholders rather than invent metadata.
 - [ ] Confirm the outcome of issue #6 with the Skillable team.
 - [ ] Review template cleanup and unused folders with the session owner
   before removing authored content or finalizing publication.

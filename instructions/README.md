@@ -16,6 +16,24 @@ use it to answer five recall questions:
 
 **Duration:** Approximately 4 hours, including a 10-minute break.
 
+Use these elapsed-time checkpoints in both delivery paths. They are planning
+targets, not measured service guarantees:
+
+| By elapsed time | Checkpoint |
+|---|---|
+| 00:20 | Environment and supplied resources checked |
+| 01:10 | Operational investigation and supplier certificates complete |
+| 02:00 | Shipment-history exercises complete |
+| 02:10 | Ten-minute break complete |
+| 02:25 | Complete-recall telemetry and refreshed analysis checked |
+| 03:00 | Restricted-identity checks complete |
+| 03:45 | Deployed console verified |
+| 04:00 | Recall evidence and handoff complete |
+
+If a service delay prevents a checkpoint, keep the error and ask the instructor
+to use the documented recovery path. Do not mark a skipped exercise complete
+to meet the schedule. Optional extensions are outside this four-hour core path.
+
 **Prerequisites:** The Skillable environment provides a Microsoft Fabric
 workspace, workshop data, and access to the Contoso Fresh SharePoint content.
 Use only the accounts and resources supplied in the lab.

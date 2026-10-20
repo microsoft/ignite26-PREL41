@@ -6,7 +6,9 @@ Record evidence for every completed test.
 | Test | Expected result | Status | Evidence |
 |---|---|---|---|
 | Markdown structure | Headings, lists, tables, code fences, callouts, and page breaks are structurally valid. | Pass | Source inspection of `instructions/README.md`. |
-| Local links | Learner and supporting-content repository-relative file targets resolve. | Pass | Manually checked Markdown targets under the root README, instructions, authoring docs, data, source, and infrastructure against existing files and folders, including the root banner image. Skillable navigation remains a separate check. |
+| Local links | Learner and supporting-content repository-relative file targets resolve. | Pass | Focused standard-library check on 2026-10-20 verified ninety local Markdown/HTML link and image targets and twenty-one local Markdown fragments across nineteen content Markdown files. Skillable navigation remains a separate check. |
+| Core run of show | Planning intervals are contiguous and total exactly 240 minutes, with optional extensions outside the core. | Pass | Checked all eight interval lengths, adjacency, and the four-hour total. Actual completion time, variable service delays, and fresh-launch performance remain unmeasured. |
+| README learning outcomes | Exactly three learning outcomes and no remaining generic setup/outcome/technology bullets. | Pass | Focused content assertions passed. Unknown owner metadata remains a separate publication requirement, and the authored mirroring/ETL scope gap is recorded in the lab contract. |
 | Placeholder scan | Learner instructions contain no template placeholders or unresolved author notes. | Pass | Source inspection of `instructions/README.md`. |
 | Token inventory | Every active `@lab.*` reference is listed and configured. | Not applicable | No active tokens are present. |
 | Activity inventory | Every Activity alias resolves to a configured Studio Activity. | Not applicable | No Activity aliases are present. |
