@@ -16,6 +16,8 @@
 ## Phase 0: Credentials and environment
 
 - [x] Confirm GitHub authentication and repository push permission.
+- [x] Validate Fabio CLI authentication against the requested local account.
+  Use Fabio for subsequent Fabric operations, with explicit workspace IDs.
 - [x] Create the consolidation branch from the latest main.
 - [x] Publish the consolidation branch using the verified GitHub noreply
   identity. The original private-email commit is preserved on the local
@@ -52,6 +54,7 @@ the account, and its Admin role and capacity assignment were verified:
 | Lakehouse schema and SQL endpoint | dbo; SQL endpoint provisioning succeeded |
 | Notebook | module-2-shipment-history, ece07e95-467e-41c8-8077-05277ddd8292 |
 | Existing Spark runtime | 2.0, inspected without changing it |
+| Recall data agent | contoso_recall_agent, 40669c9f-e1ee-49ee-91b5-2af42bfe30e8 |
 
 - [x] Create the schema-enabled lakehouse and verify SQL endpoint provisioning.
 - [x] Import the existing Module 2 notebook without changing its cells.
@@ -59,6 +62,41 @@ the account, and its Admin role and capacity assignment were verified:
   the repository. Both normalized SHA-256 cell digests are
   `869eb233c33fbfb0c4bacfb5bf9ff8ac388f29ce5edf96133ab0025d2a6c14c2`.
 - [ ] Attach the lakehouse and execute the notebook in a standard session.
+- [x] Complete a native standard-session run of existing cells 1-15 in an
+  author validation copy, filling cell 13 with the documented learner answer.
+- [x] Execute the existing SQL endpoint refresh and AI Functions cells in a
+  bound native notebook with explicit output assertions.
+- [x] Independently assert the corrected data results: 9 current stores,
+  13 receiving stores, 13 related lots, 45 reached stores, 1,165,374 shipment
+  lines, and no remaining duplicate shipment rows.
+- [x] Query the SQL analytics endpoint independently and confirm the 9/13
+  current-versus-history distinction.
+- [x] Create, configure, select nine tables, publish, and query the recall
+  data agent through Fabio. Both workshop questions returned the expected
+  9 and 13 stores and their IDs.
+
+Native validation job evidence:
+
+| Check | Job ID | Result |
+|---|---|---|
+| Core cells with documented DELETE answer | 2168fa30-e44d-45aa-a14a-6a06d45bede5 | Completed |
+| SQL refresh and AI output assertions | 80912c76-1fb7-4a18-b7e5-510fa05f1649 | Completed |
+| Independent recall counts and package inspection | a6bc8822-e79e-40fb-a168-181c3b57a4ad | Completed; exit value records all expected counts |
+
+The AI checks asserted 30 notes with 30 temperatures and 23 durations,
+six nonempty QA summaries, and no extraction or summarization errors.
+The runtime package probe reports that `duckdb` and
+`fabric-data-agent-sdk` are not installed. Their learner notebook paths are
+not verified; no packages were installed. Fabio provisioning verifies the
+published data-agent service path, not the notebook SDK installation or
+the learner's final UI publish step.
+
+An initial unchanged core run stopped at the intentional `condition = None`
+learner exercise. The validation copy uses the answer in Exercise 2.3;
+the learner notebook remains unchanged. A separate native run without an
+explicit complete lakehouse execution binding failed the starting check.
+Subsequent validation runs supply lakehouse name, ID, and workspace ID.
+The diagnostic Livy session was stopped and confirmed `killed`.
 
 The integrated browser still prompts for sign-in; browser and CLI sessions
 are separate. CLI-backed Fabric API access is working. AI/OneLake settings,
@@ -130,8 +168,10 @@ existing Module 2 contract requires a standard session for its package cells.
 - [ ] Run the core path in a clean Fabric workspace as the required account.
 - [ ] Verify all expected table schemas, counts, recall results, and
   cross-module joins.
-- [ ] Complete previously unverified Module 2 AI Functions cell 23 and the
-  final data-agent publish step.
+- [x] Complete previously unverified Module 2 AI Functions cell 23 in a native
+  notebook session, with six successful nonempty summaries asserted.
+- [x] Verify data-agent publication and expected answers through Fabio.
+- [ ] Verify the learner's final data-agent UI publish step and SDK path.
 - [ ] Validate governed reads using the actual manager and partner identities,
   not only the workspace owner.
 - [ ] Run fresh-launch and resume checks in Skillable, including narrow-pane
