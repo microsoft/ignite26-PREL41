@@ -26,7 +26,7 @@ Activities.
 | Spark fallback table | Allows the workshop to continue after capacity or startup failure | Needs Studio verification |
 | Eventstream | Replays supplied truck telemetry | Needs Studio verification |
 | Security test identities | Separate reader-only North manager and CAR-02 partner accounts, without broader grants or access to the separate operational source | Identities and effective permissions require verification |
-| Rayfin starter | Runs in the supplied environment | Needs Studio verification |
+| Rayfin starter | Runs in the supplied environment | Starter and deployment toolchain absent; native AppBackend item creation succeeded |
 | OneLake Read API | Available to the starter application | Needs Studio verification |
 
 ## Exercise 1.2 configuration
@@ -162,6 +162,33 @@ Product behavior is described in:
 - [Create and manage OneLake security roles](https://learn.microsoft.com/fabric/onelake/security/create-manage-roles)
 - [Row-level security syntax](https://learn.microsoft.com/fabric/onelake/security/row-level-security-syntax)
 - [SQL analytics endpoint access modes](https://learn.microsoft.com/fabric/onelake/security/sql-analytics-endpoint-onelake-security)
+
+## Module 5 configuration
+
+- Fabric Apps (preview) is built on Rayfin. Use the
+  [current product overview](https://learn.microsoft.com/fabric/apps/overview)
+  and [CLI reference](https://learn.microsoft.com/fabric/apps/cli-reference),
+  not assumptions based on an older CLI label.
+- Fabio successfully created **contoso_recall_console** as an AppBackend in
+  the consolidation workspace. This does not deploy frontend assets,
+  application services, authentication configuration, or data connectors.
+- Supply the actual application starter and its existing deployment tools
+  before launch. A starter must include its project manifest and
+  `rayfin/rayfin.yml`, target the authorized workspace/item, and document its
+  exact start and deploy commands. Do not require learners to select a
+  framework, install tools, or scaffold a replacement.
+- The current environment has no Rayfin executable or supplied application
+  project. Generic Fabio item-definition retrieval is unsupported for the
+  created AppBackend; it is not a substitute deployment path.
+- Keep Fabric SSO and end-user data authorization distinct. An app's
+  **Run and interact** permission allows use of the app; it does not prove
+  that downstream OneLake queries use that user's identity.
+- Require the same positive and negative manager/partner checks through the
+  actual deployed app. No owner-key backend, client-side row filtering,
+  anonymous recall data, or raw-telemetry grant is an acceptable substitute.
+- The console must preserve missing-sensor uncertainty and distinguish current
+  inventory from shipment history. Do not label all 13 receiving stores as
+  current holders or convert absent telemetry into a compliant status.
 
 ## Tokens and variables
 

@@ -57,6 +57,7 @@ the account, and its Admin role and capacity assignment were verified:
 | Recall data agent | contoso_recall_agent, 40669c9f-e1ee-49ee-91b5-2af42bfe30e8 |
 | Telemetry Eventstream | contoso_truck_telemetry, 27712fbe-9867-4894-8f6e-019c0bb53edb |
 | Telemetry destination | dbo.truck_temperature_events, managed Delta |
+| Recall Console item | contoso_recall_console, 451acf30-8346-491b-aba6-b7ab95ddc71c; AppBackend metadata only |
 
 - [x] Create the schema-enabled lakehouse and verify SQL endpoint provisioning.
 - [x] Import the existing Module 2 notebook without changing its cells.
@@ -197,6 +198,10 @@ stores. No restricted-identity pass is claimed.
   policies, the SQL endpoint, documents, telemetry, and console.
 - [ ] Module 5: Recall Console starter and complete flow, governed OneLake
   reads, inventory/history/temperature/document views, and access verification.
+- [x] Confirm the current Fabric Apps/Rayfin product relationship from official
+  documentation and create the native AppBackend item through Fabio.
+- [ ] Deploy actual application content and its services; item creation alone
+  is not a running console.
 - [ ] Wrap-up: demonstrate answers to all scenario questions and document
   supported continuation paths.
 - [ ] Provide documented recovery, resume, rerun, and fallback behavior
@@ -274,10 +279,11 @@ or successful test results:
 - Distinct restricted North manager and CAR-02 partner identities, with an
   approved sign-in method. The deployed roles intentionally have no members.
 - Skillable Studio/Lab Profile access and the provisioned operational source.
-- Rayfin starter/preview access and the learner terminal/replay-control
-  provisioning. The telemetry producer and SQL analysis are now supplied;
-  the application starter remains absent. Fabio's Power Apps AppBackend is
-  not established as Rayfin.
+- The actual Rayfin starter and a preconfigured deployment toolchain, plus
+  learner terminal/replay-control provisioning. Fabric Apps is publicly
+  documented as built on Rayfin, and native AppBackend creation now succeeds.
+  The telemetry producer and SQL analysis are supplied; the application
+  starter and deployed application content remain absent.
 - A provisioned environment satisfying the existing package-based Module 2
   path; DuckDB and the Data Agent SDK remain uninstalled and unverified.
 
@@ -323,6 +329,22 @@ failure checks. The analysis uses one read transaction for validation and
 calculation; native probes verified failure rollback and rejection of a
 caller's existing transaction without rolling it back. This is implementation
 validation, not the final red-team.
+
+### Native Fabric Apps evidence
+
+Current official [Fabric Apps documentation](https://learn.microsoft.com/fabric/apps/overview)
+identifies Rayfin as its SDK and CLI. Fabio exposes `rayfin-app` as an alias
+for `app-backend`; its Power Apps wording is not a basis for treating Rayfin
+as unavailable. The requested account created and read back
+`contoso_recall_console`, AppBackend
+`451acf30-8346-491b-aba6-b7ab95ddc71c`, in the consolidation workspace.
+
+This verifies native item creation only. The generic item-definition operation
+returned `OperationNotSupportedForItem`, and no Rayfin executable or supplied
+application project is present. No packages were installed and no replacement
+application scaffold was generated. The item description explicitly says
+application content is not yet deployed. Hosting, connectors, identity
+propagation, and the actual recall experience are not validated.
 
 Cold-start materialization took several minutes despite a 30-second batch
 setting. Fresh-launch timing and producer recovery still require testing.

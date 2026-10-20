@@ -607,12 +607,49 @@ investigate the recall.
 
 Create a Rayfin application from the supplied starter template.
 
+Fabric Apps (preview) is built on Rayfin. In this lab, use only the supplied
+starter and its configured workspace/item; do not scaffold a new project or
+install a different framework.
+
+1. Open the starter's own instructions and confirm its project manifest,
+   `rayfin/rayfin.yml`, and existing start/deploy tooling are present.
+1. Confirm its configured workspace and app item match the supplied lab
+   resources. If **contoso_recall_console** is already supplied, reuse that
+   item rather than creating a second app.
+1. Run the starter's documented start command and sign in using the supplied
+   account. Fabio authentication does not establish that the app's separate
+   sign-in has succeeded.
+1. Open the actual app URL and check that its authenticated session is visible.
+   An AppBackend item in the workspace, without deployed application content,
+   is not a running starter.
+
+If the starter, toolchain, or app URL is missing, stop and notify the
+instructor or lab support. Do not paste the engineer's tokens into a browser,
+enable anonymous recall-data access, or substitute an owner-authenticated
+mock application.
+
 **Completion check:** The starter application runs in the lab environment.
 
 ## Exercise 5.2: Read OneLake data
 
 Connect the application through the OneLake Read API and display affected
 stores, truck temperature status, and supplier certificate links.
+
+Use only the starter's provisioned connector. Verify these results separately:
+
+| Console area | Engineer's expected result |
+|---|---|
+| Current inventory | Nine stores currently hold YG-2291. |
+| Shipment history | Thirteen stores received YG-2291, including the correction-file shipment. |
+| Related products | Thirteen related lots reached 45 stores. |
+| Temperature investigation | SHP-209403 and SHP-209415 have confirmed breaches in the boundary fixture; the other 11 affected shipments have insufficient whole-journey data. |
+| Supplier documents | Certificate links open the matching files through the supplied document access, not a public URL or embedded credential. |
+
+Keep raw telemetry and supplier costs out of the application response unless
+the signed-in identity is explicitly authorized. The engineer's investigation
+SQL is not a deployed governed-result service. The console must read a
+provisioned governed result, or a verified user-identity query path, rather
+than broadening the existing roles just to make a page load.
 
 **Completion check:** The console displays the current recall data from
 OneLake.
@@ -621,6 +658,20 @@ OneLake.
 
 Use the supplied manager and partner identities to verify that the application
 respects the security configured in the previous module.
+
+1. Use separate signed-in sessions for the engineer, North manager, and
+   CAR-02 partner. Confirm the displayed identity each time.
+1. Check the manager sees only eight North current stores and its permitted
+   North shipment history. Check the partner sees only CAR-02 shipments and
+   never supplier costs.
+1. Inspect the app's network responses, not only visible table cells. Hidden
+   columns, other carriers' rows, or out-of-region records must not arrive
+   in the browser for the app to filter away.
+1. Repeat the relevant denied-access checks from Exercise 4.3 through the
+   application's actual data path. App sign-in or **Run and interact**
+   permission alone is not proof of downstream OneLake authorization.
+1. Switch identities and refresh. Results from an earlier session must not
+   remain in shared caches or appear after a lower-privilege sign-in.
 
 **Completion check:** The console changes its rows and columns for each
 identity without application-specific filtering.
