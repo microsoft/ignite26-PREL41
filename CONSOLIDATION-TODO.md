@@ -505,6 +505,18 @@ supported sign-in handoff, Fabio shortcut and CSV transformation commands, and
 exact acceptance checks. The Fabric connection, actual shortcuts, certificate
 transformation, and restricted-identity checks remain outstanding.
 
+Additional connection diagnostics: the Fabric browser account menu confirms
+the requested UPN and **CA Data 2612** tenant. Connection management's embedded
+**Gateway Admin Portal** remains blank; a direct frame reload timed out.
+Opening the same Microsoft portal as a top-level page rendered its controls
+but reported **Unable to authenticate for GRAPH service**. This is a
+portal-authentication failure, not evidence that the SharePoint source files
+are missing or that the user lacks source access. No session tokens were
+exported or injected to work around it. A read-only Graph query also returned
+no direct directory-role memberships; this is not proof that the account has
+no group-based or eligible administrative permissions, and no new directory
+identities or app permission grants were attempted.
+
 Cold-start materialization took several minutes despite a 30-second batch
 setting. Fresh-launch timing and producer recovery still require testing.
 The Eventstream was paused after validation; check sink status before
