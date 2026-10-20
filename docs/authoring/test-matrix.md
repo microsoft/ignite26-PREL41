@@ -14,6 +14,7 @@ Record evidence for every completed test.
 | Narrow instruction pane | Tables, callouts, and lists remain readable at the target pane width. | Needs Studio verification | Requires Skillable preview. |
 | Fresh launch | A learner can complete the full workshop using a new instance. | Needs Studio verification | Requires provisioned Lab Profile. |
 | Resume | A learner can resume after each module without hidden state assumptions. | Needs Studio verification | Requires launched and resumed instances. |
+| SharePoint source publication | The seven supplied files are present in the isolated source folder; metadata contains only the CSV. | Pass | Published through the requested account on 2026-10-20. All seven downloaded SHA-256 hashes match repository sources; four certificates, one SOP, one notice, and one CSV are present. This does not establish Fabric connector or learner access. |
 | SharePoint shortcut - fresh state | Exercise 1.2 creates `SupplierQuality` under **Files** without copying the source files. | Needs Studio verification | Requires the supplied SharePoint connection and content. |
 | SharePoint shortcut - resumed state | An existing readable `SupplierQuality` shortcut is reused without creating a duplicate. | Needs Studio verification | Requires a resumed or premodified instance. |
 | SharePoint shortcut - missing connection | The learner is told to stop instead of creating or signing in to a personal connection. | Needs Studio verification | Remove or deny the supplied connection in a test profile. |

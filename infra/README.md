@@ -57,6 +57,102 @@ The certificate transformation, document shortcut, telemetry, and console
 still require their own provisioning and effective-identity checks. Adding a
 new table does not automatically grant it through these selected-path roles.
 
+## SharePoint source
+
+Publish only [the supplied synthetic source](../data/sharepoint/) under a
+new workshop-specific folder in an authorized SharePoint document library.
+Preserve existing content, site settings, and sharing. Keep this structure:
+
+```text
+PREL41/supplierQuality/
+  metadata/supplier-certificates.csv
+  certificates/SUP-008_GLOBALGAP_Certificate.txt
+  certificates/SUP-014_SQF_Certificate.txt
+  certificates/SUP-021_BRCGS_Certificate.txt
+  certificates/SUP-027_FSSC22000_Certificate.txt
+  procedures/Contoso_Fresh_Product_Recall_SOP.txt
+  notices/YG-2291_Supplier_Recall_Notice.txt
+```
+
+Do not publish the alternative JSON in `metadata/`. Download the seven
+published files and compare their SHA-256 hashes with the repository sources
+before connecting Fabric. On resume, reuse identical files; do not overwrite
+different content at an existing path.
+
+For organizational-account authentication, create the cloud connection through
+Fabric's supported SharePoint Folder connection flow, signing in as the
+authorized source reader. Name the workshop connection
+**PREL41-SupplierQuality**. Browser sign-in and CLI sign-in are separate:
+verify the account in each. Do not export browser session credentials, use
+anonymous access, or skip a failing connection test.
+
+Fabio 0.79.0 advertises `OAuth2` as a connection credential type, but a
+credential-free OAuth2 creation request returned `InvalidInput` during
+consolidation validation. That request did not create a connection. Use the
+supported interactive sign-in rather than inventing credential fields.
+[Workspace identity and certificate-based service principal authentication](https://learn.microsoft.com/fabric/onelake/shortcuts/create-onedrive-sharepoint-shortcut#authentication)
+are alternatives only when their SharePoint permissions are explicitly
+provisioned; a working owner browser session does not grant those identities
+access.
+
+Once the tested connection exists, retrieve its ID through Fabio:
+
+```bash
+fabio connection list \
+  --query "[?displayName=='PREL41-SupplierQuality'].{id:id,name:displayName,type:connectionDetails.type}"
+```
+
+Require exactly one matching connection. Set `SHAREPOINT_CONNECTION_ID` to its
+ID, `SHAREPOINT_SITE_URL` to the site root, and `SHAREPOINT_SOURCE_PATH` to the
+server-relative document folder, for example
+`/Shared Documents/PREL41/supplierQuality`. These are source paths, not the
+library's `Forms/AllItems.aspx` browser URL. Inspect existing shortcuts before
+creating anything:
+
+```bash
+fabio lakehouse list-shortcuts \
+  --workspace "$WORKSPACE_ID" --id "$LAKEHOUSE_ID"
+```
+
+The following author-provisioning commands describe the intended deployment;
+they still require live execution and validation with the tested connection:
+
+```bash
+fabio lakehouse create-shortcut \
+  --workspace "$WORKSPACE_ID" --id "$LAKEHOUSE_ID" \
+  --name SupplierQuality --path Files --target-type OneDriveSharePoint \
+  --connection-id "$SHAREPOINT_CONNECTION_ID" \
+  --location "$SHAREPOINT_SITE_URL" --subpath "$SHAREPOINT_SOURCE_PATH" \
+  --conflict-policy Abort
+
+fabio lakehouse create-shortcut \
+  --workspace "$WORKSPACE_ID" --id "$LAKEHOUSE_ID" \
+  --name supplier_certificates --path Tables/dbo \
+  --target-type OneDriveSharePoint \
+  --connection-id "$SHAREPOINT_CONNECTION_ID" \
+  --location "$SHAREPOINT_SITE_URL" \
+  --subpath "$SHAREPOINT_SOURCE_PATH/metadata" \
+  --transform csvToDelta --csv-delimiter , --csv-keep-error-files \
+  --conflict-policy Abort
+```
+
+On resume, compare source, path, connection, and transformation before reusing
+an existing shortcut. Never create a uniquely named duplicate to hide a
+conflict. Confirm all six text documents are readable through
+`Files/SupplierQuality` and that `dbo.supplier_certificates` contains exactly
+the four source records, including their status, dates, and document paths.
+The SUP-014 row must be current and link to its supplied certificate. Resolve
+each document path relative to `Files/SupplierQuality`, not the metadata
+folder. Transformation materializes Delta data and requires Spark; do not
+claim zero-copy semantics for the certificate table or treat shortcut metadata
+creation as proof of completed transformation.
+
+Provision source access and shortcut access for the intended learner
+identities separately. Do not grant the restricted manager or partner broader
+document, staging-file, or operational-source access merely to make a check
+pass. See [Exercises 1.2 and 1.3](../instructions/README.md) for the learner
+flow, which uses an already provisioned connection rather than author setup.
+
 ## Operational source
 
 Module 1 uses **contoso_operations**, a separate schema-enabled lakehouse

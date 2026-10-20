@@ -467,29 +467,43 @@ does not complete the skipped technology exercises, solve a capacity-wide
 outage, or automatically rebind later-module resources. Fresh-launch and
 handoff testing remain outstanding.
 
-### SharePoint source discovery
+### SharePoint source publication
 
 The authenticated browser opened
 `https://cadata2612.sharepoint.com` and its existing Documents library at
 `https://cadata2612.sharepoint.com/Shared%20Documents/Forms/AllItems.aspx`.
 The account menu confirmed `alvidela.local@cadata2612.onmicrosoft.com`,
 tenant `5551f16b-831c-46a7-a226-4aae2ddca51a`. Site contents lists the
-Documents library, and that library currently displays an empty list.
-These checks establish browser read access, not write permission, an approved
-publication location, or Fabric connector access.
+Documents library, which was empty at discovery. The source is now published
+under the isolated `PREL41/supplierQuality/` folder using that same signed-in
+account. Each folder was read back with `Exists = true`; a successful HTTP
+response alone was insufficient because nonexistent SharePoint folders can
+return `Exists = false` with HTTP 200.
 
 Earlier Graph discovery returned empty drive/library lists and `403` for
 default-drive and site-search requests. Those results must not be treated as
 proof that the signed-in user lacks SharePoint access; the browser successfully
 opened the library. No credentials or browser session material were exported.
 
-Proposed next step: publish only the committed synthetic source under an
-isolated `PREL41/supplierQuality/` folder in that existing library, preserving
-site settings and sharing. Location approval was requested, but no answer was
-available. Discovery therefore remains read-only: no folders or files were
-created, and no sharing settings changed. After approval, publish the CSV-only
-metadata folder and supplied documents, then create the Fabric connection and
-shortcut using Fabio and validate the four-record certificate transformation.
+Following the session owner's instruction to make reasonable decisions and
+continue autonomously, published only the seven committed synthetic files:
+four certificates, the recall SOP, the supplier notice, and certificate CSV.
+Every downloaded file's SHA-256 hash matches its repository source. The
+metadata folder contains exactly one file, `supplier-certificates.csv`; the
+alternative JSON was not published. Existing content, site settings, and
+sharing were not changed.
+
+Fabio's supported-type catalog advertises SharePoint organizational-account,
+workspace-identity, and service-principal options. A native OAuth2 connection
+creation attempt without additional credentials returned `InvalidInput`.
+Subsequent connection and shortcut listings were empty: no partial connection
+or shortcut was created. No anonymous fallback or skipped connection test was
+used. The browser's Fabric connection-management page still needs a completed
+interactive organizational-account connection. The
+[author recipe](infra/README.md#sharepoint-source) records the source structure,
+supported sign-in handoff, Fabio shortcut and CSV transformation commands, and
+exact acceptance checks. The Fabric connection, actual shortcuts, certificate
+transformation, and restricted-identity checks remain outstanding.
 
 Cold-start materialization took several minutes despite a 30-second batch
 setting. Fresh-launch timing and producer recovery still require testing.
