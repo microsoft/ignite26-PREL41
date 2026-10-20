@@ -22,3 +22,12 @@ table.
 
 All company names, certification records, audit results, and recall details in
 this dataset are fictional and intended only for the workshop.
+
+## Current-state reference data
+
+The CSV files under [`reference/`](reference/) are the Contoso Fresh
+current-state tables: suppliers, products, locations, carriers, trucks, lots,
+and store inventory. All records are synthetic. The first code cell of the
+[Module 2 notebook](../src/notebooks/module-2-shipment-history.ipynb) generates
+them, and [the data model](../docs/authoring/contoso-fresh-data-model.md)
+describes each table.

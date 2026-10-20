@@ -1,0 +1,5 @@
+carrier_id,carrier_name,is_logistics_partner
+CAR-01,Contoso Fresh Fleet,false
+CAR-02,Wide World Logistics,true
+CAR-03,Relecloud Freight,true
+CAR-04,Proseware Transport,true

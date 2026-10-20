@@ -116,7 +116,7 @@ manager and partner identities.
 | Objective | Exercises | Observable evidence |
 |---|---|---|
 | Unify operational and document data | 1.1-1.4 | Supplier documents and affected-store results are visible in OneLake. |
-| Add interoperable history | 2.1-2.3 | Iceberg history is accessible and related lots are identified. |
+| Add interoperable history | 2.1-2.6 | Iceberg history is accessible and related lots are identified. |
 | Interpret the real-time signal | 3.1-3.2 | Temperature breach status is joined to affected shipments. |
 | Govern access | 4.1-4.3 | Test identities return different permitted rows and columns. |
 | Build the recall experience | 5.1-5.3 | The Recall Console displays governed recall data. |

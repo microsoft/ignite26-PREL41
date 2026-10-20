@@ -150,35 +150,22 @@ for each store.
 
 # Add shipment history
 
-In this module, you will use Apache Spark and Apache Iceberg to add five years
-of shipment history without duplicating the existing lake.
+In this module, you will write five years of shipment history as Apache Iceberg
+tables in OneLake. You will then read the same tables with Spark, DuckDB, AI
+Functions, and a Fabric data agent to find where else the supplier's product
+has traveled.
 
-## Exercise 2.1: Write Iceberg tables
+All of Module 2 runs in the **module-2-shipment-history** notebook. Complete
+the exercises in order:
 
-Run the supplied Spark notebook to write the historical shipment data as
-Apache Iceberg tables.
+1. [Exercise 2.1: Prepare the notebook and data](module-2/exercise-2-1-prepare-the-notebook-and-data.md)
+1. [Exercise 2.2: Explore current state through OneLake](module-2/exercise-2-2-explore-current-state-through-onelake.md)
+1. [Exercise 2.3: Write shipment history as Iceberg](module-2/exercise-2-3-write-shipment-history-as-iceberg.md)
+1. [Exercise 2.4: Trace related lots with DuckDB](module-2/exercise-2-4-trace-related-lots-with-duckdb.md)
+1. [Exercise 2.5: Read shipment notes with AI Functions](module-2/exercise-2-5-read-shipment-notes-with-ai-functions.md)
+1. [Exercise 2.6: Ask the recall agent](module-2/exercise-2-6-ask-the-recall-agent.md)
 
-**Completion check:** The notebook completes and reports the expected Iceberg
-tables.
-
-## Exercise 2.2: Expose history in OneLake
-
-Expose the Iceberg tables in OneLake and inspect the same data through the
-supported Fabric engines.
-
-**Completion check:** The history is readable through OneLake without a copy
-operation.
-
-## Exercise 2.3: Trace related lots
-
-Join the historical shipments with current operational data and find lots from
-the same supplier batch window during the last 90 days.
-
-**Completion check:** The result identifies the related lots and their shipment
-destinations.
-
-> [!Help] If the Spark session does not become ready, use the fallback table
-> supplied in the workspace and notify the instructor.
+After Exercise 2.6, return to this page and continue with the next module.
 
 ===
 

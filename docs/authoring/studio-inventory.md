@@ -22,7 +22,7 @@ Activities.
 | Target lakehouse | Accepts learner-created shortcuts and later module output | Exact name required |
 | SharePoint connection | Preconfigured for the Supplier Quality content | Exact name required |
 | SharePoint permissions | Learner can read the target library or folder | Needs Studio verification |
-| Historical data and notebook | Supports the Iceberg exercises | Needs Studio verification |
+| Module 2 notebook | Imported from `src/notebooks/module-2-shipment-history.ipynb`; see Module 2 configuration | Needs Studio verification |
 | Spark fallback table | Allows the workshop to continue after capacity or startup failure | Needs Studio verification |
 | Eventstream | Replays supplied truck telemetry | Needs Studio verification |
 | Security test identities | Demonstrate regional and partner access | Open environment decision |
@@ -49,6 +49,28 @@ a SharePoint site URL. If the provisioned connection is unavailable, the
 exercise must stop with instructor intervention rather than silently use a
 personal connection.
 
+## Module 2 configuration
+
+All of Module 2 runs in one notebook that writes Iceberg tables to the
+lakehouse. Studio and Fabric provisioning must satisfy these requirements:
+
+| Contract | Required configuration |
+|---|---|
+| Capacity | A paid F2 or larger capacity. AI Functions and data agents don't run on a trial capacity. |
+| Tenant settings | **Users can use Copilot and other features powered by Azure OpenAI** and **Capacities can be designated as Fabric Copilot capacities** are on. If the capacity is outside the EU data boundary and the US, both cross-geo settings are on too: data sent to Azure OpenAI can be processed, and stored, outside the capacity's region. |
+| Spark runtime | The workspace default is Runtime 2.0, which includes Iceberg. Module 2 uses no Environment. |
+| Spark session | Learners run the notebook in a standard session. Cells 16 and 24 use `%pip`, which doesn't work in high-concurrency mode. |
+| Workspace network | No outbound access protection, so `%pip` can install DuckDB and the Data Agent SDK. |
+| OneLake SAS | The workspace setting **Authenticate with OneLake user-delegated SAS tokens** is on. DuckDB reads data files with vended SAS credentials. |
+| Notebook | `src/notebooks/module-2-shipment-history.ipynb`, imported as **module-2-shipment-history**. Learners attach the lakehouse in Exercise 2.1, so the import needs no lakehouse binding. |
+| Lakehouse | The lakehouse that holds `SupplierQuality`, with schemas on. Learners can write to it. |
+| Learner role | Contributor or higher on the workspace, to create the data agent and refresh the SQL analytics endpoint metadata. |
+| Items Module 2 creates | CSV files in `Files/reference/` and `Files/history/`, the `history` schema, 7 Iceberg tables in `dbo`, `lot_history` and `shipment_history` in `history`, and the data agent `contoso_recall_agent`. |
+| Resume state | Every cell can be rerun. The notebook reuses the tables it created, which carry the property `contoso.owner = prel41-module-2`, and stops rather than overwrite any other table at the same path. |
+
+[The Contoso Fresh data model](contoso-fresh-data-model.md) describes every
+table and the results the data must produce.
+
 ## Tokens and variables
 
 The learner instructions currently contain no active `@lab.*` replacement
@@ -65,7 +87,8 @@ are declared.
 
 ## Assets and external dependencies
 
-No learner-facing images or external includes are currently referenced.
+No learner-facing images or external includes are currently referenced, except
+the Module 2 screenshots under `instructions/module-2/media/`.
 Product behavior for OneDrive and SharePoint shortcuts is based on:
 
 - [Create a OneDrive or SharePoint shortcut](https://learn.microsoft.com/fabric/onelake/shortcuts/create-onedrive-sharepoint-shortcut)
