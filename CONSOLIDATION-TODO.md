@@ -20,25 +20,38 @@
 - [x] Publish the consolidation branch using the verified GitHub noreply
   identity. The original private-email commit is preserved on the local
   `workshop/consolidation-preflight` branch without amendment.
-- [x] Verify access to the supplied Fabric workspace without modifying it.
-- [ ] Authenticate Fabric as `alvidela.local@cadata2612.onmicrosoft.com`
+- [x] Check access to the supplied Fabric workspace without modifying it.
+  The requested local account receives `InsufficientPrivileges`; use the
+  authorized isolated workspace instead.
+- [x] Authenticate Fabric as `alvidela.local@cadata2612.onmicrosoft.com`
   in tenant `5551f16b-831c-46a7-a226-4aae2ddca51a`.
-- [ ] Verify create/read/update permissions using that identity.
-- [ ] Confirm an accessible Fabric capacity supporting the required workloads,
-  its region, and the relevant AI and OneLake settings.
-- [ ] Establish an isolated workshop workspace and record its item inventory.
+- [x] Verify workspace creation and read access, and the Admin role,
+  using that identity.
+- [x] Confirm an accessible active F8 capacity in Sweden Central.
+- [ ] Verify the relevant AI and OneLake settings and workload execution.
+- [x] Establish an isolated workshop workspace and record its item inventory.
 - [ ] Confirm access to the provisioned SharePoint source and Skillable
   authoring/learner environment.
 
-Preflight on 2026-10-20: GitHub push permission is available. Azure CLI is
-authenticated as the guest identity
-`alvidela_microsoft.com#EXT#@cadata2612.onmicrosoft.com`, not the requested
-local account. The supplied workspace, `ft-test-ltg243`
-(`0db886c3-7bdb-4f83-851c-2ca89bf750d1`), is readable and reports no capacity
-assignment. The only capacity returned for the current identity is active
-reserved Premium Per User, SKU `PP3`. Suitable Spark/AI capacity access is not
-verified. Integrated-browser sign-in did not complete. No cloud resources
-were created.
+Updated preflight on 2026-10-20: GitHub push access is working. Microsoft
+Graph confirms Azure CLI is now authenticated as the requested local account,
+with object ID `81bed261-9eca-4f0e-a128-1b8ebea8bd52`. The original workspace
+is not accessible to this account. An isolated workspace was created using
+the account, and its Admin role and capacity assignment were verified:
+
+| Resource | Verified value |
+|---|---|
+| Workspace | PREL41-consolidation |
+| Workspace ID | 41c12ed5-0cc1-4d1c-9d2d-b81bcde137e4 |
+| Capacity | teamsharedsweden |
+| Capacity ID | b78e4ea3-9635-4923-8c8c-f3b692b1713f |
+| Capacity SKU and state | F8, Active |
+| Region | Sweden Central |
+| Initial item inventory | Empty, confirmed through the Fabric items API |
+
+The integrated browser still prompts for sign-in; browser and CLI sessions
+are separate. CLI-backed Fabric API access is working. AI/OneLake settings,
+workload execution, SharePoint access, and Skillable access remain unverified.
 
 ## Phase 1: Consolidate the workshop contract
 
@@ -132,10 +145,9 @@ from main. These are integration results, not evidence of functional readiness.
 The original private-email commit remains on the local preflight branch;
 published consolidation commits use the verified GitHub noreply identity.
 
-Credential preflight remains blocked on the requested Fabric local-account
-sign-in and suitable capacity access. Attempts through both the Power BI and
-Fabric integrated-browser entry points failed during single sign-on.
-No cloud resources were created. Scenario reconciliation, remaining feature
-implementation, and live lab validation are outstanding. A zero-defect or
-security-free claim is not an acceptance substitute for recorded evidence and
-disclosed limitations.
+The requested Fabric local-account identity, workspace creation, Admin access,
+and F8 capacity assignment are now verified. Scenario reconciliation,
+remaining feature implementation, and live lab validation are outstanding.
+The workspace was created on existing capacity; no new capacity was purchased.
+A zero-defect or security-free claim is not an acceptance substitute for
+recorded evidence and disclosed limitations.
