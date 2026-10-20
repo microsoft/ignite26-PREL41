@@ -21,7 +21,7 @@ Activities.
 | Operational data source | `contoso_operations`, separate from the destination, exposes the seven committed current-state tables under `dbo` through its own SQL endpoint | Native source and all 1,990 rows verified; fresh Lab Profile provisioning still needs verification |
 | Target lakehouse | Accepts learner-created shortcuts and later module output | Exact name required |
 | SharePoint connection | Preconfigured for the Supplier Quality content | Exact name required |
-| SharePoint permissions | Learner can read the target library or folder | Needs Studio verification |
+| SharePoint permissions | Learner can read the target library or folder | Consolidation account can read the tenant root Documents library in the browser; approved workshop folder, connector access, and fresh learner access remain unverified |
 | Module 2 notebook | Imported from `src/notebooks/module-2-shipment-history.ipynb`; see Module 2 configuration | Needs Studio verification |
 | Spark fallback data | `contoso_recall_fallback` supports read-only historical investigation during Spark session repair, without claiming the skipped technology exercises passed | Nine independent Delta tables and native recall checks verified; fresh-launch delivery and later-module handoff remain unverified; not a capacity-wide outage fallback |
 | Eventstream | Replays supplied truck telemetry | Needs Studio verification |

@@ -123,9 +123,11 @@ while preserving self-contained learner steps.
 
 The integrated browser now opens the workspace and notebook; browser and CLI
 sessions remain separate. Native core and AI execution are verified.
-OneLake SAS settings, package-based paths, SharePoint access, and Skillable
-access remain unverified. Fabio found no accessible SharePoint or Supplier
-Quality connection matching the workshop source.
+OneLake SAS settings, package-based paths, the provisioned SharePoint workshop
+source, and Skillable access remain unverified. Browser access to the tenant's
+root SharePoint site and its empty Documents library is verified below.
+Fabio found no accessible SharePoint or Supplier Quality connection matching
+the workshop source.
 High-concurrency notebook execution is enabled in the workspace; the
 existing Module 2 contract requires a standard session for its package cells.
 
@@ -464,6 +466,30 @@ a bounded read-only investigation path while Spark is repaired. The fallback
 does not complete the skipped technology exercises, solve a capacity-wide
 outage, or automatically rebind later-module resources. Fresh-launch and
 handoff testing remain outstanding.
+
+### SharePoint source discovery
+
+The authenticated browser opened
+`https://cadata2612.sharepoint.com` and its existing Documents library at
+`https://cadata2612.sharepoint.com/Shared%20Documents/Forms/AllItems.aspx`.
+The account menu confirmed `alvidela.local@cadata2612.onmicrosoft.com`,
+tenant `5551f16b-831c-46a7-a226-4aae2ddca51a`. Site contents lists the
+Documents library, and that library currently displays an empty list.
+These checks establish browser read access, not write permission, an approved
+publication location, or Fabric connector access.
+
+Earlier Graph discovery returned empty drive/library lists and `403` for
+default-drive and site-search requests. Those results must not be treated as
+proof that the signed-in user lacks SharePoint access; the browser successfully
+opened the library. No credentials or browser session material were exported.
+
+Proposed next step: publish only the committed synthetic source under an
+isolated `PREL41/supplierQuality/` folder in that existing library, preserving
+site settings and sharing. Location approval was requested, but no answer was
+available. Discovery therefore remains read-only: no folders or files were
+created, and no sharing settings changed. After approval, publish the CSV-only
+metadata folder and supplied documents, then create the Fabric connection and
+shortcut using Fabio and validate the four-record certificate transformation.
 
 Cold-start materialization took several minutes despite a 30-second batch
 setting. Fresh-launch timing and producer recovery still require testing.
