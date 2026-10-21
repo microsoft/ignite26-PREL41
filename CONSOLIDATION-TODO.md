@@ -618,6 +618,26 @@ The open draft PRs and repository branches were checked again: no separate
 console starter contribution appeared. The existing npm cache also contains
 no Rayfin package. The absent application is not replaced with a mock.
 
+Further investigation located the public first-party Rayfin source and
+confirmed the actual published package names: `@microsoft/rayfin-cli` and
+`@microsoft/create-rayfin`, both `1.36.2`. The missing component is the
+prepared workshop application, not the existence of a CLI distribution.
+The reference authentication sample still has monorepo dependencies and
+does not implement recall investigation. Source also confirms that function
+resource tokens use the application identity and that the released SQL
+analytics connector defaults to application authentication. Neither proves
+the caller-delegated OneLake Arrow path required by the workshop. Those
+distinctions are now explicit in the Studio inventory.
+
+The supported **Manage connections and gateways** link was also opened
+inside the authenticated Power BI host. Its embedded portal did not finish
+loading within the bounded wait; the standalone portal had reported that
+it could not authenticate to Graph. No credentials or authentication messages
+were extracted or injected. All five sessions listed for the three owned
+core, AI, and data validation notebooks were already terminal
+(`Succeeded` or `Failed`); no running session was stopped or notebook
+content removed.
+
 ### Independent historical fallback
 
 The separate schema-enabled **contoso_recall_fallback** now contains all seven

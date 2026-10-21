@@ -262,6 +262,17 @@ Product behavior is described in:
 - The current environment has no Rayfin executable or supplied application
   project. Generic Fabio item-definition retrieval is unsupported for the
   created AppBackend; it is not a substitute deployment path.
+- The first-party source and published CLI are available:
+  [Rayfin CLI installation](https://github.com/microsoft/rayfin/blob/0979439a7a0806abd0ee48c2619b37f297ae1324/packages/guide/assets/docs/cli/installation.md)
+  identifies `@microsoft/rayfin-cli`, which publishes the `rayfin` executable.
+  Registry metadata confirmed version `1.36.2`, along with
+  `@microsoft/create-rayfin` at that version. `@microsoft/rayfin` is not the
+  CLI package: the official `npm create` spelling resolves the separately
+  named initializer. Do not replace the prepared CLI with a guessed package.
+  The [authentication sample](https://github.com/microsoft/rayfin/tree/0979439a7a0806abd0ee48c2619b37f297ae1324/samples/getting-started-auth)
+  is reference material, not the authored Recall Console. Its source manifest
+  uses monorepo `workspace:*` dependencies; copying it alone is not a
+  self-contained, prepared lab project.
 - Preflight the supplied project against the official
   [CLI creation workflow](https://learn.microsoft.com/fabric/apps/create-app-with-cli)
   and [deployment workflow](https://learn.microsoft.com/fabric/apps/deploy-app).
@@ -278,6 +289,15 @@ Product behavior is described in:
 - Keep Fabric SSO and end-user data authorization distinct. An app's
   **Run and interact** permission allows use of the app; it does not prove
   that downstream OneLake queries use that user's identity.
+- Inspect the exact downstream identity, not just the token audience.
+  The first-party [function connection model](https://github.com/microsoft/rayfin/blob/0979439a7a0806abd0ee48c2619b37f297ae1324/packages/guide/assets/docs/functions/connections/index.md)
+  uses application-identity resource tokens. A function's
+  `ctx.Tokens.Storage` therefore does not establish caller-delegated
+  OneLake access. The [connector catalog](https://github.com/microsoft/rayfin/blob/0979439a7a0806abd0ee48c2619b37f297ae1324/packages/tools/common/src/config/connectors.ts)
+  supports explicit delegated authentication for SQL analytics, but defaults
+  that connector to application authentication. That SQL connector is also
+  not a direct OneLake Arrow table-read adapter. Neither sample is a drop-in
+  implementation of Exercise 5.2's governed connector contract.
 - Supply the actual connector's table-read base URL, supported request/response
   contract, and preauthorized user-delegated authentication. The
   [table API prerequisites](https://learn.microsoft.com/fabric/onelake/table-apis/table-apis-overview#prerequisites)
