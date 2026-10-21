@@ -86,7 +86,7 @@ the account, and its Admin role and capacity assignment were verified:
   data agent through Fabio. Both workshop questions returned the expected
   9 and 13 stores and their IDs.
 
-### Independent clean-room source and core
+### Independent clean-room reproduction
 
 On 2026-10-21, recreated the bounded core in **PREL41-clean-room**, starting
 with an empty workspace rather than relying on the consolidation instance.
@@ -103,6 +103,10 @@ tenant setting, or restricted-reader grant was changed.
 | Author SQL visibility notebook | 6d443f61-76e7-4662-a74f-d6aac3012114 |
 | Operational SQL source | f419e186-f9c8-4b82-b4db-2aa45d2fc6f4 |
 | Separate operational mirror endpoint | c5ee51d2-68f9-493b-b7c0-a97d78e9de12 |
+| Native truck telemetry Eventstream | 6b4c8079-f613-40b6-b8a9-d444e0e4cd82 |
+| Fixed-binding temperature refresh pipeline | 7554e04a-fae5-43fc-a9ce-e9b16b11f522 |
+| Published recall agent | 33d5715d-e40e-414d-a189-2d8498103625 |
+| Author AI Functions validation notebook | 21def865-1059-4f42-87d9-615ff56f7e6e |
 
 - [x] Generate the data from the shipped cells 1-15, with only the documented
   DELETE exercise answer filled in the author copy. Native job
@@ -144,12 +148,113 @@ tenant setting, or restricted-reader grant was changed.
   Independently confirm both probes finish at zero rows with null value
   and timestamp. These include query/observation latency, not a replication
   service guarantee or a fresh Skillable timing pass.
+- [x] Recreate the documented Eventstream topology and wait for both inlet and
+  destination to be Running before sending. The supplied dependency-free
+  producer accepted the original 35 and supplemental 404 messages. Credentials
+  were piped only to stdin, never printed or persisted.
+- [x] Observe actual OneLake Delta commits, then refresh only telemetry SQL
+  metadata and compare every persisted five-field payload. All 439 raw rows
+  yielded exactly 438 canonical IDs, with zero missing, unexpected, or
+  conflicting payloads. The observation took 179.85 seconds after its monitor
+  started, including several partial 236-of-438 results before the last batch.
+  Transport acceptance was not treated as persistence. Independently confirm
+  the sink reached Paused afterward; the custom inlet can remain Running.
+- [x] Bind and deploy the existing guarded SQL unchanged, validate the definition,
+  and independently read back its exact SQL, endpoint, destination, and absence
+  of run-time redirect parameters. Candidate job
+  `4edf16c6-d51e-4849-b2b1-8517ee552f47` completed from
+  `2026-10-21T08:54:09.4841819` to `2026-10-21T08:55:02.7766667` UTC
+  (53.29 seconds). Strict fourteen-column, thirteen-shipment acceptance
+  passed with two breaches and eleven no-breach journeys; snapshot timestamp
+  `2026-10-21T08:54:46.805358000` was strictly inside the job interval.
+- [x] Compare all thirteen non-analysis-time fields of every candidate row,
+  including multiplicity, with the unchanged live guarded analysis, then
+  promote only the fixed production binding. Production job
+  `da40f283-8f65-4b4a-bb85-5267d4958ea8` completed from
+  `2026-10-21T08:57:18.3896405` to `2026-10-21T08:58:02.26` UTC
+  (43.87 seconds). The same strict acceptance and every-field comparison
+  passed, with fresh timestamp `2026-10-21T08:57:47.781398000`.
+  All native fractional digits were preserved during freshness comparisons.
+- [x] Inspect and remove only this run's author-created candidate directory
+  after production passes. Refresh metadata, verify zero candidate tables,
+  and rerun production acceptance without changing its timestamp or rows.
+- [x] Provision and publish the fresh native agent with the exact shipped
+  instructions and original nine tables. Independently read back both draft
+  and published definitions; raw telemetry remains unselected. An initial
+  nine-run evaluation had no service errors and correct counts, but one
+  history answer correctly returned only the requested count. The strict
+  full-list check therefore exposed a fixture coverage ambiguity, not a wrong
+  count. Clarified that regression question to explicitly request every
+  distinct store ID, without changing agent or learner behavior.
+- [x] Run all three clarified questions three times: all nine fresh published
+  answers pass exact counts and complete expected ID sets, including the
+  nonexistent-lot empty result. Retain the original and clarified responses
+  separately as session-only evidence. These native service checks do not
+  execute the notebook's SDK/package cells or prove restricted-reader access.
+- [x] Recreate both unassigned role definitions and compare every permission,
+  four row constraints per role, the partner column constraint, and empty
+  memberships. The first creation reassigned only DefaultReader's server ID
+  from `1f807bcf-ad2e-4198-a6d2-04f31b057136` to
+  `4ba4d225-91fe-4b5d-8a3e-e15b86818fdc`; its exact name, kind,
+  grants, and membership were unchanged. Keep initial and post-create
+  baselines rather than pretending the IDs matched or restoring an old ID.
+- [x] Preflight zero authored SQL inline objects, zero explicit non-system
+  grants, and zero other database-scoped user requests on all three owned SQL
+  surfaces after the owned jobs finish. Save User's identity access mode
+  through the native warning flow. After a full page reload, independently
+  confirm user mode selected, delegated mode unselected, Apply disabled,
+  and the user's-identity footer. All three OneLake policies, including their
+  post-create IDs and memberships, remain unchanged.
+- [x] Investigate the immediate post-switch pipeline failure
+  `b8e1177b-b6f3-40ad-9d69-162d2be0eced` rather than accepting the earlier
+  production snapshot. Its source failed with `SqlFailedToConnect` and
+  token-identified-principal login failure. The actual engineer subsequently
+  authenticated as the requested 2612 account and executed all thirteen
+  guarded source journeys correctly. After those independent readiness checks,
+  one controlled retry under unchanged bindings and grants completed:
+  `876514da-e780-4aa2-a5f3-69df2cdcd46a`,
+  `2026-10-21T09:09:51.38` to `2026-10-21T09:10:44.8566667` UTC
+  (53.48 seconds).
+- [x] Verify the recovered snapshot timestamp
+  `2026-10-21T09:10:30.686044000` is strictly inside that new job interval,
+  not the previous valid timestamp. Strict 13/2/11 acceptance, fourteen
+  columns, every non-time field and row multiplicity, all core recall
+  checks, candidate absence, and unchanged OneLake policies pass afterward.
+  Document the observed failure/recovery and pre-launch runtime readiness
+  requirement without claiming an unverified platform-internal cause.
+- [x] After saved caller-identity mode and the recovered pipeline, rerun all nine
+  native published-agent checks: all three current, history, and nonexistent-lot
+  repeats pass exact counts and requested complete ID sets with zero service
+  errors. This still tests only the engineer's service path.
+- [x] Deploy the existing six-cell AI author validation artifact with a verified
+  fresh saved lakehouse binding. Cells 2, 25, 21, and 22 exactly match the
+  shipped source; cell 23 retains only the existing author-side summary cache
+  insertion to avoid repeating paid inference during assertions. The assertion
+  cell exactly matches the existing author checks. No package cell, runtime
+  override, Environment, or learner-notebook edit was introduced.
+- [x] Native AI job `323087fd-13e0-4fa2-b712-9c3b0464347c` completed from
+  `2026-10-21T09:15:20.8800456` to `2026-10-21T09:17:40.2831368` UTC
+  (139.40 seconds). The actual driver stdout confirms 30 notes, 30 extracted
+  temperatures, 23 durations, six nonempty summaries, and zero extraction or
+  summarization errors. Native session metadata independently confirms
+  Runtime 2.0, standard rather than high-concurrency execution, and the
+  requested creator/consumer object ID. The system stopped its session after
+  completion; full logs remain session-only.
 
 These are author setup/core checks, not a full fresh workshop pass. The
-package-dependent notebook paths, fresh AI/agent flow, SharePoint integration,
+package-dependent notebook paths, SharePoint integration,
 real restricted readers, deployed Recall Console, and Skillable fresh/resume/
 reset runs remain outstanding. Native job intervals are observations, not
 attendee completion-time or concurrency guarantees.
+
+A bounded Skillable access check followed the Studio link from the official
+Skillable login page to `https://labondemand.com/`. Its normal Entra sign-in
+recognized the already signed-in requested account, then reached the verified
+Skillable publisher's basic-profile/maintain-access consent. No consent was
+accepted, password supplied, new vendor identity approved, or organization-wide
+grant made. The requested approval could not be obtained while the owner was
+unavailable. No Lab Profile has been inspected or launched; do not infer
+profile availability or author permission from reaching the sign-in page.
 
 ### Original consolidation validation
 

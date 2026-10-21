@@ -92,6 +92,10 @@ For a role with only row constraints, omit `columns` rather than sending an
 empty array: the Fabric service rejected the empty-array form during live
 validation. Compare saved policies by name, permissions, constraints, and
 memberships, rather than assuming server-assigned role IDs remain unchanged.
+In the clean-room first-role creation, the service reassigned DefaultReader's
+ID while preserving its exact name, kind, permissions, and membership.
+Keep both baselines and record that ID change explicitly; do not restore an
+old server ID or ignore changes to effective grants.
 
 ### Configure SQL endpoint identity
 
@@ -124,6 +128,19 @@ then **Settings → Data access mode → Use OneLake security for tables
 (User's identity access mode)**. Apply and confirm the warning only after
 the checks above. Reload the page and verify the saved mode, disabled Apply
 button, and footer stating that the user's identity is being used.
+
+Saved UI state is not runtime readiness. Allow OneLake security to synchronize,
+verify that the intended engineer can sign in to the endpoint and execute the
+guarded source analysis, then require a completed pipeline run with freshly
+accepted output before learners launch. In the fresh author check, an
+immediate post-switch Copy failed at its source with `SqlFailedToConnect`
+and a token-identified-principal login error. After independently verifying
+the engineer's actual SQL login and full source results, one bounded retry
+completed without changing bindings or grants. The platform-internal cause
+was not established; do not treat this observation as permission to retry
+configuration errors indefinitely or switch back to delegated access.
+Retain failed-job evidence and never present an older valid snapshot as a
+successful refresh.
 
 Read back the OneLake roles, preserve their memberships and DefaultReader,
 and rerun the recall and snapshot checks. Native row constraints include a
@@ -169,6 +186,10 @@ Inspect every answer against these expected results:
 - Received shipments: those nine plus `STR-020`, `STR-021`, `STR-026`,
   and `STR-032`, for thirteen distinct IDs.
 - The deliberately nonexistent lot: zero stores and no store IDs.
+
+The received-store question explicitly asks for every distinct store ID.
+A correct count-only answer to an ordinary "How many?" question does not
+exercise list completeness; it is not evidence of an incorrect count.
 
 The `expected` strings only produce Fabio's naive text-match hints.
 Formatting can make a correct zero-result answer miss the hint, and matching
