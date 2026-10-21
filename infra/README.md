@@ -1,5 +1,53 @@
 # Infrastructure
 
+## Destination and learner notebook
+
+Use an authorized workspace and its approved capacity. Set `WORKSPACE_ID`
+explicitly; do not let a terminal's previous default select the destination.
+Inspect existing items before provisioning. Reuse matching resources on
+resume rather than creating duplicates or replacing authored notebooks.
+
+For a new instance, create the destination and import the shipped notebook
+from the repository root:
+
+```bash
+fabio lakehouse create \
+  --workspace "$WORKSPACE_ID" --name contoso_fresh --enable-schemas
+
+fabio notebook create \
+  --workspace "$WORKSPACE_ID" --name module-2-shipment-history \
+  --file src/notebooks/module-2-shipment-history.ipynb
+```
+
+Record the returned lakehouse and notebook IDs separately from the operational
+SQL source and its mirror. Wait for the new lakehouse's SQL endpoint to
+finish provisioning; an initial `InProgress` state does not justify creating
+a replacement lakehouse.
+
+The learner import intentionally starts unattached: follow
+[Exercise 2.1](../instructions/module-2/exercise-2-1-prepare-the-notebook-and-data.md)
+to attach and pin the destination before running cells. For an author
+validation run, complete that attachment before starting a job, then read
+back the saved notebook definition and check its `dependencies.lakehouse`
+metadata. Require the intended `default_lakehouse`,
+`default_lakehouse_workspace_id`, and `default_lakehouse_name`; job submission
+or a remembered UI selection is not proof of a saved binding.
+
+A clean-room check with Fabio 0.79.0 found that importing an ipynb with
+`--lakehouse` returned success but did not persist `dependencies`. Do not
+rely on that flag alone. The supported UI attachment remains the learner
+path. If an author updates native FabricGitSource metadata, preserve the
+existing kernel and every cell, then independently read back the saved
+definition before execution. Do not pass the complete FabricGitSource text
+to `--content`: its preview wrapped that text into a single ipynb cell.
+
+Use the supplied runtime, session, and network configuration in the
+[Studio inventory](../docs/authoring/studio-inventory.md#module-2-configuration).
+Keep author validation copies separate from the learner notebook: the
+documented DELETE answer belongs only in a validation copy, not in the
+shipped exercise. A first-fifteen-cell core run does not complete DuckDB,
+AI Functions, the SDK, or the full workshop.
+
 ## OneLake roles
 
 The workshop provides two role definitions:

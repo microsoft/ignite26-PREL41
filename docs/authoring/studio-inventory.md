@@ -124,6 +124,13 @@ lakehouse. Studio and Fabric provisioning must satisfy these requirements:
 [The Contoso Fresh data model](contoso-fresh-data-model.md) describes every
 table and the results the data must produce.
 
+Use the [destination/import procedure](../../infra/README.md#destination-and-learner-notebook)
+for new instances. Before an author job, verify the saved default-lakehouse
+metadata, not only a successful CLI import. The clean-room Fabio ipynb
+import accepted `--lakehouse` without persisting the binding. Learners still
+attach and pin the lakehouse through Exercise 2.1; provisioning must not
+silently skip that exercise or write to a fallback destination.
+
 ### Verify package-dependent cells
 
 Runtime 2.0 includes the Iceberg engine, not the notebook's complete Python

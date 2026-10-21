@@ -86,7 +86,64 @@ the account, and its Admin role and capacity assignment were verified:
   data agent through Fabio. Both workshop questions returned the expected
   9 and 13 stores and their IDs.
 
-Native validation job evidence:
+### Independent clean-room source and core
+
+On 2026-10-21, recreated the bounded core in **PREL41-clean-room**, starting
+with an empty workspace rather than relying on the consolidation instance.
+Used the same requested identity and approved F8 capacity. Read back the
+workspace's existing Runtime 2.0 default; no runtime, Environment, package,
+tenant setting, or restricted-reader grant was changed.
+
+| Resource | Clean-room ID |
+|---|---|
+| Workspace | a5094545-eb62-433c-9ef3-ed5fcc5f98f7 |
+| Destination contoso_fresh | a8891b36-5bf6-4303-b1f7-157207b2330e |
+| Destination SQL endpoint | 0994a434-cea0-43ba-8a9e-c5a9df23ea81 |
+| Author core notebook | af7695f0-f741-436d-b7d0-edd574100f1f |
+| Author SQL visibility notebook | 6d443f61-76e7-4662-a74f-d6aac3012114 |
+| Operational SQL source | f419e186-f9c8-4b82-b4db-2aa45d2fc6f4 |
+| Separate operational mirror endpoint | c5ee51d2-68f9-493b-b7c0-a97d78e9de12 |
+
+- [x] Generate the data from the shipped cells 1-15, with only the documented
+  DELETE exercise answer filled in the author copy. Native job
+  `a54cb07e-1e8e-4952-b702-a6124606387d` completed from
+  `2026-10-21T08:27:47.9091548` to `2026-10-21T08:29:54.461` UTC
+  (126.55 seconds). No existing lakehouse data was copied.
+- [x] Catch and repair the missing saved attachment after Fabio 0.79.0
+  accepted `--lakehouse` on an ipynb import without persisting dependencies.
+  Independently verify the saved native source, kernel, cells, and binding.
+  The [author preflight](infra/README.md#destination-and-learner-notebook)
+  now requires saved metadata readback; learner UI attachment is unchanged.
+- [x] Execute the exact shipped cell 25 in a separate bound author notebook.
+  Native job `46ddc8b9-5b0b-4ac0-a31d-210b54f2df2f` completed from
+  `2026-10-21T08:32:17.857645` to `2026-10-21T08:33:56.3162875` UTC
+  (98.46 seconds). A plain metadata refresh before the cell returned
+  `DeltaTableNotFound` for all nine new Iceberg tables; refresh alone does
+  not trigger their Delta conversion.
+- [x] After that conversion, execute the unchanged
+  [recall acceptance SQL](src/sql/fallback-recall-checks.sql) against the
+  fresh destination endpoint. Exact results: 9 current stores, 13 receiving
+  stores, 13 related lots, 45 reached stores, 5 regions, 16,961 history lots,
+  1,165,374 shipment lines, zero duplicate shipment keys, and zero remaining
+  lines for the two removed shipment IDs.
+- [x] Create the separate operational SQL database using the committed guarded
+  bootstrap and seven CSV imports. Compare all 1,990 rows, every typed column,
+  and row multiplicity against the CSVs through both the transactional source
+  and its automatic native mirror. Initial mirror registration lagged; no
+  ingestion, copy, or mirroring reconfiguration was used.
+- [x] Independently query current inventory through that mirror: the exact nine
+  IDs and quantities match, with eight North stores and one East store.
+  Confirm the training probe starts empty in both source and mirror.
+
+These are author setup/core checks, not a full fresh workshop pass. The
+package-dependent notebook paths, fresh AI/agent flow, SharePoint integration,
+real restricted readers, deployed Recall Console, and Skillable fresh/resume/
+reset runs remain outstanding. Native job intervals are observations, not
+attendee completion-time or concurrency guarantees.
+
+### Original consolidation validation
+
+Native validation job evidence for the original consolidation workspace:
 
 | Check | Job ID | Result |
 |---|---|---|
