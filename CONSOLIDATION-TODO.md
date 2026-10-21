@@ -127,6 +127,25 @@ has every feature deployed.
   On, enabled for all users, with inherited Default configuration. No
   setting was changed. Credential vending and actual DuckDB reads remain
   separate, unexecuted checks.
+- [x] Independently check the deployed governance fixture expectations:
+  North has eight current and eight receiving stores; CAR-02 has eight
+  shipment lines reaching eight stores. These were engineer data checks,
+  not restricted-reader authorization tests.
+- [x] Review the saved deployed production configuration for exploitable
+  refresh overrides, derived-data exposure, additive role grants, and
+  candidate cleanup. The specialized read-only review found no confirmed
+  vulnerabilities. It did not establish the complete item/connection grant
+  graph, actual restricted-reader enforcement, or security of the absent
+  Console/Arrow implementation. Current workspace assignments contain only
+  the two existing direct User/Admin assignments; this alone does not prove
+  the complete item-level permission graph.
+- [x] Recheck available inputs autonomously: open drafts #3/#4/#9 have no new
+  application contribution, and the current tree has no Rayfin project
+  configuration. The preserved Environment reports no published or staged
+  libraries through the native read-only APIs. Current official table-read
+  documentation still requires a supplied `TableReadBaseUrl` and does not
+  provide an allocation-response schema. No preview endpoint, connector
+  contract, reader identity, or dependency installation was fabricated.
 - [ ] Verify the remaining notebook, actual application, and restricted
   identity paths in this destination.
 - [ ] Finish the integrated correctness, usability, performance, and security
