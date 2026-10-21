@@ -106,9 +106,14 @@ and the deployed Recall Console's governed data path have not been confirmed
 as passed. Follow the completion checks and record any fallback or skipped
 exercise rather than treating it as completed.
 
-SharePoint Fabric connection and transformation, the actual Rayfin application,
-restricted identities, DuckDB and SDK paths, Skillable delivery, and the final
-integrated adversarial review remain unverified or incomplete.
+The author workspace now also has a working SharePoint connection and document
+shortcut: all seven source files match the repository, and the native CSV
+transformation produced all four certificate records with matching source
+fields and no corrupt rows. This does not establish fresh learner access.
+
+The actual Rayfin application, restricted identities, DuckDB and SDK paths,
+Skillable delivery, and the final integrated adversarial review remain
+unverified or incomplete.
 
 ### 🎯 Learning outcomes
 

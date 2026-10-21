@@ -243,24 +243,40 @@ are alternatives only when their SharePoint permissions are explicitly
 provisioned; a working owner browser session does not grant those identities
 access.
 
-During the latest author check, the original Power BI host loaded the
-lakehouse and **SharePoint Folder** shortcut picker after a cold start.
-The embedded **New connection** authorization form still did not render
-after bounded waits. The account and tenant were verified through the
-normal profile menu. This does not prove a missing tenant permission, and
-switching authentication kinds without provisioning their documented access
-is not a fix. Finish authorization in a working supplied browser and test
-the resulting connection before proceeding.
+The clean-room author check completed this sign-in through the native shortcut
+wizard. Open the lakehouse in a visible browser page and dismiss the
+**Analyze your data** teaching tip if it covers the ribbon. Allow the shortcut
+wizard and connection form to finish loading. Select the **New connection**
+radio circle, enter the site root and connection name, and verify the displayed
+organizational account before continuing. The form recognized the requested
+2612 account and successfully browsed **Shared Documents/PREL41/supplierQuality**.
+No browser credentials were exported, authentication kind changed, or connection
+test skipped. Earlier blank connection-management pages did not establish that
+source permissions were missing.
 
 Once the tested connection exists, retrieve its ID through Fabio:
 
 ```bash
 fabio connection list \
-  --query "[?displayName=='PREL41-SupplierQuality'].{id:id,name:displayName,type:connectionDetails.type}"
+  --query "[?starts_with(displayName,'PREL41-SupplierQuality')].{id:id,name:displayName,type:connectionDetails.type,path:connectionDetails.path}"
 ```
 
-Require exactly one matching connection. Set `SHAREPOINT_CONNECTION_ID` to its
-ID, `SHAREPOINT_SITE_URL` to the site root, and `SHAREPOINT_SOURCE_PATH` to the
+Require exactly one intended connection and verify its SharePoint type and site
+path; do not choose arbitrarily among similarly named connections. The native
+form can append the account name even when the entered name is exact. Set
+`SHAREPOINT_CONNECTION_ID` to the verified ID and normalize only that new
+workshop connection:
+
+```bash
+fabio connection update --id "$SHAREPOINT_CONNECTION_ID" \
+  --name PREL41-SupplierQuality
+
+fabio connection list \
+  --query "[?displayName=='PREL41-SupplierQuality'].{id:id,name:displayName,type:connectionDetails.type,path:connectionDetails.path}"
+```
+
+Require that the exact-name result contains that same ID. Set
+`SHAREPOINT_SITE_URL` to the site root and `SHAREPOINT_SOURCE_PATH` to the
 server-relative document folder, for example
 `/Shared Documents/PREL41/supplierQuality`. These are source paths, not the
 library's `Forms/AllItems.aspx` browser URL. Inspect existing shortcuts before
@@ -271,8 +287,9 @@ fabio lakehouse list-shortcuts \
   --workspace "$WORKSPACE_ID" --id "$LAKEHOUSE_ID"
 ```
 
-The following author-provisioning commands describe the intended deployment;
-they still require live execution and validation with the tested connection:
+The following document-shortcut command was executed and all seven source
+files were downloaded through the resulting OneLake path. Their SHA-256
+hashes matched the repository sources:
 
 ```bash
 fabio lakehouse create-shortcut \
@@ -281,16 +298,30 @@ fabio lakehouse create-shortcut \
   --connection-id "$SHAREPOINT_CONNECTION_ID" \
   --location "$SHAREPOINT_SITE_URL" --subpath "$SHAREPOINT_SOURCE_PATH" \
   --conflict-policy Abort
+```
 
-fabio lakehouse create-shortcut \
-  --workspace "$WORKSPACE_ID" --id "$LAKEHOUSE_ID" \
-  --name supplier_certificates --path Tables/dbo \
-  --target-type OneDriveSharePoint \
-  --connection-id "$SHAREPOINT_CONNECTION_ID" \
-  --location "$SHAREPOINT_SITE_URL" \
-  --subpath "$SHAREPOINT_SOURCE_PATH/metadata" \
-  --transform csvToDelta --csv-delimiter , --csv-keep-error-files \
-  --conflict-policy Abort
+For the certificate table, use the native wizard in
+[Exercise 1.3](../instructions/README.md#exercise-13-prepare-certificate-data).
+Select only `metadata`, keep the comma delimiter and header row, and name the
+result `supplier_certificates` under `Tables/dbo`. The wizard's saved
+`csvToDelta` transform, dynamic schema, mirror refresh, and excluded subfolders
+were independently read back; all four records materialized as Delta.
+
+Do not substitute Fabio 0.79.0's `--transform` or `--transform-json` shortcut
+creation response for this check. Isolated author probes with both forms
+returned a transform in the creation response, but independent reads showed
+ordinary shortcuts without a saved transform or Delta output. Both probe
+pointers were removed; the working table was not replaced. The CLI document
+shortcut works, but this SharePoint table-transformation path must use the
+verified native wizard.
+
+When SQL metadata has not discovered the completed Delta table yet, refresh
+only that table, without recreating metadata:
+
+```bash
+fabio sql-endpoint refresh-metadata \
+  --workspace "$WORKSPACE_ID" --id "$SQL_ENDPOINT_ID" \
+  --tables '[{"schema":"dbo","tableNames":["supplier_certificates"]}]'
 ```
 
 On resume, compare source, path, connection, and transformation before reusing
@@ -303,6 +334,17 @@ each document path relative to `Files/SupplierQuality`, not the metadata
 folder. Transformation materializes Delta data and requires Spark; do not
 claim zero-copy semantics for the certificate table or treat shortcut metadata
 creation as proof of completed transformation.
+
+The wizard currently defaults to skipping files with errors. Require all four
+distinct source records and inspect `__corrupt__`: every value must be null.
+Do not accept a successful job or a partially populated table instead. Fabric
+also adds `__filepath__` and `__ingestion_timestamp__`; compare the thirteen
+source columns, not these generated values, with the supplied CSV.
+
+These are author validation steps. A fresh learner instance must still leave
+the shortcut-creation work to Exercises 1.2 and 1.3, unless it is intentionally
+resuming matching completed work. A successful author connection does not
+provision another learner's connection or source permissions.
 
 Provision source access and shortcut access for the intended learner
 identities separately. Do not grant the restricted manager or partner broader

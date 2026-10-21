@@ -20,8 +20,8 @@ Activities.
 | Fabric workspace | Contains the Contoso Fresh workshop items | Exact name required |
 | Operational data source | `contoso_operations_sql` SQL database, separate from the destination, mirrors seven canonical `dbo` tables plus an isolated training probe into its own OneLake SQL endpoint | Both source/mirror copies of all 1,990 records and actual insert/update/delete propagation verified; fresh Lab Profile provisioning still needs verification |
 | Target lakehouse | Accepts learner-created shortcuts and later module output | Exact name required |
-| SharePoint connection | Preconfigured for the Supplier Quality content | Exact name required |
-| SharePoint permissions | Learner can read the target library or folder | Consolidation account published and read back all seven source files in an isolated folder; connector access and fresh learner access remain unverified |
+| SharePoint connection | Preconfigured for the Supplier Quality content | Author connection `PREL41-SupplierQuality` works; fresh Lab Profile delivery still needs verification |
+| SharePoint permissions | Learner can read the target library or folder | Author downloaded all seven matching source files through the actual OneLake shortcut; fresh learner access remains unverified |
 | Module 2 notebook | Imported from `src/notebooks/module-2-shipment-history.ipynb`; see Module 2 configuration | Needs Studio verification |
 | Spark fallback data | `contoso_recall_fallback` supports read-only historical investigation during Spark session repair, without claiming the skipped technology exercises passed | Nine independent Delta tables and native recall checks verified; fresh-launch delivery and later-module handoff remain unverified; not a capacity-wide outage fallback |
 | Eventstream | Replays supplied truck telemetry | Needs Studio verification |
@@ -76,8 +76,10 @@ The [author provisioning recipe](../../infra/README.md#sharepoint-source)
 separates source publication, organizational-account sign-in, and native Fabio
 shortcut creation. In the consolidation tenant, all seven published source
 files match their repository SHA-256 hashes; the metadata folder contains only
-the CSV. The Fabric connection and transformation are separate, outstanding
-checks, not implied by successful SharePoint publication.
+the CSV. Fresh author validation also completed the organizational-account
+connection, downloaded all seven files through `Files/SupplierQuality`, and
+verified all thirteen source fields of the four transformed records. This
+does not establish fresh learner or restricted-reader access.
 
 The [operational-source provisioning recipe](../../infra/README.md#operational-source)
 now creates and seeds native SQL for automatic OneLake mirroring. The exact
@@ -98,6 +100,13 @@ restricted test identities.
   table. Its completion time and refresh behavior need live validation; the
   ordinary document shortcut's zero-copy behavior does not apply.
 - Keep the table outside Module 2's nine-table agent selection.
+- The native wizard's CSV transformation was verified in the fresh author
+  workspace, including actual Delta output and SQL discovery after a scoped
+  metadata refresh. Its generated `__corrupt__` values were all null.
+- Use that wizard, not a successful-looking CLI shortcut creation response.
+  The [author recipe](../../infra/README.md#sharepoint-source) records the two
+  CLI transformation probes that did not persist a transform, their cleanup,
+  and the working document-shortcut command.
 
 The supported transformation flow is described in
 [Transform structured files into Delta tables](https://learn.microsoft.com/fabric/onelake/shortcuts/transformations).
@@ -138,6 +147,12 @@ dependency set. A read-only native check on 2026-10-21 reported both
 `duckdb` and `fabric-data-agent-sdk` absent. Driver logs exposed the exact
 missing-package error; the job's generic Spark-session cancellation alone
 would not have established its cause.
+
+A second standard-session preflight independently confirmed both missing
+distribution metadata and unavailable modules, without installing anything or
+changing the runtime. Job `f2952905-5681-429f-93e0-ef85ad5cdae9` completed on
+Runtime 2.0 with high concurrency false. Do not assume that a successful core or
+AI Functions run means these two dependencies are already present.
 
 Before launch, verify the shipped dependency flow in an author validation
 instance with the same approved network and standard-session configuration:

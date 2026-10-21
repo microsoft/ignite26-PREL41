@@ -275,7 +275,10 @@ recall investigation.
 ### Inspect the result
 
 Confirm that the table has **4 certificate records** with distinct
-`certificate_id` values. Find **CERT-2026-014**, for **SUP-014**:
+`certificate_id` values. Fabric can add `__filepath__`, `__corrupt__`, and
+`__ingestion_timestamp__` columns. Every `__corrupt__` value must be null;
+do not accept missing records or rows with parsing errors even if the
+transformation reports success. Find **CERT-2026-014**, for **SUP-014**:
 
 - Certificate type: **SQF Food Safety Code**.
 - Status: **Active**, with `is_current` true.

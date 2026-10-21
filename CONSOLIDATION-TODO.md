@@ -107,6 +107,7 @@ tenant setting, or restricted-reader grant was changed.
 | Fixed-binding temperature refresh pipeline | 7554e04a-fae5-43fc-a9ce-e9b16b11f522 |
 | Published recall agent | 33d5715d-e40e-414d-a189-2d8498103625 |
 | Author AI Functions validation notebook | 21def865-1059-4f42-87d9-615ff56f7e6e |
+| Supplier Quality organizational-account connection | 6ecc6865-6044-4d6e-a385-852eea73d408 |
 
 - [x] Generate the data from the shipped cells 1-15, with only the documented
   DELETE exercise answer filled in the author copy. Native job
@@ -241,8 +242,42 @@ tenant setting, or restricted-reader grant was changed.
   requested creator/consumer object ID. The system stopped its session after
   completion; full logs remain session-only.
 
+- [x] Complete the native SharePoint organizational-account connection as the
+  requested engineer. Normalize only its auto-suffixed display name to
+  `PREL41-SupplierQuality`; create the actual `Files/SupplierQuality`
+  shortcut through Fabio. Download all six documents and the metadata CSV
+  through OneLake and compare every SHA-256 hash with the repository.
+- [x] Follow the native certificate-table wizard and independently verify its
+  saved `csvToDelta` configuration and real Delta log. After a scoped SQL
+  metadata refresh, compare all thirteen typed source columns and
+  multiplicities of all four records, distinct IDs, and zero corrupt rows.
+  SUP-014 is current and its document resolves through the verified shortcut.
+- [x] Test the previously documented CLI CSV recipe in isolated author
+  candidates. Both typed flags and a full native transform payload returned
+  successful-looking creation metadata but did not persist a transform;
+  the raw-payload probe also failed SQL discovery with `DeltaTableNotFound`.
+  Remove only these owned probe pointers, confirm no candidate SQL table,
+  and replace the misleading provisioning command with the working native
+  wizard. The working production table was not overwritten.
+- [x] After supplier integration, repeat all nine core recall invariants,
+  compare all three OneLake roles with the saved baseline (IDs, grants,
+  constraints, and memberships unchanged; exclude only etag), and verify
+  exact shipped agent instructions and nine-table selection in both draft
+  and published definitions. Certificate and raw telemetry tables remain
+  excluded from the agent.
+- [x] Independently repeat the package preflight in a standard Runtime 2.0
+  session: job `f2952905-5681-429f-93e0-ef85ad5cdae9` completed in 17.61
+  seconds and reports both missing distribution metadata and unavailable
+  modules for `duckdb` and `fabric-data-agent-sdk`. No packages were installed
+  or runtime settings changed; this is not a pass for the package cells.
+- [x] Obtain an interim specialized static security review of delivered
+  implementation against main: no vulnerabilities reported across telemetry,
+  pipeline binding/SQL guards, notebook flows, governance, and documented
+  authentication/deployment handling. This does not replace actual restricted
+  identities, deployed-app checks, Skillable checks, or the final red-team.
+
 These are author setup/core checks, not a full fresh workshop pass. The
-package-dependent notebook paths, SharePoint integration,
+package-dependent notebook paths,
 real restricted readers, deployed Recall Console, and Skillable fresh/resume/
 reset runs remain outstanding. Native job intervals are observations, not
 attendee completion-time or concurrency guarantees.
@@ -358,8 +393,9 @@ stores. No restricted-identity pass is claimed.
 
 - [x] Document welcome environment checks, prerequisites, recall questions, and both
   guided and self-paced starting paths.
-- [ ] Module 1: operational recall data, supplier-document shortcut,
+- [x] Module 1: operational recall data, supplier-document shortcut,
   transformations, completion checks, and downstream handoff.
+  Native author checks pass; fresh attendee delivery remains in Phase 4.
 - [x] Provision the separate seven-table operational source with native Fabio
   CSV loads, compare all 1,990 rows/columns, and run the exact learner inventory query.
 - [x] Promote the operational source to a correctly named native SQL database;
@@ -1013,8 +1049,10 @@ used. The browser's Fabric connection-management page still needs a completed
 interactive organizational-account connection. The
 [author recipe](infra/README.md#sharepoint-source) records the source structure,
 supported sign-in handoff, Fabio shortcut and CSV transformation commands, and
-exact acceptance checks. The Fabric connection, actual shortcuts, certificate
-transformation, and restricted-identity checks remain outstanding.
+exact acceptance checks. At that point the Fabric connection, actual shortcuts, certificate
+transformation, and restricted-identity checks were outstanding. The fresh
+author validation above subsequently completed the connection, both shortcuts,
+and exact transformed data; restricted-identity checks remain outstanding.
 
 Additional connection diagnostics: the Fabric browser account menu confirms
 the requested UPN and **CA Data 2612** tenant. Connection management's embedded
