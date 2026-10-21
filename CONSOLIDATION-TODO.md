@@ -293,7 +293,9 @@ stores. No restricted-identity pass is claimed.
 - [x] Complete previously unverified Module 2 AI Functions cell 23 in a native
   notebook session, with six successful nonempty summaries asserted.
 - [x] Verify data-agent publication and expected answers through Fabio.
-- [ ] Verify the learner's final data-agent UI publish step and SDK path.
+- [x] Verify both recall questions, executed SQL/results, and the final
+  data-agent publish flow through the actual author browser UI.
+- [ ] Verify the learner's SDK path in a prepared standard notebook session.
 - [ ] Validate governed reads using the actual manager and partner identities,
   not only the workspace owner.
 - [ ] Run fresh-launch and resume checks in Skillable, including narrow-pane
@@ -691,6 +693,61 @@ files, 105 local targets, 25 Markdown fragments, and 25 Bash fences. Git
 whitespace checks passed. The exact documented database-scoped activity
 query also executed natively and returned zero other user requests.
 No packages were installed or project test suites run.
+
+### Agent count correction and learner UI validation
+
+On 2026-10-21, a real published-agent regression query answered **8 stores**
+while listing the exact **9** current store IDs. The history answer still
+returned the correct thirteen. SQL independently confirmed both complete
+sets. The error was in the generated answer, not missing records or a
+restricted-reader session.
+
+Cell 26 now instructs the agent to compute distinct store counts in SQL
+from the same set as the listed IDs, using a window count; reconcile count
+and list; distinguish positive current inventory from shipment history;
+and explicitly report failure rather than guess an unverified answer.
+No expected count is hardcoded into the agent instructions.
+
+The exact shipped instruction string was applied to the existing native
+agent and published through the learner-facing browser flow. Its success
+notification appeared. The existing description was preserved and
+**Also publish to Microsoft Copilot** remained off. Native definition
+read-back proved both draft and published instruction strings match the
+notebook and both stages still select exactly the original nine tables.
+
+Three subsequent published calls per learner question returned the correct
+count and exact store-ID set: six passes. A separate nonexistent-lot query
+returned zero stores and no invented IDs. The actual browser also answered
+both questions correctly, with observed response times of 15 and 16 seconds.
+Following **Expand response → Steps completed → Show input** exposed the
+executed SQL window counts and their complete nine/thirteen-row outputs.
+These are observed author results, not guarantees against future model
+variation, fresh-learner evidence, or restricted-reader authorization.
+
+The existing learner notebook was updated without running it. No Livy
+sessions were listed before the change. Only its agent-instruction
+assignment changed; exact native read-back preserved all other source,
+all 26 code cells, and the existing lakehouse metadata. Fabio's
+`update-definition --content` dry-run would wrap the full source in a
+single ipynb cell, so that path was not executed. The supported native
+FabricGitSource definition was updated through authenticated Fabio with
+the original notebook metadata intact. Local JSON/Python AST checks passed.
+The shipped learner guidance now requires count/list agreement and explicit
+escalation of persistent mismatches rather than accepting plausible prose.
+
+The SharePoint connection list was also checked again and is still empty.
+The standalone portal retains its Graph authentication error; a fresh
+supported navigation through Power BI Settings did not load the embedded
+portal within the bounded wait. No alternative credentials or broad grants
+were introduced. SDK/package execution and the other remaining integrations
+are still outstanding.
+
+Focused post-change validation passed: exactly one notebook cell changed,
+with three added instruction lines and all other cells, metadata, and
+outputs preserved; the changed cell parses as Python. Documentation checks
+passed for 23 content Markdown files, 105 local targets, 25 fragments, and
+25 Bash fences, with no Git whitespace errors. No packages were installed
+or project test suites run.
 
 ### Independent historical fallback
 

@@ -33,6 +33,7 @@ Cell 25 lists the folder for each of the 9 tables, then asks the endpoint to ref
 Cell 26 creates **contoso_recall_agent**, or opens it if it already exists. It gives the agent two sets of instructions:
 
 - The agent instructions say it answers recall questions for Contoso Fresh, that today is 2026-10-13, and that it lists the store IDs when an answer is a set of stores.
+- Store counts must come from SQL over the same distinct store set as the listed IDs. The agent must check that the count and list agree, rather than counting its own prose.
 - The data source instructions say what each table holds, that timestamps are in UTC, and how to find a related lot on the Paris clock.
 
 Then the cell adds the lakehouse as the agent's data source and publishes the agent.
@@ -70,14 +71,20 @@ The two questions need different tables: store inventory for where the lot is no
 
     The step shows the SQL the agent wrote and the tables it queried.
 
-> [!Help] If an answer gives a different count, check that all 9 tables are ticked, then ask again.
+> [!Help] Check the count and the distinct store IDs, not only the headline.
+> If they disagree, open **Steps completed** and compare the SQL result with
+> cells 7 and 15. For current holdings, check the requested lot and positive
+> inventory; for receiving stores, check distinct store IDs in shipment
+> history. Confirm all 9 tables are ticked and ask again. If the mismatch
+> persists, report it to the instructor; do not mark this check complete
+> because a later answer merely sounds plausible.
 
 ## Publish the agent
 
 A data agent has two versions. The draft is what you edit and what the chat box tests. The published version is what colleagues query. Cell 26 publishes before you select the tables, so publish again to copy your table selection from the draft.
 
 1. Select **Publish**.
-1. In the window that asks for a description, keep the description cell 26 set, or enter ++Answers recall questions about Contoso Fresh lots, stores, and shipments.++ if it's empty. Then select **Publish**.
+1. In the window that asks for a description, keep the description cell 26 set, or enter ++Answers recall questions about Contoso Fresh lots, stores, and shipments.++ if it's empty. Leave **Also publish to Microsoft Copilot** off; this exercise does not require a separate Copilot publication. Then select **Publish**.
 
     The published version now queries the same 9 tables you tested. You can keep changing the draft without changing what regional managers see.
 
