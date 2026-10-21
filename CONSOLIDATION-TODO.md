@@ -295,6 +295,8 @@ stores. No restricted-identity pass is claimed.
 - [x] Verify data-agent publication and expected answers through Fabio.
 - [x] Verify both recall questions, executed SQL/results, and the final
   data-agent publish flow through the actual author browser UI.
+- [x] Ship and execute a repeatable three-question published-agent evaluation,
+  including the zero-result case, three repeats, and partial-failure checks.
 - [ ] Verify the learner's SDK path in a prepared standard notebook session.
 - [ ] Validate governed reads using the actual manager and partner identities,
   not only the workspace owner.
@@ -748,6 +750,36 @@ outputs preserved; the changed cell parses as Python. Documentation checks
 passed for 23 content Markdown files, 105 local targets, 25 fragments, and
 25 Bash fences, with no Git whitespace errors. No packages were installed
 or project test suites run.
+
+### Repeatable published-agent checks
+
+The native evaluation fixture and author command are now shipped, rather
+than relying only on one-off session probes. The exact documented Fabio
+evaluation ran three questions three times at concurrency one:
+`questionCount = 3`, `runCount = 9`, and `failedRuns = 0`. Separate checks
+verified the complete expected ID set and count in every answer. All nine
+passed, including three empty-result answers for the deliberately nonexistent
+lot. No external LLM judge or additional dependency was used.
+
+The author procedure explains that Fabio can succeed with partial failures
+and its naive text-match hints are not acceptance. Correct zero-result
+wording need not contain the literal expected substring. Persistent errors,
+count/list disagreement, or missing IDs must be recorded, not hidden with
+retries until one response passes.
+
+The fixture JSON shape, 23 content Markdown files, 108 local targets,
+25 fragments, and 26 Bash fences passed focused validation; Git whitespace
+checks passed. No packages were installed or project test suites run.
+
+The direct OneLake table-read prerequisite was checked again. Native
+lakehouse properties expose filesystem paths and the SQL endpoint, not a
+table-read base URL. The current first-party read article still uses
+`<TableReadBaseUrl>` and does not publish the allocation-response JSON shape.
+A web-search summary again supplied an alleged stream schema that is absent
+from its cited article; it was not used. The console's actual connector
+contract remains unverified, not replaced with guessed URLs or SQL.
+Open draft PRs #3, #4, and #9 were also rechecked; none contains a new
+application/toolchain contribution since the previous review.
 
 ### Independent historical fallback
 

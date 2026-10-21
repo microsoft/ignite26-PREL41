@@ -96,6 +96,42 @@ The certificate transformation, document shortcut, telemetry, and console
 still require their own provisioning and effective-identity checks. Adding a
 new table does not automatically grant it through these selected-path roles.
 
+## Published recall-agent regression
+
+After publishing or changing endpoint security, run the
+[shipped questions](data-agent/recall-questions.json) as the engineer from
+the repository root. Set `RECALL_AGENT_ID` to the supplied published agent:
+
+```bash
+fabio data-agent evaluate \
+  --workspace "$WORKSPACE_ID" --id "$RECALL_AGENT_ID" \
+  --questions infra/data-agent/recall-questions.json \
+  --repeats 3 --concurrency 1 --timeout 180
+```
+
+Require `questionCount = 3`, `runCount = 9`, `failedRuns = 0`, and three
+non-error answers per question. Fabio can exit successfully when only
+some runs succeed; command exit status alone is not acceptance. Do not add
+an external LLM judge or send these answers to another service.
+
+Inspect every answer against these expected results:
+
+- Current inventory: nine distinct IDs, `STR-003`, `STR-004`, `STR-008`,
+  `STR-010`, `STR-013`, `STR-014`, `STR-015`, `STR-016`, and `STR-028`.
+- Received shipments: those nine plus `STR-020`, `STR-021`, `STR-026`,
+  and `STR-032`, for thirteen distinct IDs.
+- The deliberately nonexistent lot: zero stores and no store IDs.
+
+The `expected` strings only produce Fabio's naive text-match hints.
+Formatting can make a correct zero-result answer miss the hint, and matching
+text alone does not prove the listed IDs are complete or the headline is
+consistent. Compare the count and full ID set, and inspect executed SQL and
+results through [the learner UI](../instructions/module-2/exercise-2-6-ask-the-recall-agent.md)
+if they disagree. Record failures; do not quietly retry until one answer
+passes. Repeated passes are observations, not a guarantee against future
+model variation. These engineer expectations are not the expected results
+for restricted readers and must not be used as their authorization test.
+
 ## SharePoint source
 
 Publish only [the supplied synthetic source](../data/sharepoint/) under a
