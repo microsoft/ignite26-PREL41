@@ -219,7 +219,13 @@ attendees launch.
 - Configure the destination SQL analytics endpoint for **User's identity
   access mode** before the workshop. Do not silently change a populated
   author's endpoint: switching access modes can remove inline metadata
-  objects. Confirm the effect during provisioning.
+  objects and SQL permissions and cancel workspace SQL queries. Use the
+  [guarded author procedure](../../infra/README.md#configure-sql-endpoint-identity).
+  In the consolidation workspace, this mode was saved on 2026-10-21 and
+  independently confirmed after a full page reload. Both restricted-role
+  definitions still match, memberships remain empty, and DefaultReader is
+  unchanged. The production refresh and strict 13/2/11 snapshot checks
+  passed afterward. This is not a restricted-reader or fresh Studio pass.
 - Regional RLS applies separately to locations, inventory, and shipment
   history. North is `STR-001` through `STR-016` in this snapshot; OneLake RLS
   does not support joining the location dimension in a row rule.

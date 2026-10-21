@@ -224,6 +224,8 @@ stores. No restricted-identity pass is claimed.
   restrictions, denied-access checks, and identity-specific expected results.
 - [x] Implement and deploy unassigned OneLake policy definitions for North and
   CAR-02, and assert their saved content while preserving default permissions.
+- [x] Save the destination SQL endpoint's user-identity mode, verify it after
+  reload, preserve OneLake policies, and pass native production regression.
 - [ ] Supply and exercise actual restricted reader identities against those
   policies, the SQL endpoint, documents, telemetry, and console.
 - [ ] Module 5: Recall Console starter and complete flow, governed OneLake
@@ -637,6 +639,58 @@ were extracted or injected. All five sessions listed for the three owned
 core, AI, and data validation notebooks were already terminal
 (`Succeeded` or `Failed`); no running session was stopped or notebook
 content removed.
+
+### Saved SQL caller identity and post-change regression
+
+On 2026-10-21, the destination SQL analytics endpoint was changed from
+delegated identity to **User's identity access mode** through its supported
+**Settings → Data access mode** page. A full reload independently confirmed
+the saved user-mode selection, unselected delegated mode, disabled Apply
+button, and user-identity footer. This is an actual persisted configuration,
+not just a selected radio button.
+
+Before applying, catalog checks returned no authored views, procedures,
+functions, or triggers and no explicit grants to non-system SQL principals.
+Database-scoped checks found no other active user requests on the affected
+owned endpoints. Fabio's unfiltered activity list also returned requests
+from other databases in the shared pool; those were not treated as workspace
+queries or cancelled. The managed staging lakehouse's one background request
+was a system task, not learner activity.
+
+Native OneLake read-back still contains exactly the three expected roles.
+Both restricted-role definitions match their committed permissions, path
+grants, constraints, and empty memberships, with four row rules each.
+Comparison checked the service-added `type: "Fabric"` row discriminator
+before excluding it and server-generated role metadata. DefaultReader's
+identity, definition, and memberships match the saved baseline, excluding
+its version etag. No reader was assigned and no policy was rewritten.
+
+The exact committed recall acceptance passed again: 9 current stores,
+13 receiving stores, 13 related lots, 45 reached stores, five regions,
+16,961 lot-history rows, 1,165,374 shipment-history rows, zero duplicate
+shipment keys, and zero removed duplicate lines.
+
+The unchanged production pipeline then completed as job
+`8e1872f5-e315-4878-a9d3-46cdef635f4c`, from
+`2026-10-21T02:47:11.1726043Z` to `2026-10-21T02:48:02.4366667Z`
+(51.26 seconds). Strict snapshot acceptance returned 13 shipments, two
+breaches, and eleven no-breach journeys. Its single analysis timestamp,
+`2026-10-21T02:47:41.579706000Z`, is strictly inside the completed job
+interval. Bidirectional EXCEPT across all thirteen non-refresh-time fields
+found no candidate/production differences. Raw telemetry stayed at 509;
+owner scopes stayed eight North and eight CAR-02.
+
+These checks establish saved endpoint configuration and owner regression,
+not effective authorization for the missing restricted identities. Real
+reader sign-ins, SharePoint connectivity, package-based notebook paths,
+the deployed console, Skillable delivery, and the final integrated review
+remain outstanding.
+
+Focused documentation validation passed for 23 tracked content Markdown
+files, 105 local targets, 25 Markdown fragments, and 25 Bash fences. Git
+whitespace checks passed. The exact documented database-scoped activity
+query also executed natively and returned zero other user requests.
+No packages were installed or project test suites run.
 
 ### Independent historical fallback
 

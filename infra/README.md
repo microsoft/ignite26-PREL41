@@ -45,6 +45,45 @@ empty array: the Fabric service rejected the empty-array form during live
 validation. Compare saved policies by name, permissions, constraints, and
 memberships, rather than assuming server-assigned role IDs remain unchanged.
 
+### Configure SQL endpoint identity
+
+Role creation does not switch the SQL analytics endpoint's access mode.
+Provision **User's identity access mode** before learners begin. Review
+existing SQL metadata objects and grants with the workspace owner first:
+switching modes can remove SQL objects and permissions and cancel SQL
+queries across the workspace. Do not make this change during learner work.
+
+Check every affected, owned SQL endpoint for other active user requests,
+connecting to each database separately:
+
+```sql
+SELECT r.session_id, r.status, r.command
+FROM sys.dm_exec_requests AS r
+JOIN sys.dm_exec_sessions AS s ON s.session_id = r.session_id
+WHERE r.database_id = DB_ID()
+  AND r.session_id <> @@SPID
+  AND s.is_user_process = 1;
+```
+
+Require no other active user requests and coordinate the maintenance window;
+an idle check cannot prevent a new query from starting. Do not cancel
+unrelated requests. Fabio's unfiltered `queries-running` result can include
+other databases in the shared pool, so its total is not a workspace-local
+activity count. Internal background tasks are not learner queries.
+
+In the lakehouse, choose **Analyze data with → SQL analytics endpoint**,
+then **Settings → Data access mode → Use OneLake security for tables
+(User's identity access mode)**. Apply and confirm the warning only after
+the checks above. Reload the page and verify the saved mode, disabled Apply
+button, and footer stating that the user's identity is being used.
+
+Read back the OneLake roles, preserve their memberships and DefaultReader,
+and rerun the recall and snapshot checks. Native row constraints include a
+`type: "Fabric"` discriminator: validate that value before comparing the
+remaining rule content with the source definitions. Do not ignore other
+constraint differences. This configuration is saved in the consolidation
+workspace; real restricted-reader tests remain required.
+
 ### Validate before release
 
 Follow [Exercise 4.3](../instructions/README.md#exercise-43-compare-identities)
