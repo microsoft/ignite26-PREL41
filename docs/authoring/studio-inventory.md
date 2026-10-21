@@ -154,6 +154,11 @@ changing the runtime. Job `f2952905-5681-429f-93e0-ef85ad5cdae9` completed on
 Runtime 2.0 with high concurrency false. Do not assume that a successful core or
 AI Functions run means these two dependencies are already present.
 
+The owner's selected Fabric destination was checked independently with
+standard-session Runtime 2.0 job `124ac64a-2576-48e3-89bf-61c819fc76c1`.
+Its actual driver output likewise reports both distributions and modules
+absent. No packages, runtime changes, or Environment overrides were applied.
+
 Before launch, verify the shipped dependency flow in an author validation
 instance with the same approved network and standard-session configuration:
 DuckDB `>=1.5.6,<2` in cell 16 and
@@ -169,8 +174,9 @@ engine, or count a failed setup cell as completed. If the lab's approved
 network policy prevents setup, prepare a compatible Lab Profile before
 attendees launch.
 
-The fresh author workspace's **Workspace settings > Delegated Settings >
-OneLake settings** independently shows **Authenticate with OneLake
+Both the fresh author workspace and the owner's selected destination were
+independently inspected in **Workspace settings > Delegated Settings >
+OneLake settings**. Each shows **Authenticate with OneLake
 user-delegated SAS tokens** on, enabled for all users, with the inherited
 **Default configuration**. This was read without changing the setting.
 It establishes that prerequisite only, not successful credential vending,

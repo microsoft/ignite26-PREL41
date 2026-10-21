@@ -101,9 +101,9 @@ end-to-end workshop readiness.
 
 The target duration is **240 minutes**, including a 10-minute break; this is a
 planning target, not a measured completion time. End-to-end readiness remains
-under validation. Runtime behavior, service timing, restricted-identity access,
-and the deployed Recall Console's governed data path have not been confirmed
-as passed. Follow the completion checks and record any fallback or skipped
+under validation. Full-workshop runtime behavior and completion time,
+restricted-identity access, and the deployed Recall Console's governed data
+path have not been confirmed as passed. Follow the completion checks and record any fallback or skipped
 exercise rather than treating it as completed.
 
 The author workspace now also has a working SharePoint connection and document
@@ -111,9 +111,16 @@ shortcut: all seven source files match the repository, and the native CSV
 transformation produced all four certificate records with matching source
 fields and no corrupt rows. This does not establish fresh learner access.
 
-The actual Rayfin application, restricted identities, DuckDB and SDK paths,
-Skillable delivery, and the final integrated adversarial review remain
-unverified or incomplete.
+The current author review is a Fabric deployment in the owner's selected
+workspace. Skillable provisioning, preview, resume, and reset checks are a
+separate phase after the owner approves the working Fabric lab; they are not
+prerequisites for continuing the Fabric deployment.
+
+The actual Rayfin application, effective restricted-identity access, DuckDB
+and SDK paths, and the final integrated adversarial review remain unverified
+or incomplete. The [consolidation ledger](CONSOLIDATION-TODO.md#current-fabric-destination)
+records the current destination and its actual native results separately
+from earlier isolated-workspace evidence.
 
 ### 🎯 Learning outcomes
 

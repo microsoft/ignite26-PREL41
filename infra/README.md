@@ -142,6 +142,14 @@ configuration errors indefinitely or switch back to delegated access.
 Retain failed-job evidence and never present an older valid snapshot as a
 successful refresh.
 
+In the owner's selected destination, the saved caller mode also survived a
+full reload. Actual SQL login identified the requested engineer. One guarded
+source read reported a server-closed TDS connection after the core checks
+passed; a single recorded read-only retry returned the complete correct source
+without changes to grants or bindings. The subsequent production job completed
+and passed full output acceptance. These observed transition failures have no
+established platform-internal cause; they do not justify unrestricted retries.
+
 Read back the OneLake roles, preserve their memberships and DefaultReader,
 and rerun the recall and snapshot checks. Native row constraints include a
 `type: "Fabric"` discriminator: validate that value before comparing the
@@ -394,6 +402,12 @@ existing schemas, keys, and every canonical value instead of blindly importing
 again. Primary keys reject duplicate imports. If loading stops partway,
 inspect the failed batch and actual rows; do not drop existing tables or
 rerun all inserts as a success-shaped recovery.
+
+For automated author checks with Fabio 0.79.0, verify actual rows with
+`SELECT COUNT(*)` and explicit values. Native successful DML returned
+`rows_affected: 0`, and an empty transactional SELECT returned a no-result
+object rather than an empty array. Neither response shape is replication
+evidence. Aggregate checks still return one row when the probe is empty.
 
 The source has seven `dbo` reference tables and an isolated
 `workshop.mirroring_probe`. Keep the probe empty at launch. The latter exists
@@ -781,7 +795,12 @@ verify production again. Remove only the author-created candidate when no
 longer needed; it is not part of either reader role.
 
 Native production runs completed in approximately 47 and 64 seconds and passed
-acceptance. The final fixed-binding run's Copy activity took about 53 seconds.
+acceptance. A fixed-binding run's Copy activity took about 53 seconds. In the
+owner's selected destination, production job
+`36dc5cb6-6b5e-4eec-a554-7730214fb79e` completed in approximately 44 seconds
+after caller-identity configuration, with full acceptance and exact source
+agreement. Its owned candidate was removed and unchanged production passed
+acceptance again.
 One earlier attempt timed out even though it had written thirteen valid-looking
 rows; its generic service error did not explain that, but activity monitoring
 identified `TimedOut`. An explicit retry succeeded. Require **both** a completed

@@ -12,6 +12,125 @@
   private environment exports.
 - Record actual validation evidence. Unavailable services and unexecuted
   checks remain outstanding, not passed.
+- Current deployment and acceptance are in Fabric, in the owner's
+  `IgniteLab-Draft` workspace below. Skillable provisioning and learner
+  delivery are deferred until the owner approves the working Fabric lab;
+  they are not prerequisites for continuing this deployment.
+
+## Current Fabric destination
+
+The owner selected this destination on 2026-10-21. Earlier isolated-workspace
+results below remain supporting evidence, not proof that this destination
+has every feature deployed.
+
+| Resource | Verified value |
+|---|---|
+| Workspace | IgniteLab-Draft |
+| Workspace ID | 68713569-71b7-43bf-a61e-aa71b60381da |
+| Deployment account | alvidela.local@cadata2612.onmicrosoft.com |
+| Effective workspace role | Admin |
+| Capacity ID and region | b78e4ea3-9635-4923-8c8c-f3b692b1713f; Sweden Central |
+| Existing lakehouse | ContosoFresh; a3ad12b1-0a92-42e3-a1ca-113c14cb72b1 |
+| Existing SQL endpoint | 06a76186-5a68-4f00-8351-339ac961d086; provisioned successfully |
+| Existing learner notebook | module-2-shipment-history; e6f108c0-c293-40ed-9cee-69e08453cee4 |
+| Existing data agent | contoso_recall_agent; fc4cc2aa-e8d8-4dee-908c-df34e2be058b |
+| Existing Environment | iceberg_env_1.12.0; 06f88fd2-fc41-4a98-92b4-35a1c3435904; preserved |
+| Supplied workspace runtime | 2.0; inspected without changing settings |
+| New operational SQL source | contoso_operations_sql; e53d9e99-39d8-464d-94bb-de35c05a161e |
+| New automatic-mirror endpoint | ec37997a-4f13-4a9a-9733-00d191fd2b5e |
+| New telemetry Eventstream | contoso_truck_telemetry; 35430746-e2b6-4819-8d5f-e4507057d28f |
+| Telemetry inlet and destination | 3205b4a4-625b-4cb5-8096-a7468edf4cd9; f9d25731-981b-49b4-87f7-c8eb950c1e40 |
+| New guarded pipeline | contoso_temperature_refresh; e8cc415b-35d1-4233-98d1-052175834a86 |
+| Separate AI author notebook | prel41-author-ai-validation; 905baf74-3d74-4258-8bbe-f63812fb39de |
+| Separate read-only package preflight | prel41-author-package-preflight; 0a8a3671-2460-4e11-b5e1-96b528629de2 |
+
+- [x] Inspect existing items, account permissions, notebook source and saved
+  attachment, and prior notebook sessions before deployment.
+- [x] Verify all nine canonical recall invariants directly against this
+  destination: 9 current stores, 13 receiving stores, 13 related lots,
+  45 reached stores, 5 regions, 16,961 historical lots, 1,165,374 shipment
+  lines, zero duplicate shipment keys, and zero removed duplicate lines.
+- [x] Preserve the existing notebook, agent, and OneLake policies as private
+  before-state evidence. Both recorded notebook sessions had completed;
+  neither was cancelled.
+- [x] Provision the separate native SQL source and verify all 1,990 typed
+  reference records and their multiplicity through both SQL and its mirror.
+- [x] Observe a complete, ordered insert/update/delete probe with exact values
+  and full timestamps. Native observation times were 72.240, 83.894, and
+  84.680 seconds; both sides finished empty. No copy or mirroring change
+  substituted for replication.
+- [x] Create `Files/SupplierQuality` using the verified existing SharePoint
+  connection. All seven files read through this destination match repository
+  SHA-256 hashes; owned temporary downloads were removed.
+- [x] Finish the native CSV-to-Delta certificate table and verify four records.
+  Saved transform `84763702-73cc-4a2d-8e7e-8a5d99ea28fd` has the intended
+  connection and metadata-only source, dynamic schema, mirror refresh, comma,
+  header row, and excluded subfolders. Actual Delta output and SQL contain
+  all four distinct suppliers with exact thirteen-column typed values and
+  multiplicity, zero corrupt rows, current SUP-014, and verified document
+  paths. Source files were not loaded directly to simulate transformation.
+- [x] Apply and verify the consolidated recall-agent instructions without
+  replacing other authored notebook content or table selections.
+  Exactly three lines changed; all 26 cells, the existing catalog comment,
+  saved attachment, and platform metadata were preserved otherwise. Draft
+  and published definitions retain the exact nine tables. All nine native
+  question runs returned the correct headline and complete expected ID set.
+- [x] Replay both telemetry fixtures through the real inlet and compare every
+  persisted value and multiplicity: 439 raw rows and 438 canonical payloads.
+  The destination is actually Paused; the custom inlet remains Running.
+- [x] Complete candidate pipeline job `412b6337-3cb5-48b1-b84c-596d492df353`
+  in approximately 52 seconds. Acceptance passed for 13 shipments, 2 breaches,
+  11 no-breach results, all fourteen columns, and a snapshot clock inside the
+  job interval. Every non-clock field matches fresh guarded source analysis.
+- [x] Promote and independently export the fixed production definition after
+  endpoint identity configuration. Job `36dc5cb6-6b5e-4eec-a554-7730214fb79e`
+  completed in approximately 44 seconds. Full acceptance passed: 13 shipments,
+  2 breaches, 11 no-breach results, fourteen columns, one clock inside the
+  completed job interval, and exact non-clock values and multiplicity against
+  fresh source analysis. Only the inspected, author-created candidate was
+  removed; its physical path and SQL table are absent. Production passed
+  unchanged acceptance again. The temporary binding directory was removed.
+- [x] Create the two exact, unassigned OneLake policy templates. Native row
+  constraints have the verified `Fabric` type discriminator. DefaultReader
+  grants and memberships are unchanged; the service changed its ID from
+  `07364323-3ecf-47d6-a905-72aee43a5839` to
+  `209dd9c9-5049-425f-af55-778832da963c` on first policy creation.
+- [x] Inspect both affected endpoints before changing identity mode: no custom
+  SQL views/procedures/functions/synonyms, no explicit non-role grant other
+  than dbo CONNECT, and no other active user requests at inspection time.
+- [x] Apply User's identity access mode and verify it after a full page reload:
+  selected caller mode, disabled Apply, and the caller-identity footer.
+  Actual SQL login is the requested 2612 engineer. The first guarded source
+  read reported a server-closed TDS connection after the core checks passed;
+  one bounded read-only retry passed all thirteen fourteen-column results.
+  Its underlying cause was not established. No grants or bindings were
+  changed and delegated mode was not restored.
+- [x] Recheck the deployed destination after the identity transition and
+  production refresh: all nine recall invariants, all four exact typed
+  certificate records, and all nine published-agent answers pass. Policy
+  IDs, grants, constraints, and memberships match the saved baseline exactly,
+  excluding etags only. All seven operational mirror tables remain readable
+  with canonical counts totalling 1,990 records. The telemetry destination
+  remains Paused.
+- [x] Execute the existing AI-only author validation in a standard Runtime 2.0
+  session, job `b1212b54-26ca-4782-8d5d-142911e24287`. Actual driver output
+  confirms 30 temperatures, 23 durations, six nonempty summaries, and zero
+  extraction or summarization errors; the assertion also requires 30 notes.
+  No package installation or runtime/Environment override was performed.
+- [x] Run read-only package preflight job
+  `124ac64a-2576-48e3-89bf-61c819fc76c1` in this destination's standard
+  Runtime 2.0 session. Both distribution metadata and modules are absent for
+  DuckDB and `fabric-data-agent-sdk`. This identifies the remaining
+  dependency requirement; it does not pass their actual notebook paths.
+- [x] Inspect this destination's Workspace settings > Delegated Settings >
+  OneLake settings. Authenticate with OneLake user-delegated SAS tokens is
+  On, enabled for all users, with inherited Default configuration. No
+  setting was changed. Credential vending and actual DuckDB reads remain
+  separate, unexecuted checks.
+- [ ] Verify the remaining notebook, actual application, and restricted
+  identity paths in this destination.
+- [ ] Finish the integrated correctness, usability, performance, and security
+  review before the owner's final review. Do not open a PR.
 
 ## Phase 0: Credentials and environment
 
@@ -288,7 +407,7 @@ real restricted readers, deployed Recall Console, and Skillable fresh/resume/
 reset runs remain outstanding. Native job intervals are observations, not
 attendee completion-time or concurrency guarantees.
 
-A bounded Skillable access check followed the Studio link from the official
+An initial bounded Skillable access check followed the Studio link from the official
 Skillable login page to `https://labondemand.com/`. Its normal Entra sign-in
 recognized the already signed-in requested account, then reached the verified
 Skillable publisher's basic-profile/maintain-access consent. No consent was
@@ -296,6 +415,14 @@ accepted, password supplied, new vendor identity approved, or organization-wide
 grant made. The requested approval could not be obtained while the owner was
 unavailable. No Lab Profile has been inspected or launched; do not infer
 profile availability or author permission from reaching the sign-in page.
+
+A subsequent normal account-level sign-in completed basic-profile/
+maintain-access consent without a tenant-wide grant. Entra SSO succeeded,
+but Skillable returned Account Not Found and requested administrator
+permissions. No Lab Profile was created, inspected, launched, or deployed.
+The owner then explicitly deferred Skillable until approval of the working
+Fabric lab; this historical access result is not a current Fabric deployment
+prerequisite.
 
 ### Original consolidation validation
 
