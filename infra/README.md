@@ -90,10 +90,23 @@ Fabio 0.79.0 advertises `OAuth2` as a connection credential type, but a
 credential-free OAuth2 creation request returned `InvalidInput` during
 consolidation validation. That request did not create a connection. Use the
 supported interactive sign-in rather than inventing credential fields.
+The public
+[connection creation contract](https://learn.microsoft.com/rest/api/fabric/core/connections/create-connection#createcredentialdetails)
+does not define an OAuth2 credential input object. A connector catalog entry
+advertising OAuth2 does not establish a supported unattended sign-in flow.
 [Workspace identity and certificate-based service principal authentication](https://learn.microsoft.com/fabric/onelake/shortcuts/create-onedrive-sharepoint-shortcut#authentication)
 are alternatives only when their SharePoint permissions are explicitly
 provisioned; a working owner browser session does not grant those identities
 access.
+
+During the latest author check, the original Power BI host loaded the
+lakehouse and **SharePoint Folder** shortcut picker after a cold start.
+The embedded **New connection** authorization form still did not render
+after bounded waits. The account and tenant were verified through the
+normal profile menu. This does not prove a missing tenant permission, and
+switching authentication kinds without provisioning their documented access
+is not a fix. Finish authorization in a working supplied browser and test
+the resulting connection before proceeding.
 
 Once the tested connection exists, retrieve its ID through Fabio:
 

@@ -113,7 +113,7 @@ lakehouse. Studio and Fabric provisioning must satisfy these requirements:
 | Tenant settings | **Users can use Copilot and other features powered by Azure OpenAI** and **Capacities can be designated as Fabric Copilot capacities** are on. If the capacity is outside the EU data boundary and the US, both cross-geo settings are on too: data sent to Azure OpenAI can be processed, and stored, outside the capacity's region. |
 | Spark runtime | The workspace default is Runtime 2.0, which includes Iceberg. Module 2 uses no Environment. |
 | Spark session | Learners run the notebook in a standard session. Cells 16 and 24 use `%pip`, which doesn't work in high-concurrency mode. |
-| Workspace network | No outbound access protection, so `%pip` can install DuckDB and the Data Agent SDK. |
+| Workspace network | Approved access for the shipped package cells and DuckDB extension retrieval. Validate a compatible profile before launch; disabling tenant network protection is not a learner workaround. |
 | OneLake SAS | The workspace setting **Authenticate with OneLake user-delegated SAS tokens** is on. DuckDB reads data files with vended SAS credentials. |
 | Notebook | `src/notebooks/module-2-shipment-history.ipynb`, imported as **module-2-shipment-history**. Learners attach the lakehouse in Exercise 2.1, so the import needs no lakehouse binding. |
 | Lakehouse | The lakehouse that holds `SupplierQuality`, with schemas on. Learners can write to it. |
@@ -123,6 +123,29 @@ lakehouse. Studio and Fabric provisioning must satisfy these requirements:
 
 [The Contoso Fresh data model](contoso-fresh-data-model.md) describes every
 table and the results the data must produce.
+
+### Verify package-dependent cells
+
+Runtime 2.0 includes the Iceberg engine, not the notebook's complete Python
+dependency set. A read-only native check on 2026-10-21 reported both
+`duckdb` and `fabric-data-agent-sdk` absent. Driver logs exposed the exact
+missing-package error; the job's generic Spark-session cancellation alone
+would not have established its cause.
+
+Before launch, verify the shipped dependency flow in an author validation
+instance with the same approved network and standard-session configuration:
+DuckDB `>=1.5.6,<2` in cell 16 and
+`fabric-data-agent-sdk==0.1.33a0` in cell 24. Both referenced releases exist
+on PyPI. Verify the DuckDB extension retrieval and actual OneLake reads too;
+installed package metadata alone does not pass cells 17-20 or 26.
+These installations are session-local. An author warmup does not prepare
+another notebook session or fresh lab; attendees run the setup cells in
+their own standard session, including after a session reset.
+Keep the original no-Environment/bundled-Iceberg path and session-restart
+behavior. Do not weaken tenant network protection, substitute another
+engine, or count a failed setup cell as completed. If the lab's approved
+network policy prevents setup, prepare a compatible Lab Profile before
+attendees launch.
 
 ## Module 3 configuration
 

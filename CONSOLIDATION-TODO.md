@@ -594,6 +594,30 @@ checks covered 23 Markdown files, 104 local targets, 24 fragments, 21 Bash
 blocks, exactly three outcomes, and matching eight-interval/checkpoint
 240-minute schedules. Actual fresh-instance completion time remains unmeasured.
 
+### Follow-up environment checks
+
+Continued through the supported Dataflow Gen2 and lakehouse shortcut entry
+points rather than stopping at an empty connection list. On the original
+Power BI host, the lakehouse and **SharePoint Folder** picker now rendered;
+the normal profile confirmed the requested account and tenant. The embedded
+new-connection authorization screen still stayed blank after bounded waits.
+No credential fields were invented, and no tenant, site, or reader permissions
+were changed. The unused author-only dataflow was removed through its exact
+native item ID.
+
+A separate native Runtime 2.0 package check confirmed the actual notebook
+dependency gap. Job `5b505544-aa80-4a9a-9b6b-c7e21828140a` returned a generic
+Spark cancellation; Fabio driver logs established the specific error:
+**duckdb is not installed; fabric-data-agent-sdk is not installed**.
+Both shipped package releases exist on PyPI. No packages were installed,
+no runtime was overridden, and the failed diagnostic notebook was removed.
+The standard-session package cells and actual DuckDB/SDK paths still need
+execution in the prepared environment.
+
+The open draft PRs and repository branches were checked again: no separate
+console starter contribution appeared. The existing npm cache also contains
+no Rayfin package. The absent application is not replaced with a mock.
+
 ### Independent historical fallback
 
 The separate schema-enabled **contoso_recall_fallback** now contains all seven
