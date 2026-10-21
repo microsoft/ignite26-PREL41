@@ -134,6 +134,16 @@ tenant setting, or restricted-reader grant was changed.
 - [x] Independently query current inventory through that mirror: the exact nine
   IDs and quantities match, with eight North stores and one East store.
   Confirm the training probe starts empty in both source and mirror.
+- [x] Run the exact committed mirroring exercise batch, changing only its action
+  in memory. Observe each insert/update/delete through the separate native
+  mirror before advancing. Insert matched after 47.035 seconds with source
+  timestamp `2026-10-21T08:36:48.217850000`; update matched after 116.388
+  seconds with timestamp `2026-10-21T08:37:40.277047000`; deletion matched
+  after 117.657 seconds. Each observation matched count, value, and the full
+  native timestamp, within the learner's three-minute per-change limit.
+  Independently confirm both probes finish at zero rows with null value
+  and timestamp. These include query/observation latency, not a replication
+  service guarantee or a fresh Skillable timing pass.
 
 These are author setup/core checks, not a full fresh workshop pass. The
 package-dependent notebook paths, fresh AI/agent flow, SharePoint integration,
