@@ -23,7 +23,6 @@ Activities.
 | SharePoint connection | Preconfigured for the Supplier Quality content | Author connection `PREL41-SupplierQuality` works; fresh Lab Profile delivery still needs verification |
 | SharePoint permissions | Learner can read the target library or folder | Author downloaded all seven matching source files through the actual OneLake shortcut; fresh learner access remains unverified |
 | Module 2 notebook | Imported from `src/notebooks/module-2-shipment-history.ipynb`; see Module 2 configuration | Needs Studio verification |
-| Spark fallback data | `contoso_recall_fallback` supports read-only historical investigation during Spark session repair, without claiming the skipped technology exercises passed | Nine independent Delta tables and native recall checks verified; fresh-launch delivery and later-module handoff remain unverified; not a capacity-wide outage fallback |
 | Eventstream | Replays supplied truck telemetry | Needs Studio verification |
 | Authorized terminal | Existing Python 3.9+, Fabio with its working credential provider, repository checkout, supplied engineer identity, and instance-specific replay/pipeline bindings | Native replay and deployment paths verified; terminal delivery and identity isolation need Studio verification |
 | Security test identities | Separate reader-only North manager and CAR-02 partner accounts, without broader grants or access to the separate operational source | Identities and effective permissions require verification |
@@ -142,29 +141,24 @@ silently skip that exercise or write to a fallback destination.
 
 ### Verify package-dependent cells
 
-Runtime 2.0 includes the Iceberg engine, not the notebook's complete Python
-dependency set. A read-only native check on 2026-10-21 reported both
-`duckdb` and `fabric-data-agent-sdk` absent. Driver logs exposed the exact
-missing-package error; the job's generic Spark-session cancellation alone
-would not have established its cause.
+Runtime 2.0 includes Iceberg, but DuckDB and the data-agent SDK are installed
+by the notebook: DuckDB `>=1.5.6,<2` in cell 16 and
+`fabric-data-agent-sdk==0.1.33a0` in cell 24. The Module 2 contributor
+reported successful execution of these paths in a Runtime 2.0 development
+workspace on 2026-10-20 in [PR #9](https://github.com/microsoft/ignite26-PREL41/pull/9),
+and confirmed the package-cell behavior on 2026-10-21.
 
-A second standard-session preflight independently confirmed both missing
-distribution metadata and unavailable modules, without installing anything or
-changing the runtime. Job `f2952905-5681-429f-93e0-ef85ad5cdae9` completed on
-Runtime 2.0 with high concurrency false. Do not assume that a successful core or
-AI Functions run means these two dependencies are already present.
+Independent clean-session checks, including jobs
+`f2952905-5681-429f-93e0-ef85ad5cdae9` and
+`124ac64a-2576-48e3-89bf-61c819fc76c1`, found both packages absent without
+running the install cells. That is expected before `%pip`, not a failure of
+the supplied notebook or missing implementation. The independent selected-
+workspace run has not replayed these paths.
 
-The owner's selected Fabric destination was checked independently with
-standard-session Runtime 2.0 job `124ac64a-2576-48e3-89bf-61c819fc76c1`.
-Its actual driver output likewise reports both distributions and modules
-absent. No packages, runtime changes, or Environment overrides were applied.
-
-Before launch, verify the shipped dependency flow in an author validation
-instance with the same approved network and standard-session configuration:
-DuckDB `>=1.5.6,<2` in cell 16 and
-`fabric-data-agent-sdk==0.1.33a0` in cell 24. Both referenced releases exist
-on PyPI. Verify the DuckDB extension retrieval and actual OneLake reads too;
-installed package metadata alone does not pass cells 17-20 or 26.
+Before launch, independently replay the shipped install and exercise cells
+in the delivery configuration, including DuckDB extension retrieval, actual
+OneLake reads, SDK execution, and the session restart. Do not treat installed
+package metadata alone as execution evidence for cells 17-20 or 26.
 These installations are session-local. An author warmup does not prepare
 another notebook session or fresh lab; attendees run the setup cells in
 their own standard session, including after a session reset.

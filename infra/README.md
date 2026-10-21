@@ -48,6 +48,11 @@ documented DELETE answer belongs only in a validation copy, not in the
 shipped exercise. A first-fifteen-cell core run does not complete DuckDB,
 AI Functions, the SDK, or the full workshop.
 
+The Module 2 contributor reports successful DuckDB and SDK runs, including
+the `%pip` setup cells. Independent clean-session package probes did not
+execute those install cells and do not establish a notebook failure. See
+the [attributed package evidence](../docs/authoring/studio-inventory.md#verify-package-dependent-cells).
+
 ## OneLake roles
 
 The workshop provides two role definitions:
@@ -505,15 +510,18 @@ identities must not receive access to this unfiltered source or its staging
 CSV files. Their governed reads use the destination lakehouse and require
 separate identity tests.
 
-## Independent Spark-recovery data
+## Author-only diagnostic snapshot
 
 **contoso_recall_fallback** is a schema-enabled lakehouse containing the seven
 reference tables plus `history.lot_history` and `history.shipment_history`,
-independently loaded as managed Delta. Its purpose is read-only historical
-investigation while an instructor repairs a Spark session, not a claim that
-the notebook's technology exercises have completed.
+independently loaded as managed Delta. This existing item is retained for
+author diagnostics only. It is not a Lab Profile dependency or a Module 2
+attendee fallback. Do not direct attendees to its SQL endpoint, attach their
+notebook to it, or use it to bypass the Iceberg exercise sequence.
 
-### Provision before learner launch
+### Reproduce an author diagnostic copy
+
+These steps are optional author procedures, not learner-launch preparation.
 
 1. Complete and validate the corrections in an author source. Do not export
    the uncorrected 12-store snapshot.
@@ -621,9 +629,9 @@ proof of Iceberg, DuckDB, AI Functions, or the SDK path.
 Keep this item and any staging exports unavailable to restricted manager and
 partner identities until equivalent policy and identity validation are
 explicitly provisioned. The item uses the same F8 capacity and cannot recover
-from a capacity-wide outage. Later modules require an explicit validated
-handoff: the fallback does not automatically move the SharePoint shortcut,
-Eventstream destination, data agent, security roles, or console connectors.
+from a capacity-wide outage. It does not replace the workshop lakehouse or
+rebind the SharePoint shortcut, Eventstream destination, data agent, security
+roles, or console connectors. Attendees remain on the original module path.
 
 ## Truck telemetry Eventstream
 

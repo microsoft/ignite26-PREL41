@@ -31,7 +31,7 @@ targets, not measured service guarantees:
 | 04:00 | Recall evidence and handoff complete |
 
 If a service delay prevents a checkpoint, keep the error and ask the instructor
-to use the documented recovery path. Do not mark a skipped exercise complete
+to repair the supplied environment. Do not mark a skipped exercise complete
 to meet the schedule. Optional extensions are outside this four-hour core path.
 
 **Prerequisites:** The Skillable environment provides a Microsoft Fabric
@@ -357,36 +357,15 @@ the exercises in order:
 
 After Exercise 2.6, return to this page and continue with the next module.
 
-## Recover from an unavailable Spark session
+## If a Module 2 cell fails
 
 If Spark cannot start or an exercise fails, keep the error and ask the
 instructor to check the supplied environment. Do not repeatedly select
 **Run all**, switch runtimes, install replacement packages, or delete tables.
-
-The supplied **contoso_recall_fallback** lakehouse contains independently
-loaded, corrected Delta data for the historical investigation. With
-instructor approval:
-
-1. Open that lakehouse's **SQL analytics endpoint**, not the notebook.
-1. Run [the fallback recall checks](../src/sql/fallback-recall-checks.sql).
-1. Confirm nine current stores, thirteen receiving stores, thirteen related
-   lots, forty-five reached stores in five regions, 16,961 lot rows,
-   1,165,374 shipment rows, and zero duplicate shipment keys or removed
-   duplicate lines.
-1. Continue the read-only historical investigation with the instructor while
-   the notebook environment is repaired.
-
-This path supplies corrected answers, not Spark execution, Iceberg snapshots,
-DuckDB credential vending, AI Functions, or SDK validation. Record those
-exercises as not completed rather than claiming a pass from fallback results.
-Do not attach the exercise notebook to the fallback or copy its Delta tables
-over the notebook's owned Iceberg tables.
-
-The fallback is on the same Fabric capacity and does not solve a capacity-wide
-outage. It also does not automatically rebind later-module telemetry, document
-shortcuts, application connectors, or reader permissions. The instructor must
-verify any recovery handoff before continuing those modules; do not silently
-substitute a different endpoint.
+Stay on the same notebook, lakehouse, and exercise sequence. Module 2 has no
+alternate-data or SQL-answer completion path. Resume the unfinished exercise
+after the environment is repaired, and record it as incomplete until its own
+completion check passes.
 
 ===
 
@@ -1014,9 +993,8 @@ separate from observation time and from that fixed scenario clock.
    unverified integration. Do not mark the workshop complete if the app or
    effective-identity checks were replaced by engineer-only queries.
 
-If you used the historical fallback, identify which technology exercises were
-not completed and which endpoint supplied the investigation results. A correct
-fallback answer does not retrospectively validate an unavailable runtime.
+Do not substitute results from another dataset or endpoint for unfinished
+Module 2 exercises.
 
 ## Optional extensions
 

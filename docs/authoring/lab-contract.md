@@ -46,10 +46,10 @@ telemetry/pipeline allowance must include persistence, deployment, and verified
 candidate/production refresh, not just accepted sends. The rebalanced allowances
 remain unmeasured planning targets, not evidence that the new sequence fits.
 
-If a checkpoint is missed, use the documented recovery path and record the
+If a checkpoint is missed, repair the supplied environment and record the
 unfinished exercise; do not silently skip a technology or identity check to
-claim a four-hour completion. A separate precomputed fallback lakehouse is
-required for historical investigation during Spark repair.
+claim a four-hour completion. Module 2 must use its supplied notebook,
+lakehouse, and exercise sequence, not a precomputed alternate dataset.
 [Optional extensions](../../instructions/README.md#optional-extensions) are
 outside this core allowance and do not replace a required exercise.
 
@@ -118,14 +118,13 @@ or credentials into the learner path.
 | `contoso_operations_sql` | Author supplies a native SQL database with seven typed reference tables, an empty `workshop.mirroring_probe`, and its automatically mirrored SQL endpoint. | Preserve all recall records. Learner writes only the probe, observes each change, and leaves source/mirror empty. Restricted readers receive no alternate source or mirror access. |
 | SharePoint source and connection | Author publishes the seven synthetic files under `supplierQuality`, keeps `metadata` CSV-only, and supplies a tested connection. | Reuse matching source content and connection. Do not reset SharePoint by deleting source files or changing site sharing. |
 | `SupplierQuality` and `dbo.supplier_certificates` | Absent before Exercises 1.2 and 1.3 so the learner creates them. | Reuse only matching readable shortcuts and a successful four-record transformation. Reset only learner-created destination objects, not the source. |
-| Module 2 notebook and tables | Author imports the supplied notebook. Learner attaches the destination and creates seven `dbo` Iceberg tables and two `history` tables. | Reuse only notebook-owned tables with `contoso.owner = prel41-module-2`; retain the certificate table. Never replace unrelated tables or bind the notebook to the fallback. |
+| Module 2 notebook and tables | Author imports the supplied notebook. Learner attaches the destination and creates seven `dbo` Iceberg tables and two `history` tables. | Reuse only notebook-owned tables with `contoso.owner = prel41-module-2`; retain the certificate table. Never replace unrelated tables or switch to alternate data to bypass an exercise. |
 | `contoso_recall_agent` | Created by the learner with the explicit nine-table selection. | Recheck selection and final publication. Certificate, telemetry, and snapshot additions do not enlarge the agent's scope. |
 | `contoso_truck_telemetry` | Author supplies the inlet, destination, replay utility/control, and authorized terminal. Raw output may be absent before the first replay. | Verify the actual destination state, then replay stable IDs. Preserve retries and use canonical payloads rather than a fixed raw-row total. |
 | `contoso_temperature_refresh` and candidate | Absent for a fresh Exercise 3.3; learner binds/deploys the supplied template and creates the engineer-only candidate. Existing instances follow the explicit resume checks. | Reuse only matching workshop settings and wait for active runs. Reset owns the learner-created item/candidate; never grant readers candidate access. |
 | `dbo.recall_temperature_status` | Created/promoted by Exercise 3.3 from verified complete telemetry before governed reads. It is not an automatically updated stream. | Refresh after the intended complete replay, verify all thirteen rows and job interval, and retain the analysis timestamp. Do not overwrite unrelated tables or expose deployment files. |
 | `RegionalManagerNorth` and `LogisticsPartner` | Learner creates selected-path roles and assigns the supplied restricted identities. | Inspect existing memberships and grants before reuse. Empty author templates must not overwrite assigned roles or DefaultReader. |
 | `contoso_recall_console` | Author supplies the target AppBackend, runnable starter, configured connector, and existing tools; learner completes the application flow. | Reuse the configured item. An empty item is not deployed content. Reset must clear instance-specific sessions and cached data without deleting shared services. |
-| `contoso_recall_fallback` | Author supplies independent corrected Delta data for read-only recovery. | Keep it separate from notebook ownership. Recovery does not automatically rebind later modules, reader roles, or the console. |
 
 The [Studio inventory](studio-inventory.md) records the settings and outstanding
 fresh-launch checks. This table defines required behavior; it does not claim
@@ -199,4 +198,4 @@ The learner wrap-up provides an explicit five-question evidence table and
 handoff sequence. Correct owner-account dataset results are necessary but
 not sufficient: the deployed console, document path, actual restricted
 identities, negative reads, and data freshness must be demonstrated. A
-fallback or skipped runtime path must remain visible in the completion record.
+skipped runtime path must remain visible in the completion record.

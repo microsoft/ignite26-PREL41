@@ -115,8 +115,9 @@ The target duration is **240 minutes**, including a 10-minute break; this is a
 planning target, not a measured completion time. End-to-end readiness remains
 under validation. Full-workshop runtime behavior and completion time,
 restricted-identity access, and the deployed Recall Console's governed data
-path have not been confirmed as passed. Follow the completion checks and record any fallback or skipped
-exercise rather than treating it as completed.
+path have not been confirmed as passed. Follow the completion checks and record
+any skipped exercise rather than treating it as completed. Module 2 stays on
+the supplied notebook and dataset; it has no alternate-data completion path.
 
 The author workspace now also has a working SharePoint connection and document
 shortcut: all seven source files match the repository, and the native CSV
@@ -128,9 +129,13 @@ workspace. Skillable provisioning, preview, resume, and reset checks are a
 separate phase after the owner approves the working Fabric lab; they are not
 prerequisites for continuing the Fabric deployment.
 
-The actual Rayfin application, effective restricted-identity access, DuckDB
-and SDK paths, and the final integrated adversarial review remain unverified
-or incomplete. The [consolidation ledger](CONSOLIDATION-TODO.md#current-fabric-destination)
+The Module 2 contributor reports successful DuckDB and data-agent SDK runs,
+including the session-local `%pip` setup in cells 16 and 24. The independent
+selected-workspace validation has not replayed those paths; package absence
+before the install cells is expected, not evidence of a broken exercise.
+The actual Rayfin application, effective restricted-identity access, and
+the final integrated adversarial review remain unverified or incomplete.
+The [consolidation ledger](CONSOLIDATION-TODO.md#current-fabric-destination)
 records the current destination and its actual native results separately
 from earlier isolated-workspace evidence.
 

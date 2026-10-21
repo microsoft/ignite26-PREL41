@@ -22,9 +22,11 @@
   sending any event. It uses the existing Python standard library and a Fabio
   source connection piped on stdin, without storing or printing credentials.
   See the [author replay procedure](../infra/README.md#replay-with-the-supplied-producer).
-- [Fallback recall checks](sql/fallback-recall-checks.sql) verifies the corrected
+- [Author recall checks](sql/fallback-recall-checks.sql) verifies the corrected
   reference/history results through a SQL analytics endpoint without Spark.
-  It does not validate Iceberg snapshots, DuckDB, AI, or notebook package paths.
+  This diagnostic is not an alternate Module 2 completion path and does not
+  validate Iceberg snapshots, DuckDB, AI, or notebook package paths.
 
-Run these assets through their corresponding [learner exercises](../instructions/README.md).
+Run learner assets through their corresponding [exercises](../instructions/README.md);
+keep the author diagnostic checks outside the attendee sequence.
 The temperature batch does not create tables, change roles, or grant access.

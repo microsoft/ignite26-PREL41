@@ -8,6 +8,8 @@ In this exercise, you connect the Module 2 notebook to your lakehouse and genera
 
 1. In the workspace, open the notebook **module-2-shipment-history**.
 
+    <!-- Screenshot TODO: exercise-2-1-open-notebook.png; show the notebook in the workspace item list. -->
+
     If a **Notebook Copilot Updates** window opens, select **Skip for now**.
 
     > [!Note] A notebook reads and writes files through its default lakehouse. Every cell in Module 2 finds the lakehouse this way, so attach the lakehouse you used in Module 1 before you run anything.
@@ -18,9 +20,13 @@ In this exercise, you connect the Module 2 notebook to your lakehouse and genera
 
 1. Find the lakehouse. Its name is listed twice: one row is the lakehouse and the other is its SQL analytics endpoint. Select the row with the lakehouse icon, then select **Add**.
 
+    <!-- Screenshot TODO: exercise-2-1-onelake-catalog.png; show the lakehouse selected, not its SQL analytics endpoint. -->
+
     The SQL analytics endpoint is a read-only SQL view of the lakehouse tables. The notebook needs the lakehouse itself because it writes files.
 
 1. Check that the lakehouse shows under **OneLake** with a pin.
+
+    <!-- Screenshot TODO: exercise-2-1-lakehouse-pinned.png; show the default lakehouse pin in Explorer. -->
 
     The pin marks the notebook's default lakehouse. Paths such as `Files/history` in the notebook point to it.
 
@@ -29,9 +35,9 @@ In this exercise, you connect the Module 2 notebook to your lakehouse and genera
 You should run the code cells in order, one at a time. To run a cell, select it, then select **Run cell** to its left. Wait for a cell to finish before you run the next one.
 
 If the session cannot start or a cell fails, retain the error and follow
-[the bounded recovery path](../README.md#recover-from-an-unavailable-spark-session)
-with the instructor. Do not attach this notebook to the fallback lakehouse:
-its independent Delta tables are not the notebook's owned Iceberg tables.
+[the Module 2 troubleshooting guidance](../README.md#if-a-module-2-cell-fails)
+with the instructor. Keep the same notebook and lakehouse; do not substitute
+another dataset or endpoint.
 
 > [!Note] Each section below matches a cell in the notebook, and **Run the next code cell** moves you one code cell down.
 
@@ -45,6 +51,8 @@ Contoso Fresh's data comes from a generator in the first code cell. The cell wri
 The cell's code is collapsed, so it reads **Input is hidden**.
 
 1. Select the first code cell, then select **Run cell** to its left. 
+
+    <!-- Screenshot TODO: exercise-2-1-run-cell.png; show Run cell beside the first cell with Input is hidden. -->
 
     > [!Note] The first run also starts the Spark session so it may take a few moments to complete.
 

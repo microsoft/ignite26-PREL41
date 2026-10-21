@@ -3,7 +3,12 @@
 ## Delivery agreement
 
 - Consolidation branch: `workshop/consolidation`.
-- Base: current `origin/main`, including merged PR #10.
+- Review base: `workshop/port-iceberg-workshop` (PR #9); the consolidation
+  already includes the `main` baseline with merged PR #10.
+- Review stack: #3 -> #4 -> #9 -> #11. Keep the original commits intact.
+  After approval, retarget the stack PRs to `main`, verify their current
+  heads are ancestors of #11, and land #11 with a merge commit, not squash
+  or rebase. Verify the earlier PRs' indirect-merge states afterward.
 - Preserve existing contributions; integrate the Contoso Fresh workshop from
   PRs #3, #4, and #9 rather than maintaining separate workshop scenarios.
 - The owner initially requested no PR before review. On 2026-10-21, the owner
@@ -18,6 +23,25 @@
   `IgniteLab-Draft` workspace below. Skillable provisioning and learner
   delivery are deferred until the owner approves the working Fabric lab;
   they are not prerequisites for continuing this deployment.
+
+## Colleague review corrections
+
+On 2026-10-21, the owner approved these changes:
+
+- Record the contributor's successful DuckDB/SDK tests, including the
+  notebook's `%pip` cells. Clean-session package absence is not a missing
+  implementation; independent replay remains a separate validation check.
+- Remove the alternate-data recovery route from Module 2 and the required
+  Lab Profile. Preserve the existing diagnostic copy for authors only;
+  do not delete cloud data or route attendees to a different endpoint.
+- Restore ten screenshot capture TODOs at their original UI-critical steps,
+  retaining the actual menu image and avoiding broken image links.
+- Stack PR #11 on #9 for review, show the stack in each PR, and document
+  the history-preserving final landing without merging anything now.
+- Post-feedback validation passes for all 23 tracked Markdown files outside
+  `.github`: 125 local targets, 36 fragments, and balanced fences. All eleven
+  original screenshot positions remain covered by one real image and ten
+  TODOs; the original notebook and both `%pip` setup cells are unchanged.
 
 ## Current Fabric destination
 
@@ -124,13 +148,15 @@ has every feature deployed.
 - [x] Run read-only package preflight job
   `124ac64a-2576-48e3-89bf-61c819fc76c1` in this destination's standard
   Runtime 2.0 session. Both distribution metadata and modules are absent for
-  DuckDB and `fabric-data-agent-sdk`. This identifies the remaining
-  dependency requirement; it does not pass their actual notebook paths.
+  DuckDB and `fabric-data-agent-sdk` before running the notebook's install
+  cells. This expected clean-session state does not establish a dependency
+  blocker. The contributor reports successful execution; this independent
+  run has not replayed those actual notebook paths.
 - [x] Inspect this destination's Workspace settings > Delegated Settings >
   OneLake settings. Authenticate with OneLake user-delegated SAS tokens is
   On, enabled for all users, with inherited Default configuration. No
-  setting was changed. Credential vending and actual DuckDB reads remain
-  separate, unexecuted checks.
+  setting was changed. Independent target credential-vending and DuckDB
+  replay remain separate from the contributor-reported successful tests.
 - [x] Independently check the deployed governance fixture expectations:
   North has eight current and eight receiving stores; CAR-02 has eight
   shipment lines reaching eight stores. These were engineer data checks,
@@ -150,7 +176,8 @@ has every feature deployed.
   documentation still requires a supplied `TableReadBaseUrl` and does not
   provide an allocation-response schema. No preview endpoint, connector
   contract, reader identity, or dependency installation was fabricated.
-- [x] Deliver independent corrected Delta recovery data in this destination.
+- [x] Deliver an independent corrected Delta diagnostic copy in this destination.
+  Retain it for authors only, not as an attendee fallback or launch dependency.
   All 44 files / 18,080,846 bytes match the verified source by independent
   SHA-256 reads. Every Delta reference is relative; there are no external
   locations or deletion vectors. All nine recall checks pass. Every logical
@@ -580,8 +607,10 @@ stores. No restricted-identity pass is claimed.
   insert/update/delete propagation, and verify state/transaction/read-only guards.
 - [x] Execute the exact new Exercise 3.3 binding utility and learner block for
   candidate and production, including strict output/job-interval checks.
-- [ ] Module 2: historical-data generation, Iceberg writes and row changes,
-  snapshots, REST catalog, DuckDB tracing, AI Functions, and data agent.
+- [x] Supply Module 2: historical-data generation, Iceberg writes and row
+  changes, snapshots, REST catalog, DuckDB tracing, AI Functions, and data
+  agent. Contributor-tested DuckDB/SDK execution and independent native
+  checks are attributed separately; full attendee replay remains below.
 - [x] Module 3: supplied/replayable telemetry, Eventstream path, the
   above-4-C-for-more-than-20-minutes rule, shipment joins, and expected results.
   Native author deployment and exact persisted results pass; attendee
@@ -632,24 +661,23 @@ stores. No restricted-identity pass is claimed.
   results, handoff sequence, and supported optional continuation paths.
 - [ ] Execute that complete wrap-up through the actual console, documents,
   and restricted identities; do not substitute owner SQL results.
-- [x] Provide documented recovery, resume, rerun, and fallback behavior
+- [x] Provide documented session repair, resume, and rerun behavior
   wherever required by the lab contract.
-- [x] Provision independent corrected fallback reference/history data and
-  validate the read-only historical recovery checks without claiming the
-  skipped Spark/Iceberg/DuckDB/AI exercises passed.
-- [ ] Verify fallback delivery in a fresh learner environment and any
-  deliberate handoff to later-module connections, roles, and app bindings.
+- [x] Retain the verified independent corrected reference/history copy for
+  author diagnostics only. Module 2 has no alternate-data completion path.
 
 ## Phase 3: Instructions and delivery
 
 - [x] Provide one canonical attendee entry point for both guided and self-paced
   delivery, using the supplied lab rather than a locally improvised environment.
 - [ ] Verify Skillable navigation for all exercises.
-- [x] Retain the visually checked menu screenshot and replace missing
-  Module 2 image placeholders with self-contained instructions.
+- [x] Retain the visually checked menu screenshot and restore ten explicit
+  capture TODOs alongside self-contained Module 2 instructions.
+- [ ] Capture the ten remaining UI screenshots before final publication.
 - [x] Verify repository-relative Markdown, HTML image/link targets, and local
-  Markdown fragments across all nineteen content Markdown files: 125 local
-  targets and 35 fragments resolve; all 31 shell examples pass syntax checks.
+  fragments across all 23 tracked Markdown files outside `.github`: 125 local
+  targets and 36 fragments resolve. The 31 unchanged shell examples passed
+  the prior syntax check.
 - [ ] Verify the corresponding navigation and rendering in Skillable.
 - [x] Correct the known PR #10 loop-body indentation and remove its two
   missing screenshot references without replacing them with invented images.
@@ -688,14 +716,16 @@ stores. No restricted-identity pass is claimed.
   data-agent publish flow through the actual author browser UI.
 - [x] Ship and execute a repeatable three-question published-agent evaluation,
   including the zero-result case, three repeats, and partial-failure checks.
-- [ ] Verify the learner's SDK path in a prepared standard notebook session.
+- [ ] Independently replay the full learner notebook in the selected
+  standard session, including the supplied %pip and SDK cells. The
+  contributor's successful tests are recorded, not counted as missing code.
 - [ ] Validate governed reads using the actual manager and partner identities,
   not only the workspace owner.
 - [ ] Run fresh-launch and resume checks in Skillable, including narrow-pane
   rendering, credentials substitution, navigation, and reset behavior.
 - [ ] Measure module durations, Spark startup, SQL endpoint refresh, AI
   latency, telemetry freshness, and console responsiveness.
-- [ ] Verify fallback paths, partial execution, reruns, interrupted sessions,
+- [ ] Verify session repair, partial execution, reruns, interrupted sessions,
   missing permissions, unavailable capacity, and service errors.
 
 ## Phase 5: Red-team after feature completion
@@ -724,13 +754,15 @@ The owner's latest scope is to finish work executable with the available
 repository and approved Fabric resources, then identify what remains. Current
 native results are in the destination section above. SharePoint, certificate
 transformation, full telemetry coverage, production refresh, and independent
-recovery data are delivered; earlier failed or incomplete attempts below are
-historical evidence, not their current status.
+an author-only diagnostic copy are delivered; earlier failed or incomplete
+attempts below are historical evidence, not their current status.
 
-- **Notebook setup and execution:** the DuckDB and data-agent SDK setup cells
-  are supplied, but neither package is present in the tested standard session.
-  Prepare the approved dependency path and run the actual remaining cells.
-  This is unfinished setup/validation work, not missing engineer credentials.
+- **Independent notebook replay:** the contributor confirms successful
+  DuckDB/SDK tests with the supplied %pip cells. Replay the full notebook
+  independently in the selected destination/delivery configuration; the
+  earlier clean-session probes are not evidence of missing implementation.
+- **Screenshot captures:** ten restored capture TODOs remain before
+  publication; the real Add data items menu image is retained.
 - **Recall Console implementation and deployment:** the application is not
   implemented. Finish it with the approved Rayfin toolchain and the actual
   user-delegated OneLake Arrow endpoint, allocation/stream response contract,
@@ -756,7 +788,10 @@ workshop or publication as ready on the strength of native engineer checks.
 
 The following sections preserve the sequence of earlier experiments and
 recoveries. Their resources, raw row totals, and then-outstanding checks can
-differ from the current owner-selected destination.
+differ from the current owner-selected destination. Earlier package-gap
+claims and attendee fallback recommendations are superseded by the colleague
+review corrections above; historical evidence is retained, not reclassified
+as a current lab requirement.
 
 ### Live telemetry evidence
 
