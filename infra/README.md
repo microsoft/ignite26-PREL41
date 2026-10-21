@@ -555,6 +555,55 @@ manifest pointers still referenced the original lakehouse. That copy was
 rejected; its five unused files were removed only after verifying that the
 replacement Delta table referenced its own data file.
 
+### Reuse an already verified Delta recovery snapshot
+
+An existing independent, corrected **Delta** fallback can be copied into a
+new, empty, schema-enabled author fallback instead of exporting history again.
+First inspect all nine source tables and their Delta logs. Require managed
+Delta with relative data-file paths and no external table locations or
+deletion-vector references. This is not a shortcut or an Iceberg directory
+clone. Do not overwrite an existing authored destination.
+
+Set `VERIFIED_WORKSPACE_ID`, `VERIFIED_FALLBACK_ID`, and the new `FALLBACK_ID`
+from the inspected source and destination items. Preview each exact path:
+
+```bash
+(
+  set -e
+  : "${VERIFIED_WORKSPACE_ID:?Set the verified source workspace}"
+  : "${VERIFIED_FALLBACK_ID:?Set the verified source fallback}"
+  : "${WORKSPACE_ID:?Set the approved destination workspace}"
+  : "${FALLBACK_ID:?Set the new owned fallback}"
+  for table in dbo/suppliers dbo/products dbo/locations dbo/carriers dbo/trucks \
+    dbo/lots dbo/store_inventory history/lot_history history/shipment_history
+  do
+    fabio lakehouse copy-table \
+      --source-workspace "$VERIFIED_WORKSPACE_ID" \
+      --source-id "$VERIFIED_FALLBACK_ID" --source-table "$table" \
+      --dest-workspace "$WORKSPACE_ID" --dest-id "$FALLBACK_ID" \
+      --dest-table "$table" --dry-run
+  done
+)
+```
+
+Review the item IDs and paths, then repeat without `--dry-run` only for the
+new, owned destination. Schema-enabled copy paths use `dbo/table` or
+`history/table`, not a flat dotted table name. Inspect actual destination
+table formats and SQL registration afterward. Independently compare every
+copied file's length and SHA-256, and recheck that source and destination
+manifests stayed unchanged during verification. Require all recall checks,
+every logical column in both `EXCEPT` directions, matching table counts, and
+unique logical keys on both sides; totals alone do not prove fidelity.
+
+In the selected owner workspace, this delivered
+`contoso_recall_fallback` (`84b69fa3-6391-4469-bd84-ee2fd2a1c713`), with SQL
+endpoint `0f51dddd-4e06-455d-bf25-2ddc2af14db4`. All 44 files
+(18,080,846 bytes) matched independently, every Delta reference was relative,
+and all nine tables matched live ContosoFresh in both directions with equal
+counts and no duplicate logical keys. All nine recall invariants passed.
+Owned verification downloads were removed. No Spark execution, package
+installation, runtime change, or live-table overwrite was needed.
+
 ### Verified contents and limitations
 
 All nine fallback tables were checked against the corrected source. Both

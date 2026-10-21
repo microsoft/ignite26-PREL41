@@ -43,6 +43,8 @@ has every feature deployed.
 | New guarded pipeline | contoso_temperature_refresh; e8cc415b-35d1-4233-98d1-052175834a86 |
 | Separate AI author notebook | prel41-author-ai-validation; 905baf74-3d74-4258-8bbe-f63812fb39de |
 | Separate read-only package preflight | prel41-author-package-preflight; 0a8a3671-2460-4e11-b5e1-96b528629de2 |
+| Independent recovery lakehouse | contoso_recall_fallback; 84b69fa3-6391-4469-bd84-ee2fd2a1c713 |
+| Recovery SQL endpoint | 0f51dddd-4e06-455d-bf25-2ddc2af14db4 |
 
 - [x] Inspect existing items, account permissions, notebook source and saved
   attachment, and prior notebook sessions before deployment.
@@ -146,6 +148,22 @@ has every feature deployed.
   documentation still requires a supplied `TableReadBaseUrl` and does not
   provide an allocation-response schema. No preview endpoint, connector
   contract, reader identity, or dependency installation was fabricated.
+- [x] Deliver independent corrected Delta recovery data in this destination.
+  All 44 files / 18,080,846 bytes match the verified source by independent
+  SHA-256 reads. Every Delta reference is relative; there are no external
+  locations or deletion vectors. All nine recall checks pass. Every logical
+  column matches live ContosoFresh in both `EXCEPT` directions, with equal
+  table counts and unique logical keys on both sides. Source/destination
+  manifests stayed stable, and owned downloads were removed. No Spark job,
+  runtime/package change, live-table overwrite, or new reader grant was needed.
+- [x] Finish the available-work repository pass: all nineteen content Markdown
+  files pass 125 local link/image targets, 35 local fragments, balanced fences,
+  and 31 shell-example syntax checks. Both Python helpers and all 26 notebook
+  code-cell Python portions parse; the two package magic commands were not
+  executed. Actual producer preflight accepts both 35/404-message fixtures.
+  After recovery delivery, the original core results, unchanged production
+  acceptance, exact policy IDs/grants/memberships, and Paused sink still pass.
+  Stale current-status claims were reconciled with the actual handoff.
 - [ ] Verify the remaining notebook, actual application, and restricted
   identity paths in this destination.
 - [ ] Finish the integrated correctness, usability, performance, and security
@@ -522,16 +540,20 @@ stores. No restricted-identity pass is claimed.
 
 - [x] Integrate the scaffold, supplier exercise, and Module 2 contributions
   from PRs #3, #4, and #9 in dependency order.
-- [ ] Reconcile merged PR #10 with the Contoso Fresh recall scenario;
-  preserve reusable walkthrough material and replace automotive-specific
-  data flows with recall-relevant flows.
+- [x] Reconcile merged PR #10 with the Contoso Fresh recall scenario.
+  Preserve the automotive contribution as labelled authoring material; the
+  canonical learner path uses recall-specific SharePoint and operational flows,
+  not a second automotive scenario.
 - [x] Define the canonical resource names, schema/layout references, and
   author/learner ownership boundaries for fresh, resumed, and reset instances.
   Studio implementation and actual reset verification remain separate gates.
 - [x] Separate current-inventory questions in Module 1 from shipment-history
   questions in Module 2; resolve references to operational orders/shipments.
-- [ ] Agree shared identifiers, schemas, expected results, scenario clock,
-  security identities, and downstream data requirements.
+- [x] Document and verify shared data identifiers, schemas, expected results,
+  and scenario clock across the supplied assets and native author runs.
+- [ ] Confirm actual restricted-identity bindings and the application's
+  real downstream Arrow/authentication contract; documented requirements
+  are not a substitute for those integrations.
 - [x] Map canonical workshop objectives to linked exercises and exact observable
   evidence, distinguishing each engine's execution and restricted-identity reads.
 - [x] Document a 240-minute core run of show, learner checkpoints, and optional
@@ -557,8 +579,10 @@ stores. No restricted-identity pass is claimed.
   candidate and production, including strict output/job-interval checks.
 - [ ] Module 2: historical-data generation, Iceberg writes and row changes,
   snapshots, REST catalog, DuckDB tracing, AI Functions, and data agent.
-- [ ] Module 3: supplied/replayable telemetry, Eventstream path, the
+- [x] Module 3: supplied/replayable telemetry, Eventstream path, the
   above-4-C-for-more-than-20-minutes rule, shipment joins, and expected results.
+  Native author deployment and exact persisted results pass; attendee
+  delivery and application integration remain separate checks below.
 - [x] Deploy the native custom-endpoint-to-lakehouse Eventstream through
   Fabio and verify real persisted Delta output, not just accepted sends.
 - [x] Supply 35 boundary-fixture events with 34 distinct IDs and verify all
@@ -605,7 +629,7 @@ stores. No restricted-identity pass is claimed.
   results, handoff sequence, and supported optional continuation paths.
 - [ ] Execute that complete wrap-up through the actual console, documents,
   and restricted identities; do not substitute owner SQL results.
-- [ ] Provide documented recovery, resume, rerun, and fallback behavior
+- [x] Provide documented recovery, resume, rerun, and fallback behavior
   wherever required by the lab contract.
 - [x] Provision independent corrected fallback reference/history data and
   validate the read-only historical recovery checks without claiming the
@@ -621,20 +645,23 @@ stores. No restricted-identity pass is claimed.
 - [x] Retain the visually checked menu screenshot and replace missing
   Module 2 image placeholders with self-contained instructions.
 - [x] Verify repository-relative Markdown, HTML image/link targets, and local
-  Markdown fragments across the nineteen content Markdown files: ninety local
-  targets and twenty-one fragments resolve.
+  Markdown fragments across all nineteen content Markdown files: 125 local
+  targets and 35 fragments resolve; all 31 shell examples pass syntax checks.
 - [ ] Verify the corresponding navigation and rendering in Skillable.
 - [x] Correct the known PR #10 loop-body indentation and remove its two
   missing screenshot references without replacing them with invented images.
-- [ ] Verify all examples.
+- [x] Validate supplied helper and notebook Python syntax, telemetry input
+  contracts, and shell-example syntax without installing dependencies.
+  Actual package-dependent and application examples remain unexecuted.
 - [x] Clearly label the retained automotive walkthrough as authoring material,
   not part of the canonical Contoso Fresh learner path.
 - [x] Reconcile the Studio inventory's token and image claims with the
   canonical instructions and the retained automotive contribution.
 - [ ] Reconcile all Skillable aliases and credentials placeholders with the
   actual Lab Profile; do not substitute real secrets into repository files.
-- [ ] Complete provisioning inventory, data model, authoring guidance, and
+- [x] Complete provisioning inventory, data model, authoring guidance, and
   expected-results documentation.
+  Required but unavailable integrations are identified, not marked deployed.
 - [x] Populate confirmed README getting-started directions, exactly three
   learning outcomes, and technologies while preserving the authored description.
 - [ ] Confirm README content owners and delivery links; preserve unknown owner
@@ -645,8 +672,9 @@ stores. No restricted-identity pass is claimed.
 
 ## Phase 4: End-to-end evidence
 
-- [ ] Verify all repository-relative links, images, notebook references,
-  examples, and learner entry points.
+- [x] Verify repository-relative links, images, notebook references, example
+  syntax, and both guided/self-paced learner entry points. This is repository
+  validation, not execution of unavailable package or application paths.
 - [ ] Run the core path in a clean Fabric workspace as the required account.
 - [ ] Verify all expected table schemas, counts, recall results, and
   cross-module joins.
@@ -682,38 +710,48 @@ stores. No restricted-identity pass is claimed.
 - [ ] Review query plans and measured performance for clear bottlenecks,
   unnecessary full scans, excessive polling, and costly reruns.
 - [ ] Fix confirmed defects and repeat the affected checks.
-- [ ] Record remaining risks, external dependencies, and unverified behavior.
+- [x] Record remaining risks, external dependencies, and unverified behavior.
 - [ ] Prepare a final review summary, evidence, and proposed PR description
   without opening a pull request.
 
-## Current state
+## Remaining work for colleague handoff
 
-### External resources still required
+The owner's latest scope is to finish work executable with the available
+repository and approved Fabric resources, then identify what remains. Current
+native results are in the destination section above. SharePoint, certificate
+transformation, full telemetry coverage, production refresh, and independent
+recovery data are delivered; earlier failed or incomplete attempts below are
+historical evidence, not their current status.
 
-The session owner was unavailable when these locations and identities were
-requested. Do not treat that as approval to invent resources, credentials,
-or successful test results:
+- **Notebook setup and execution:** the DuckDB and data-agent SDK setup cells
+  are supplied, but neither package is present in the tested standard session.
+  Prepare the approved dependency path and run the actual remaining cells.
+  This is unfinished setup/validation work, not missing engineer credentials.
+- **Recall Console implementation and deployment:** the application is not
+  implemented. Finish it with the approved Rayfin toolchain and the actual
+  user-delegated OneLake Arrow endpoint, allocation/stream response contract,
+  and authentication flow. A metadata-only AppBackend is not completion.
+- **Effective access tests:** provide distinct North and CAR-02 reader
+  sign-ins and run positive/negative table, column, file, agent, and
+  application checks. The deployed restricted roles remain unassigned.
+- **Final integrated validation:** after those paths run, measure the complete
+  four-hour flow and perform the full correctness, usability, performance,
+  and security review. Existing bounded reviews do not provide that sign-off.
+- **Later delivery and publication:** after Fabric approval, provision and
+  exercise Skillable preview, fresh launch, resume, and reset. Resolve issue
+  #6 with the delivery team, confirm README content owners and delivery links,
+  and review template cleanup with the owner. Do not fabricate metadata or
+  remove authored content without confirmation.
 
-- An accessible Supplier Quality SharePoint connection and source library.
-  Fabio returned no matching accessible connection.
-- Distinct restricted North manager and CAR-02 partner identities, with an
-  approved sign-in method. The deployed roles intentionally have no members.
-- Skillable Studio/Lab Profile access and fresh-instance provisioning of the
-  now-available operational source.
-- The actual Rayfin starter and a preconfigured deployment toolchain, plus
-  learner terminal/replay-control provisioning. Fabric Apps is publicly
-  documented as built on Rayfin, and native AppBackend creation now succeeds.
-  The telemetry producer and SQL analysis are supplied; the application
-  starter and deployed application content remain absent.
-- A provisioned environment satisfying the existing package-based Module 2
-  path; DuckDB and the Data Agent SDK remain uninstalled and unverified.
+No new tenant, test account, tenant-setting change, or PR is part of this
+handoff. Skillable remains deferred. Do not report the complete workshop or
+publication as ready on the strength of native engineer checks.
 
-Module 3 has a live ingestion path and validated boundary fixtures, but its
-complete learner flow is not finished. Module 5 is not implemented.
-Restricted-identity and Skillable runs have not passed, and the final
-post-feature red-team has not started. Do not
-open the final PR or report publication readiness on the strength of the
-completed owner-account checks.
+## Earlier author-workspace evidence
+
+The following sections preserve the sequence of earlier experiments and
+recoveries. Their resources, raw row totals, and then-outstanding checks can
+differ from the current owner-selected destination.
 
 ### Live telemetry evidence
 

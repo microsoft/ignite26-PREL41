@@ -9,6 +9,12 @@ Author and reviewer resources:
 - [Studio inventory](authoring/studio-inventory.md)
 - [Test matrix](authoring/test-matrix.md)
 - [Contoso Fresh data model](authoring/contoso-fresh-data-model.md)
+- [Fabric setup and recovery](../infra/README.md)
+- [Current Fabric inventory and evidence](../CONSOLIDATION-TODO.md#current-fabric-destination)
 
-These documents describe required Skillable Studio configuration and validation
-work. They do not configure a Lab Profile or prove runtime behavior.
+Current author review runs directly in the owner's selected Fabric workspace.
+Skillable provisioning, learner preview, resume, and reset checks follow approval
+of the Fabric lab. The inventory and test matrix distinguish actual native
+results from outstanding notebook, application, and restricted-reader checks.
+The Studio requirements describe later delivery; these documents do not
+configure a Lab Profile or prove an unexecuted integration.

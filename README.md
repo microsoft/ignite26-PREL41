@@ -39,6 +39,18 @@ Learn how to connect, ingest, mirror, and virtualize data across your organizati
 
 ### 🚀 Getting started
 
+#### For the current Fabric author review
+
+The owner is reviewing the lab directly in the
+[selected 2612 Fabric workspace](https://app.powerbi.com/groups/68713569-71b7-43bf-a61e-aa71b60381da/list?experience=power-bi).
+Skillable provisioning follows approval of that Fabric lab.
+Use the [current resource inventory and evidence](CONSOLIDATION-TODO.md#current-fabric-destination),
+[author setup and recovery procedures](infra/README.md), and
+[test matrix](docs/authoring/test-matrix.md). Inspect existing state before
+resuming; do not bootstrap over the supplied source or regenerate authored
+tables. The attendee paths below describe the intended later delivery, not a
+claim that all integrations have passed.
+
 #### In a guided session
 
 If you're following along during a live session:

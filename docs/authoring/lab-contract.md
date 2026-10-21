@@ -58,6 +58,13 @@ outside this core allowance and do not replace a required exercise.
 The lab uses Microsoft Fabric and SharePoint. The optional external analytics
 service is outside the required learner path.
 
+The current author review runs directly in the owner's selected Fabric
+workspace, using the [recorded resource inventory](../../CONSOLIDATION-TODO.md#current-fabric-destination)
+and [native setup and recovery procedures](../../infra/README.md). Skillable
+provisioning and fresh-launch/resume/reset checks follow approval of the
+working Fabric lab. The delivery requirements below are not prerequisites
+for continuing that author review.
+
 The Skillable environment must provide:
 
 - A Contoso Fresh Fabric workspace.
