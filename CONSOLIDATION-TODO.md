@@ -6,8 +6,10 @@
 - Base: current `origin/main`, including merged PR #10.
 - Preserve existing contributions; integrate the Contoso Fresh workshop from
   PRs #3, #4, and #9 rather than maintaining separate workshop scenarios.
-- Do not open a pull request or merge this branch. The session owner will
-  review the result before publication.
+- The owner initially requested no PR before review. On 2026-10-21, the owner
+  authorized a draft discussion PR with implementation, documentation,
+  evidence, and remaining-work details for the product group PMs. Do not
+  merge or report publication readiness without the remaining validations.
 - Never commit credentials, access tokens, temporary access passes, or
   private environment exports.
 - Record actual validation evidence. Unavailable services and unexecuted
@@ -167,7 +169,8 @@ has every feature deployed.
 - [ ] Verify the remaining notebook, actual application, and restricted
   identity paths in this destination.
 - [ ] Finish the integrated correctness, usability, performance, and security
-  review before the owner's final review. Do not open a PR.
+  review before the owner's final merge review. The authorized draft
+  discussion PR is not that sign-off.
 
 ## Phase 0: Credentials and environment
 
@@ -711,8 +714,9 @@ stores. No restricted-identity pass is claimed.
   unnecessary full scans, excessive polling, and costly reruns.
 - [ ] Fix confirmed defects and repeat the affected checks.
 - [x] Record remaining risks, external dependencies, and unverified behavior.
-- [ ] Prepare a final review summary, evidence, and proposed PR description
-  without opening a pull request.
+- [ ] Prepare the final merge-ready review summary and evidence after the
+  outstanding integrations and validation pass. The PM discussion PR records
+  current progress and gaps, not a completed release.
 
 ## Remaining work for colleague handoff
 
@@ -743,9 +747,10 @@ historical evidence, not their current status.
   and review template cleanup with the owner. Do not fabricate metadata or
   remove authored content without confirmation.
 
-No new tenant, test account, tenant-setting change, or PR is part of this
-handoff. Skillable remains deferred. Do not report the complete workshop or
-publication as ready on the strength of native engineer checks.
+No new tenant, test account, or tenant-setting change is part of this
+handoff. The owner subsequently authorized a draft PR for discussion with
+product group PMs; Skillable remains deferred. Do not report the complete
+workshop or publication as ready on the strength of native engineer checks.
 
 ## Earlier author-workspace evidence
 
