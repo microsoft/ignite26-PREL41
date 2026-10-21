@@ -406,16 +406,191 @@ rules. Identity tests remain required before exposing it through the console.
 ## Governed temperature snapshot
 
 `dbo.recall_temperature_status` contains the validated analysis output for
-all 13 YG-2291 shipments. It is a managed Delta snapshot, not a live view or a
-streaming update pipeline. `lot_id` identifies the investigation and
+all 13 YG-2291 shipments. It is a managed Delta snapshot, not a live view or an
+automatically streaming table. `lot_id` identifies the investigation and
 `analysis_time_utc` identifies when analysis ran. The console must display
 that timestamp and must not describe the snapshot as live telemetry.
 
 The snapshot contains shipment/truck/carrier/store IDs, journey times, reading
 counts, observed coverage, longest confirmed hot duration, and both status
 fields. It contains no raw event payloads, supplier costs, or endpoint
-credentials. Empty observation timestamps and durations remain null for the
-seven shipments without readings.
+credentials. With only the boundary fixture, observation timestamps and
+durations remain null for the seven shipments without readings. The
+complete-recall supplement supplies those observations.
+
+### Native pipeline refresh
+
+The author-owned **contoso_temperature_refresh** Data Factory pipeline runs
+the [guarded analysis](../src/sql/module-3-temperature-status.sql) against the
+lakehouse SQL endpoint and overwrites only the selected derived Delta table.
+It is manually triggered, with no schedule or automatic replay trigger.
+The [definition template](pipelines/temperature-refresh/pipeline-content.json)
+contains no tenant bindings or credentials. Its empty deployment fields must
+be bound before use; do not deploy it directly. The generated definition has
+literal query/destination settings and no run-time parameters. Starting a job
+must not be a way to change its SQL or redirect its writes. Inline Fabric linked
+services reference the supplied items; they are not an application identity connector.
+
+Provision and run this as the engineer. Do not grant learners write access to
+the pipeline or raw telemetry just to request a refresh. Before promotion,
+confirm that the production destination is this workshop's author-owned
+snapshot, inspect its fourteen columns, and preserve its existing role paths.
+Never point this template at an unrelated table.
+
+For a new author environment, create the pipeline once and record its ID:
+
+```bash
+fabio data-pipeline create \
+  --workspace "$WORKSPACE_ID" --name contoso_temperature_refresh \
+  --description "Author-triggered guarded temperature snapshot refresh; no schedule"
+```
+
+On resume, inspect and reuse that item rather than creating another. Set
+`PIPELINE_ID` to its ID. Set `WORKSPACE_ID`, `LAKEHOUSE_ID`,
+`SQL_ENDPOINT_ID`, and `SQL_ENDPOINT_HOST` from the destination lakehouse and
+its SQL endpoint. The endpoint ID is **not** the lakehouse ID; the host is
+the bare managed SQL hostname, not a URL or connection string.
+
+Run this from the repository root with the supplied existing Python 3.9+
+and Fabio. First use `OUTPUT_TABLE=recall_temperature_pipeline_candidate`.
+The binding copies the committed SQL unchanged; after editing that SQL,
+bind and deploy again rather than leaving the pipeline on an older query.
+
+```bash
+(
+  set -e
+  : "${PIPELINE_ID:?Set the author-owned pipeline ID}"
+  export WORKSPACE_ID LAKEHOUSE_ID SQL_ENDPOINT_ID SQL_ENDPOINT_HOST
+  export OUTPUT_TABLE="${OUTPUT_TABLE-recall_temperature_pipeline_candidate}"
+  export PIPELINE_DEFINITION_DIR
+  PIPELINE_DEFINITION_DIR=$(mktemp -d) || exit 1
+  trap 'rm -f "$PIPELINE_DEFINITION_DIR/pipeline-content.json" "$PIPELINE_DEFINITION_DIR/snapshot-checks.sql"; rmdir "$PIPELINE_DEFINITION_DIR"' EXIT
+
+  python3 - <<'PY'
+import json
+import os
+import re
+from pathlib import Path
+from uuid import UUID
+
+settings = {}
+for parameter, variable in (
+    ("workspace_id", "WORKSPACE_ID"),
+    ("lakehouse_id", "LAKEHOUSE_ID"),
+    ("sql_endpoint_id", "SQL_ENDPOINT_ID"),
+):
+    value = os.environ.get(variable, "").strip()
+    try:
+        identifier = UUID(value)
+    except ValueError:
+        raise SystemExit(f"{variable} must be a nonzero UUID.")
+    if not identifier.int:
+        raise SystemExit(f"{variable} must be a nonzero UUID.")
+    settings[parameter] = str(identifier)
+
+host = os.environ.get("SQL_ENDPOINT_HOST", "").strip()
+if not re.fullmatch(r"[a-z0-9-]+\.datawarehouse\.fabric\.microsoft\.com", host):
+    raise SystemExit("SQL_ENDPOINT_HOST must be a bare managed Fabric SQL hostname.")
+output = os.environ["OUTPUT_TABLE"]
+if output not in {"recall_temperature_pipeline_candidate", "recall_temperature_status"}:
+    raise SystemExit("OUTPUT_TABLE must be the candidate or production temperature snapshot.")
+settings.update(
+    sql_endpoint_host=host,
+    output_table=output,
+    analysis_sql=Path("src/sql/module-3-temperature-status.sql").read_text(encoding="utf-8"),
+)
+template = Path("infra/pipelines/temperature-refresh/pipeline-content.json")
+definition = json.loads(template.read_text(encoding="utf-8"))
+activity = definition["properties"]["activities"][0]["typeProperties"]
+source = activity["source"]
+source["sqlReaderQuery"] = settings["analysis_sql"]
+source["datasetSettings"]["linkedService"]["properties"]["typeProperties"].update(
+    endpoint=settings["sql_endpoint_host"],
+    artifactId=settings["sql_endpoint_id"],
+    workspaceId=settings["workspace_id"],
+)
+sink = activity["sink"]
+sink["datasetSettings"]["typeProperties"]["table"] = output
+sink["datasetSettings"]["linkedService"]["properties"]["typeProperties"].update(
+    artifactId=settings["lakehouse_id"],
+    workspaceId=settings["workspace_id"],
+)
+target = Path(os.environ["PIPELINE_DEFINITION_DIR"]) / "pipeline-content.json"
+with target.open("x", encoding="utf-8") as handle:
+    json.dump(definition, handle, indent=2)
+    handle.write("\n")
+PY
+
+  fabio item validate-definition --type DataPipeline --dir "$PIPELINE_DEFINITION_DIR"
+  fabio data-pipeline update-definition \
+    --workspace "$WORKSPACE_ID" --id "$PIPELINE_ID" \
+    --file "$PIPELINE_DEFINITION_DIR/pipeline-content.json"
+  fabio data-pipeline run \
+    --workspace "$WORKSPACE_ID" --id "$PIPELINE_ID" \
+    --wait --timeout 300 --cancel-on-timeout
+  fabio sql-endpoint refresh-metadata \
+    --workspace "$WORKSPACE_ID" --id "$SQL_ENDPOINT_ID"
+  sed "s/dbo[.]recall_temperature_status/dbo.$OUTPUT_TABLE/g" \
+    src/sql/temperature-snapshot-checks.sql > "$PIPELINE_DEFINITION_DIR/snapshot-checks.sql"
+  fabio sql-endpoint query \
+    --workspace "$WORKSPACE_ID" --id "$SQL_ENDPOINT_ID" \
+    --sql @"$PIPELINE_DEFINITION_DIR/snapshot-checks.sql"
+)
+```
+
+The acceptance batch is specifically for the **complete-recall** fixture.
+It checks every shipment's readings, continuous duration, statuses, full
+delivery endpoints, authorization context, and fourteen-column shape.
+Expect thirteen shipments, two breaches, eleven no-breach journeys, and one
+analysis timestamp **inside the recorded pipeline job interval**. For a
+boundary-only run, use the boundary expectations in the next section instead.
+Do not treat the complete-recall acceptance failure as permission to suppress
+missing-data results.
+
+SQL registration can lag a successful Copy activity. If registration is still
+pending, repeat metadata refresh and the acceptance query; do not substitute
+job status for actual output or repeatedly overwrite the table. Compare the
+candidate with the guarded analysis before promotion. Then set
+`OUTPUT_TABLE=recall_temperature_status`, repeat binding/deployment/run, and
+verify production again. Remove only the author-created candidate when no
+longer needed; it is not part of either reader role.
+
+Native production runs completed in approximately 47 and 64 seconds and passed
+acceptance. The final fixed-binding run's Copy activity took about 53 seconds.
+One earlier attempt timed out even though it had written thirteen valid-looking
+rows; its generic service error did not explain that, but activity monitoring
+identified `TimedOut`. An explicit retry succeeded. Require **both** a completed
+job and fresh accepted output. Pre-warm before learner launch and verify fresh-lab
+timing; these observations are not a cold-start or concurrency guarantee.
+An isolated empty-input source-guard test failed before copying
+any result and preserved the previous candidate. This proves that tested
+failure path, not recovery from every possible sink/network failure. Report
+all failures and never present an old analysis timestamp as a fresh result.
+Leave `isolationLevel` unset: the connector rejected the literal `"None"`;
+the guarded SQL itself owns its read transaction. The CSV procedure below
+remains an explicit author fallback, not a second automatic writer.
+
+#### Remove an author-created candidate
+
+Only after production acceptance passes, inspect the exact candidate directory
+you created. Do not delete an unrelated or pre-existing authored table.
+For this schema-enabled lakehouse, use its explicit directory path;
+`delete-table --table dbo.recall_temperature_pipeline_candidate` tried a
+nonexistent flat path in the tested Fabio version.
+
+```bash
+fabio lakehouse list-files \
+  --workspace "$WORKSPACE_ID" --id "$LAKEHOUSE_ID" \
+  --path Tables/dbo/recall_temperature_pipeline_candidate
+fabio lakehouse delete-directory \
+  --workspace "$WORKSPACE_ID" --id "$LAKEHOUSE_ID" \
+  --path Tables/dbo/recall_temperature_pipeline_candidate --force
+fabio sql-endpoint refresh-metadata \
+  --workspace "$WORKSPACE_ID" --id "$SQL_ENDPOINT_ID"
+```
+
+Then verify the candidate is absent from `sys.tables` in the `dbo` schema
+and rerun production acceptance. Never delete production to reset a probe.
 
 ### Create or refresh an author-owned snapshot
 

@@ -1,0 +1,75 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "name": "Refresh guarded temperature analysis",
+        "type": "Copy",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "0.00:05:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": true,
+          "secureOutput": true
+        },
+        "typeProperties": {
+          "source": {
+            "type": "WarehouseSource",
+            "sqlReaderQuery": "",
+            "queryTimeout": "00:02:00",
+            "partitionOption": "None",
+            "datasetSettings": {
+              "annotations": [],
+              "type": "DataWarehouseTable",
+              "schema": [],
+              "linkedService": {
+                "name": "contoso_fresh_sql",
+                "properties": {
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "endpoint": "",
+                    "artifactId": "",
+                    "workspaceId": ""
+                  }
+                }
+              }
+            }
+          },
+          "sink": {
+            "type": "LakehouseTableSink",
+            "tableActionOption": "Overwrite",
+            "datasetSettings": {
+              "annotations": [],
+              "type": "LakehouseTable",
+              "schema": [],
+              "typeProperties": {
+                "schema": "dbo",
+                "table": "recall_temperature_pipeline_candidate"
+              },
+              "linkedService": {
+                "name": "contoso_fresh_snapshot",
+                "properties": {
+                  "type": "Lakehouse",
+                  "typeProperties": {
+                    "workspaceId": "",
+                    "artifactId": "",
+                    "rootFolder": "Tables"
+                  }
+                }
+              }
+            }
+          },
+          "enableStaging": false,
+          "translator": {
+            "type": "TabularTranslator",
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": false,
+              "treatBooleanAsNumber": false
+            }
+          }
+        }
+      }
+    ]
+  }
+}

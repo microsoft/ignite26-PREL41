@@ -176,8 +176,11 @@ manager and partner identities.
 The authored root session description also promises mirroring and ETL/ELT
 pipeline work. The canonical five-module path above uses a pre-provisioned
 operational source and does not contain a learner-built mirroring or
-Data Factory pipeline exercise. CSV shortcut transformation is not evidence
-that those separate features were implemented. Preserve the authored
+Data Factory pipeline exercise. The author-triggered
+[temperature refresh pipeline](../../infra/README.md#native-pipeline-refresh)
+now materializes guarded SQL into Delta, but it is not mirroring or a
+learner-built pipeline exercise. CSV shortcut transformation is also not
+evidence of those separate features. Preserve the authored
 description until the session owner reconciles that scope; do not sign off
 the broader description from this objective map.
 

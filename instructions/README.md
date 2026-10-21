@@ -496,8 +496,11 @@ then expect **404 accepted messages**. Do not delete the original fixture.
    no-breach journeys**. SHP-209414 now has explicit readings in its formerly
    missing window; its longest hot interval is ten minutes. SHP-209416
    shares its truck's exactly-twenty-minute hot period and is not breached.
-1. Have the instructor refresh and verify the governed temperature snapshot
-   before continuing to the console.
+1. Have the instructor run the supplied **contoso_temperature_refresh**
+   pipeline and verify the governed temperature snapshot before continuing
+   to the console. The [author refresh procedure](../infra/README.md#native-pipeline-refresh)
+   checks all thirteen results and the new analysis timestamp; a successful
+   replay or pipeline job alone does not establish fresh, correct output.
 
 These are additional synthetic observations, not a fallback that assumes
 missing temperatures were safe. Without the supplement's actual persisted
@@ -758,8 +761,9 @@ than broadening the existing roles just to make a page load.
 The provisioned derived table is **dbo.recall_temperature_status**. It contains
 all 13 affected shipments with no raw events or supplier costs. Display its
 `analysis_time_utc` as the analysis timestamp: this is a snapshot, not a
-continuously refreshed feed. Have the instructor refresh and verify it after
-the intended replay. A successful replay alone does not update this table.
+continuously refreshed feed. Have the instructor run and verify
+**contoso_temperature_refresh** after the intended replay. A successful
+replay alone does not update this table.
 The North and CAR-02 roles have separate row rules for the snapshot, but
 their actual application identity propagation still requires the next
 exercise's checks.

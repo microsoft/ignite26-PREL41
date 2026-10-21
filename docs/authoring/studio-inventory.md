@@ -134,8 +134,14 @@ table and the results the data must produce.
 - The governed derived table `dbo.recall_temperature_status` is provisioned
   and verified against all 13 analysis rows. It contains `lot_id` and
   `analysis_time_utc` and is an author-refreshed snapshot, not an automatic
-  streaming result. Its [refresh procedure](../../infra/README.md#governed-temperature-snapshot)
-  must run after the intended replay, with actual output verification.
+  streaming result. Provision the author-owned **contoso_temperature_refresh**
+  Data Factory pipeline from the [parameterized template](../../infra/pipelines/temperature-refresh/pipeline-content.json).
+  Its [native refresh procedure](../../infra/README.md#native-pipeline-refresh)
+  must run after the intended replay, with actual output and timestamp
+  verification. Supply the instructor refresh handoff in both attendee paths;
+  do not give readers pipeline write access or raw-event grants to invoke it.
+  No automatic schedule is supplied. The native run and empty-input guard
+  passed in the author workspace, not yet in a fresh Lab Profile.
 - Separate North-store and CAR-02 row rules for the snapshot are deployed in
   the unassigned roles. Raw telemetry and staging files remain excluded.
   Application identity propagation and restricted-reader checks are still
@@ -143,7 +149,7 @@ table and the results the data must produce.
 - The supplied read-only SQL batch validates IDs, timestamps, temperatures,
   retry consistency, journey matches, and history consistency before
   calculating statuses. It returns all 13 YG-2291 shipments, including seven
-  without telemetry.
+  without telemetry when only the boundary fixture is present.
 - Native replay and exact SQL results now pass for complete coverage of all
   13 affected deliveries, including matching every one of the 438 persisted
   canonical payloads. Verify fresh launch and learner replay/resume in the

@@ -7,6 +7,11 @@
   read-only SQL analytics endpoint batch. It validates telemetry, deduplicates
   retries, calculates continuous hot intervals, and reports every affected
   shipment, including those without observations.
+- [Complete-recall snapshot checks](sql/temperature-snapshot-checks.sql) verifies
+  all thirteen derived shipment results, coverage, authorization context, and
+  schema after an author refresh. It deliberately rejects boundary-only data.
+  Use the [native pipeline refresh](../infra/README.md#native-pipeline-refresh)
+  to materialize the guarded analysis without a local CSV export.
 - [Telemetry replay](telemetry/replay.py) validates the complete input before
   sending any event. It uses the existing Python standard library and a Fabio
   source connection piped on stdin, without storing or printing credentials.

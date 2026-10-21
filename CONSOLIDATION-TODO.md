@@ -208,6 +208,9 @@ stores. No restricted-identity pass is claimed.
   and refresh the governed snapshot to two breaches and eleven no-breach journeys.
 - [ ] Verify learner terminal/replay-control delivery, snapshot refresh delivery,
   and console integration.
+- [x] Execute the unchanged guarded analysis in a native, parameterized Data
+  Factory pipeline, verify source-failure preservation in an isolated candidate,
+  promote to the governed snapshot, and pass strict per-shipment acceptance.
 - [x] Materialize all 13 guarded analysis rows in a cost-free derived snapshot,
   verify every persisted column, and deploy scoped unassigned row rules
   without granting raw telemetry or changing DefaultReader semantics.
@@ -402,10 +405,70 @@ files remain excluded. Owner dataset expectations are eight North and eight
 CAR-02 rows, not proof of effective authorization.
 
 This is an explicitly timestamped author-refreshed snapshot, not an automatic
-streaming result. The [refresh procedure](infra/README.md#governed-temperature-snapshot)
+streaming result. The [native refresh procedure](infra/README.md#native-pipeline-refresh)
 requires output validation and prevents silent continuation after failure.
 Console binding, freshness presentation, actual restricted identities, and
 Lab Profile refresh delivery remain outstanding.
+
+### Native temperature refresh pipeline
+
+Fabio created Data Factory item `cca261e5-ce16-4dc7-8b61-567efcca542c`,
+now **contoso_temperature_refresh**. The reusable
+[definition](infra/pipelines/temperature-refresh/pipeline-content.json)
+has empty deployment fields for item IDs, SQL host, and the unchanged guarded
+SQL, plus a safe candidate destination. The author binding validates UUIDs,
+managed host, and a two-table output allowlist, then fixes those values in the
+generated definition. There are no run-time query or destination parameters.
+The template contains no environment-specific values or credentials.
+
+The isolated full-analysis run completed in about 44 seconds and matched
+every production value except its intentionally renewed timestamp. An
+empty-input guard injection failed with the existing no-telemetry error and
+preserved all thirteen candidate rows and their timestamp. Raw telemetry
+and production were untouched. The invalid connector isolation literal
+`"None"` from the first attempt was removed, and the original SQL was
+restored before promotion.
+
+Initial promotion job `d60f7d00-f1fb-4738-b181-7d0a93af75a1` completed in
+**46.84 seconds**. The final fixed-binding job
+`3e9504a9-bb7c-4101-aef5-cce6aaea67d6` completed in **63.95 seconds**.
+The persisted analysis timestamp is now
+`2026-10-21T00:32:30.198646Z`, inside that job's interval. The new
+[acceptance batch](src/sql/temperature-snapshot-checks.sql) passed against
+both the previous baseline and refreshed production: all thirteen shipment
+results, exact durations and reading counts, two breaches, eleven no-breach,
+full delivery endpoints, history authorization context, and fourteen columns.
+All non-refresh-time values matched the validated candidate. Raw rows
+remained 509; owner dataset scopes remained eight North and eight CAR-02.
+Policy read-back retained empty reader memberships and DefaultReader
+semantics. These remain owner checks, not effective-reader tests.
+
+No schedule was created. A replay still requires an explicit instructor
+refresh and verification. This implements a real author-owned Copy pipeline,
+not mirroring, a learner-built ETL exercise, automatic streaming freshness,
+or Skillable delivery.
+
+The author-created one-row probe and thirteen-row candidate were removed
+using their exact inspected `Tables/dbo/...` paths. SQL metadata confirmed
+both were gone, and production acceptance still passed. The acceptance
+batch also rejected a read-only incorrect-count fixture with error 50102
+and no open transaction, and rejected a caller-owned transaction with 50100
+while preserving its count of one until the harness rolled it back.
+
+The exact documented binder passed native definition validation for candidate
+and production, rejected nine invalid-setting cases before creating a file,
+and refused to overwrite an existing generated file. Saved definition
+read-back confirmed the unchanged source SQL, production destination, and
+absence of run-time parameters. Native schedule listing returned zero.
+
+One fixed-binding attempt, `1bbe1090-61bb-45a2-aa6d-0a8c958a700d`, failed
+with a generic service 500 despite having published a valid-looking snapshot.
+The documented activity-monitoring API, called through Fabio, showed the Copy
+activity **TimedOut** after 353.289 seconds. An explicit idempotent retry
+completed; its activity was **Succeeded** in 53.269 seconds. Both the final
+job status and strict persisted-data acceptance passed. Keep fresh-launch
+and concurrent timing open; do not turn this recovery into a cold-start
+performance guarantee.
 
 ### Complete affected-delivery coverage
 
