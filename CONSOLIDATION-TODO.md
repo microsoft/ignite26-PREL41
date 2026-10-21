@@ -270,6 +270,12 @@ tenant setting, or restricted-reader grant was changed.
   seconds and reports both missing distribution metadata and unavailable
   modules for `duckdb` and `fabric-data-agent-sdk`. No packages were installed
   or runtime settings changed; this is not a pass for the package cells.
+- [x] Inspect the fresh workspace's delegated OneLake settings through the
+  actual browser UI: user-delegated SAS authentication is on, enabled for all
+  users through the inherited default configuration. No setting was changed.
+  Actual vending and DuckDB reads still require their package-dependent path.
+- [x] Recheck current open WIPs #3, #4, and #9 and verify each current head is
+  already an ancestor of consolidation. No new implementation was left out.
 - [x] Obtain an interim specialized static security review of delivered
   implementation against main: no vulnerabilities reported across telemetry,
   pipeline binding/SQL guards, notebook flows, governance, and documented

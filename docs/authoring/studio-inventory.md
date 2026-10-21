@@ -169,6 +169,13 @@ engine, or count a failed setup cell as completed. If the lab's approved
 network policy prevents setup, prepare a compatible Lab Profile before
 attendees launch.
 
+The fresh author workspace's **Workspace settings > Delegated Settings >
+OneLake settings** independently shows **Authenticate with OneLake
+user-delegated SAS tokens** on, enabled for all users, with the inherited
+**Default configuration**. This was read without changing the setting.
+It establishes that prerequisite only, not successful credential vending,
+DuckDB reads, or access for a restricted identity.
+
 ## Module 3 configuration
 
 - Provision **contoso_truck_telemetry** with custom inlet **truck_replay**,
