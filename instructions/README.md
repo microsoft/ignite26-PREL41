@@ -858,12 +858,29 @@ install a different framework.
 
 1. Open the starter's own instructions and confirm its project manifest,
    `rayfin/rayfin.yml`, and existing start/deploy tooling are present.
+1. Check that the supplied configuration enables both `services.auth.enabled`
+   and `services.auth.fabric.enabled`. Deployed Fabric Apps use Fabric-brokered
+   Entra SSO; a local email/password sign-in is not a deployed authentication
+   path.
 1. Confirm its configured workspace and app item match the supplied lab
    resources. If **contoso_recall_console** is already supplied, reuse that
    item rather than creating a second app.
 1. Run the starter's documented start command and sign in using the supplied
    account. Fabio authentication does not establish that the app's separate
    sign-in has succeeded.
+1. From the prepared starter's project root, preview deployment. Proceed only
+   when it targets the supplied workspace/item with the expected configuration
+   and no unexpected schema removals. Use the already supplied CLI and
+   dependencies; these commands must not install a replacement toolchain:
+
+   ```bash
+   npx --no-install rayfin up --dry-run
+   npx --no-install rayfin up
+   npx --no-install rayfin up status --json
+   ```
+
+   If the CLI is unavailable, return to the missing-toolchain handoff rather
+   than removing `--no-install`. Do not force destructive schema changes.
 1. Open the actual app URL and check that its authenticated session is visible.
    An AppBackend item in the workspace, without deployed application content,
    is not a running starter.
@@ -890,6 +907,14 @@ Use only the starter's provisioned connector. Verify these results separately:
 | Temperature investigation | After complete-recall replay, SHP-209403 and SHP-209415 have confirmed breaches and the other 11 affected shipments have complete no-breach coverage. With only the boundary fixture, those 11 must remain insufficient data. |
 | Supplier documents | Certificate links open the matching files through the supplied document access, not a public URL or embedded credential. |
 
+The OneLake table read API returns Apache Arrow streams, not a JSON row array.
+The supplied connector must allocate a read, retrieve **every** returned
+stream, and process its batches without loading the entire shipment-history
+table into browser memory. A missing or failed stream is an incomplete read,
+not an empty or compliant result. Its data token must represent the signed-in
+user and target the Azure Storage audience; the app's publishable key or a
+Fabric management token is not a substitute.
+
 Keep raw telemetry and supplier costs out of the application response unless
 the signed-in identity is explicitly authorized. The engineer's investigation
 SQL is not a deployed governed-result service. The console must read a
@@ -899,9 +924,11 @@ than broadening the existing roles just to make a page load.
 The provisioned derived table is **dbo.recall_temperature_status**. It contains
 all 13 affected shipments with no raw events or supplier costs. Display its
 `analysis_time_utc` as the analysis timestamp: this is a snapshot, not a
-continuously refreshed feed. Have the instructor run and verify
-**contoso_temperature_refresh** after the intended replay. A successful
-replay alone does not update this table.
+continuously refreshed feed. Use the accepted production output from
+Exercise 3.3. After any subsequent replay, have the engineer run and verify
+**contoso_temperature_refresh** again before checking the console. A successful
+replay alone does not update this table; the instructor can help recover a
+failed refresh without granting readers write access.
 The North and CAR-02 roles have separate row rules for the snapshot, but
 their actual application identity propagation still requires the next
 exercise's checks.
@@ -919,14 +946,23 @@ respects the security configured in the previous module.
 1. Check the manager sees only eight North current stores and its permitted
    North shipment history. Check the partner sees only CAR-02 shipments and
    never supplier costs.
+1. Check the governed temperature snapshot separately: the North manager sees
+   eight North shipments with two breaches; the partner sees eight CAR-02
+   shipments with one breach. Neither may receive the other five rows.
 1. Inspect the app's network responses, not only visible table cells. Hidden
    columns, other carriers' rows, or out-of-region records must not arrive
    in the browser for the app to filter away.
 1. Repeat the relevant denied-access checks from Exercise 4.3 through the
    application's actual data path. App sign-in or **Run and interact**
    permission alone is not proof of downstream OneLake authorization.
+   For the table read API, an unauthorized table or explicitly forbidden
+   column returns not found; the engineer must first confirm that same
+   resource exists. A permitted table with no in-scope rows instead returns
+   a successful empty Arrow result. An expired sign-in or failed read is
+   neither a denial pass nor evidence of no affected stores.
 1. Switch identities and refresh. Results from an earlier session must not
    remain in shared caches or appear after a lower-privilege sign-in.
+   Do not reuse read-session stream IDs across identities.
 
 **Completion check:** The console changes its rows and columns for each
 identity without application-specific filtering.

@@ -230,6 +230,13 @@ stores. No restricted-identity pass is claimed.
   reads, inventory/history/temperature/document views, and access verification.
 - [x] Confirm the current Fabric Apps/Rayfin product relationship from official
   documentation and create the native AppBackend item through Fabio.
+- [x] Ground console deployment and data-read requirements in current official
+  contracts: prepared Rayfin CLI, brokered Entra SSO, Storage-audience
+  user-delegated tokens, complete Arrow streams, explicit denial/error
+  distinctions, and identity-isolated caches/read sessions.
+- [x] Protect generated Rayfin `.env.fabric-*` deployment files at root and
+  nested paths while retaining source manifests, configuration, and example
+  environment files. Parse every Bash fence, including indented learner steps.
 - [ ] Deploy actual application content and its services; item creation alone
   is not a running console.
 - [x] Provide the wrap-up's five-question evidence table, concrete expected

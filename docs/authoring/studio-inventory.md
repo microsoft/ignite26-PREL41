@@ -239,9 +239,41 @@ Product behavior is described in:
 - The current environment has no Rayfin executable or supplied application
   project. Generic Fabio item-definition retrieval is unsupported for the
   created AppBackend; it is not a substitute deployment path.
+- Preflight the supplied project against the official
+  [CLI creation workflow](https://learn.microsoft.com/fabric/apps/create-app-with-cli)
+  and [deployment workflow](https://learn.microsoft.com/fabric/apps/deploy-app).
+  Its existing dependencies must include the Rayfin CLI; learner commands use
+  `npx --no-install`, not package installation or project scaffolding. Inspect
+  the deployment preview before updating the existing app, then verify
+  deployment status and the actual hosted URL. Do not force schema removals.
+- Enable Fabric-brokered Entra SSO in the supplied configuration:
+  `services.auth.enabled` and `services.auth.fabric.enabled` must both be true.
+  Local email/password authentication does not work for deployed Fabric Apps.
+  Keep generated environment/session material out of version control.
+  Repository ignore rules cover `.env` and Rayfin's `.env.fabric-*` files,
+  including nested starter directories, without excluding `rayfin/rayfin.yml`.
 - Keep Fabric SSO and end-user data authorization distinct. An app's
   **Run and interact** permission allows use of the app; it does not prove
   that downstream OneLake queries use that user's identity.
+- Supply the actual connector's table-read base URL, supported request/response
+  contract, and preauthorized user-delegated authentication. The
+  [table API prerequisites](https://learn.microsoft.com/fabric/onelake/table-apis/table-apis-overview#prerequisites)
+  require the Azure Storage token audience; the Fabric management API token or
+  app publishable key cannot replace it. Do not invent a preview host or
+  silently fall back to engineer credentials.
+- The [table read API](https://learn.microsoft.com/fabric/onelake/table-apis/read-table-data-rest-api)
+  allocates streams with `POST /read` and returns Arrow IPC through each
+  `GET /readStream/{streamId}`. Retrieve every stream before the 60-minute
+  session expiry and process batches without buffering full history in the
+  browser. Streams share their read session's snapshot; separate allocations
+  must not be assumed to share a cross-table snapshot.
+- Verify multistream completeness, explicit failure reporting, and identity
+  isolation of both results and stream IDs. Unauthorized tables/explicit
+  forbidden columns return not found; zero permitted rows yield a successful
+  empty Arrow response. Confirm resource existence as engineer before denial
+  tests, and never count authentication/network errors as successful denial.
+  Project only necessary columns, avoid allocating a new billed read for
+  every keystroke, and do not share cached results across identities.
 - Require the same positive and negative manager/partner checks through the
   actual deployed app. No owner-key backend, client-side row filtering,
   anonymous recall data, or raw-telemetry grant is an acceptable substitute.
