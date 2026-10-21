@@ -18,16 +18,38 @@ Activities.
 | Dependency | Required behavior | Status |
 |---|---|---|
 | Fabric workspace | Contains the Contoso Fresh workshop items | Exact name required |
-| Operational data source | `contoso_operations`, separate from the destination, exposes the seven committed current-state tables under `dbo` through its own SQL endpoint | Native source and all 1,990 rows verified; fresh Lab Profile provisioning still needs verification |
+| Operational data source | `contoso_operations_sql` SQL database, separate from the destination, mirrors seven canonical `dbo` tables plus an isolated training probe into its own OneLake SQL endpoint | Both source/mirror copies of all 1,990 records and actual insert/update/delete propagation verified; fresh Lab Profile provisioning still needs verification |
 | Target lakehouse | Accepts learner-created shortcuts and later module output | Exact name required |
 | SharePoint connection | Preconfigured for the Supplier Quality content | Exact name required |
 | SharePoint permissions | Learner can read the target library or folder | Consolidation account published and read back all seven source files in an isolated folder; connector access and fresh learner access remain unverified |
 | Module 2 notebook | Imported from `src/notebooks/module-2-shipment-history.ipynb`; see Module 2 configuration | Needs Studio verification |
 | Spark fallback data | `contoso_recall_fallback` supports read-only historical investigation during Spark session repair, without claiming the skipped technology exercises passed | Nine independent Delta tables and native recall checks verified; fresh-launch delivery and later-module handoff remain unverified; not a capacity-wide outage fallback |
 | Eventstream | Replays supplied truck telemetry | Needs Studio verification |
+| Authorized terminal | Existing Python 3.9+, Fabio with its working credential provider, repository checkout, supplied engineer identity, and instance-specific replay/pipeline bindings | Native replay and deployment paths verified; terminal delivery and identity isolation need Studio verification |
 | Security test identities | Separate reader-only North manager and CAR-02 partner accounts, without broader grants or access to the separate operational source | Identities and effective permissions require verification |
 | Rayfin starter | Runs in the supplied environment | Starter and deployment toolchain absent; native AppBackend item creation succeeded |
 | OneLake Read API | Available to the starter application | Needs Studio verification |
+
+## Exercise 1.1 configuration
+
+Provision **contoso_operations_sql** through the
+[native SQL source recipe](../../infra/README.md#provision-the-mirrored-sql-source).
+Use the canonical display name at creation; SQL database items cannot be
+renamed. Seed the seven typed tables from the committed CSVs and leave
+`workshop.mirroring_probe` empty in both source and mirror at launch.
+
+The learner must distinguish the transactional SQL database from its separate
+read-only SQL analytics endpoint, even when they have the same display name.
+Allow the engineer to perform the supplied probe DML, not the restricted test
+identities. Source/mirror access must not bypass later destination policies.
+Verify actual propagation of each action and timestamp; seeded rows and
+mirror metadata alone are insufficient. Reset clears only the instance's
+probe and confirms both sides empty; it does not rewrite recall facts.
+
+Native verification compared every column of all 1,990 reference rows through
+both surfaces, exercised insert/update/delete, and checked explicit wrong-state
+and transaction errors. The earlier CSV-only operational lakehouse remains an
+author query fallback, not a passing mirroring substitute.
 
 ## Exercise 1.2 configuration
 
@@ -58,10 +80,10 @@ the CSV. The Fabric connection and transformation are separate, outstanding
 checks, not implied by successful SharePoint publication.
 
 The [operational-source provisioning recipe](../../infra/README.md#operational-source)
-uses Fabio's native CSV upload/load operations. In the consolidation workspace,
-all seven typed Delta tables matched the committed data, and the exact learner
-inventory query returned nine stores against that separate endpoint. Keep
-the source and its staging files inaccessible to the restricted test identities.
+now creates and seeds native SQL for automatic OneLake mirroring. The exact
+learner inventory query returns nine stores through that mirror. Keep source,
+mirror, training schema, and any fallback/staging files inaccessible to the
+restricted test identities.
 
 ## Exercise 1.3 configuration
 
@@ -132,16 +154,21 @@ table and the results the data must produce.
   table creation took several minutes; the 30-second destination batch setting
   does not bound provisioning time.
 - The governed derived table `dbo.recall_temperature_status` is provisioned
-  and verified against all 13 analysis rows. It contains `lot_id` and
-  `analysis_time_utc` and is an author-refreshed snapshot, not an automatic
-  streaming result. Provision the author-owned **contoso_temperature_refresh**
-  Data Factory pipeline from the [parameterized template](../../infra/pipelines/temperature-refresh/pipeline-content.json).
-  Its [native refresh procedure](../../infra/README.md#native-pipeline-refresh)
-  must run after the intended replay, with actual output and timestamp
-  verification. Supply the instructor refresh handoff in both attendee paths;
-  do not give readers pipeline write access or raw-event grants to invoke it.
-  No automatic schedule is supplied. The native run and empty-input guard
-  passed in the author workspace, not yet in a fresh Lab Profile.
+  and verified against all 13 analysis rows in the author workspace. It contains
+  `lot_id` and `analysis_time_utc` and is a manually triggered snapshot, not an
+  automatic streaming result. Exercise 3.3 now has the engineer deploy
+  **contoso_temperature_refresh** using the
+  [template](../../infra/pipelines/temperature-refresh/pipeline-content.json)
+  and [binding utility](../../infra/pipelines/temperature-refresh/bind.py).
+  Supply those assets and terminal bindings; pipeline, candidate, and production
+  are absent in a fresh exercise and reused only through matching resume checks.
+  Preflight the native path separately as author before launch. The
+  [refresh procedure](../../infra/README.md#native-pipeline-refresh) also remains
+  an explicit instructor recovery path, not permission to mark a skipped
+  learner deployment complete. Do not give restricted readers pipeline write
+  access, candidate access, or raw-event grants. No schedule is supplied.
+  Native runs and the empty-input guard passed in the author workspace,
+  not yet through a fresh Lab Profile.
 - Separate North-store and CAR-02 row rules for the snapshot are deployed in
   the unassigned roles. Raw telemetry and staging files remain excluded.
   Application identity propagation and restricted-reader checks are still
@@ -225,8 +252,17 @@ Product behavior is described in:
 ## Tokens and variables
 
 The canonical learner path in `instructions/README.md` and `instructions/module-2/`
-currently contains no active `@lab.*` replacement tokens, variables, conditional
-displays, or text fields.
+currently contains no active Skillable `@lab.*` replacement tokens, conditional
+displays, or text fields. Its shell variables still require real terminal
+bindings; the absence of tokens does not provision them:
+
+| Shell binding | Producer and first availability | Consumers and resume rule |
+|---|---|---|
+| `WORKSPACE_ID`, `LAKEHOUSE_ID` | Lab provisioning, before Module 3 | Replay/deployment target the supplied instance's `contoso_fresh`, never the operational source or author validation workspace. |
+| `SQL_ENDPOINT_ID`, `SQL_ENDPOINT_HOST` | Destination lakehouse provisioning, before Exercise 3.3 | Bind that lakehouse's SQL endpoint ID and bare managed hostname. Check IDs again on resume; the source SQL database/mirror is a different endpoint. |
+| `EVENTSTREAM_ID`, `SOURCE_ID` | Eventstream provisioning, before replay | Resolve the supplied stream/inlet and confirm the destination is running. No credential-bearing connection response is stored. |
+| `PIPELINE_ID` | Learner item creation or verified resume in Exercise 3.3 | Reuse the matching workshop item and check active runs before rebinding. |
+| `OUTPUT_TABLE` | Learner, first candidate then production in Exercise 3.3 | Binding accepts only the two documented snapshot names. Do not add a general-purpose destination override. |
 
 The retained automotive contribution,
 `instructions/1-ingest-operational-data-from-sharepoint.md`, is not linked from

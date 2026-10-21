@@ -21,12 +21,12 @@ targets, not measured service guarantees:
 
 | By elapsed time | Checkpoint |
 |---|---|
-| 00:20 | Environment and supplied resources checked |
-| 01:10 | Operational investigation and supplier certificates complete |
-| 02:00 | Shipment-history exercises complete |
-| 02:10 | Ten-minute break complete |
-| 02:25 | Complete-recall telemetry and refreshed analysis checked |
-| 03:00 | Restricted-identity checks complete |
+| 00:15 | Environment and supplied resources checked |
+| 01:05 | Operational mirroring and supplier certificates complete |
+| 01:55 | Shipment-history exercises complete |
+| 02:05 | Ten-minute break complete |
+| 02:30 | Complete-recall telemetry and deployed refresh pipeline checked |
+| 03:05 | Restricted-identity checks complete |
 | 03:45 | Deployed console verified |
 | 04:00 | Recall evidence and handoff complete |
 
@@ -91,14 +91,15 @@ OneLake view without building a copy pipeline.
 Explore the supplied Contoso Fresh current-state data and identify the lots,
 products, suppliers, locations, and store inventory needed for the recall.
 
-1. Open the supplied operational data source, **contoso_operations**.
+1. Open the supplied **contoso_operations_sql** SQL database.
 1. Find lot **YG-2291** and identify its product and supplier.
 1. Find the store inventory records for that lot.
 1. Use the location records to identify each store's region.
 
 The current-state source contains seven tables: `suppliers`, `products`,
 `locations`, `carriers`, `trucks`, `lots`, and `store_inventory`. Keep its SQL
-analytics endpoint separate from the destination lakehouse's endpoint:
+analytics endpoint separate from both the transactional database and the
+destination lakehouse's endpoint:
 Module 2 creates its own Iceberg representation of the same reference data.
 Do not load current-state tables into the destination lakehouse's `dbo`
 schema manually.
@@ -114,9 +115,58 @@ contain orders or shipment records. In Module 2, you will use historical
 shipments to find every store that received the lot, including stores that no
 longer hold it.
 
-**Completion check:** You can locate the affected lot in the operational data
-and explain the difference between stock currently held and historical
-deliveries.
+### Observe changes arriving through mirroring
+
+The SQL database automatically replicates supported tables into OneLake as
+Delta data. Its separate **SQL analytics endpoint** queries that read-only
+mirror; it does not query the transactional source directly. Mirroring
+replicates data, unlike the zero-copy document pointer in the next exercise.
+
+Use only the supplied `workshop.mirroring_probe` training table. Do not change
+the seven recall tables, upload replacement files, or change the scenario clock.
+
+1. In the **SQL database** query editor, open
+   [the mirroring exercise SQL](../src/sql/mirroring-probe.sql). Run its default
+   `inspect` action. A fresh source returns zero probe rows.
+1. In the separate **contoso_operations_sql SQL analytics endpoint**, run:
+
+   ```sql
+   SELECT COUNT_BIG(*) AS probe_rows,
+       MAX(probe_value) AS probe_value,
+       MAX(changed_at_utc) AS changed_at_utc
+   FROM workshop.mirroring_probe
+   WHERE probe_id = 'PREL41-mirroring';
+   ```
+
+1. Before starting a fresh run, confirm both source and mirror return zero
+   rows, with null value and timestamp. If the source has value **1** or
+   **2**, resume that step instead of inserting again. If only the mirror
+   still has an old row, wait for deletion to arrive.
+1. In the source query, change only `@action` from `inspect` to `insert`
+   and run the whole batch once. Expect one row with value **1** and a
+   source-generated UTC timestamp.
+1. Repeat the read-only mirror query until its count, value, and timestamp
+   match the source. An old value or timestamp is not a completed step.
+1. Change the source action to `update`, run once, and observe value **2**
+   with the new matching timestamp in the mirror.
+1. Only after seeing that update, change the source action to `delete`,
+   run once, and observe zero rows and null value/timestamp in both places.
+   Leave the training table empty.
+
+Changes are asynchronous. If a state has not arrived within three minutes,
+keep the source result and notify the instructor rather than advancing or
+copying rows into the mirror. Do not turn mirroring off or reconfigure it;
+SQL database in Fabric manages this replication automatically. Source pause,
+capacity state, and workload can affect timing.
+
+On resume, value **1** means observe insert, then update and delete; value
+**2** means observe update, then delete. The supplied batch rejects duplicate
+inserts and out-of-order updates/deletes instead of silently changing a
+different state.
+
+**Completion check:** You can locate the affected lot, distinguish current
+stock from historical deliveries, and demonstrate source insert/update/delete
+arriving through the separate mirror without an ingestion or copy command.
 
 ## Exercise 1.2: Link supplier documents
 
@@ -251,7 +301,7 @@ shortcut remains available.
 Use the SQL analytics endpoint to join the operational data and identify stores
 that currently hold lot **YG-2291**.
 
-1. Open the SQL analytics endpoint of **contoso_operations**, the supplied operational source,
+1. Open the SQL analytics endpoint of **contoso_operations_sql**, the supplied operational source,
    not the destination lakehouse that Module 2 has yet to populate.
 1. Create a SQL query and run:
 
@@ -496,11 +546,8 @@ then expect **404 accepted messages**. Do not delete the original fixture.
    no-breach journeys**. SHP-209414 now has explicit readings in its formerly
    missing window; its longest hot interval is ten minutes. SHP-209416
    shares its truck's exactly-twenty-minute hot period and is not breached.
-1. Have the instructor run the supplied **contoso_temperature_refresh**
-   pipeline and verify the governed temperature snapshot before continuing
-   to the console. The [author refresh procedure](../infra/README.md#native-pipeline-refresh)
-   checks all thirteen results and the new analysis timestamp; a successful
-   replay or pipeline job alone does not establish fresh, correct output.
+1. Continue with Exercise 3.3 to deploy the guarded refresh pipeline and
+   verify the governed snapshot before continuing to the console.
 
 These are additional synthetic observations, not a fallback that assumes
 missing temperatures were safe. Without the supplement's actual persisted
@@ -509,6 +556,89 @@ records, preserve the original insufficient-data results.
 **Completion check:** Your investigation distinguishes a confirmed breach,
 no breach over a fully observed journey, and insufficient data. It does not
 silently label missing telemetry as compliant.
+
+## Exercise 3.3: Deploy the guarded refresh pipeline
+
+Use Data Factory to transform the persisted raw observations with the
+validated SQL and load a curated Delta snapshot. This is a real SQL-to-Delta
+Copy pipeline, not a live streaming view or a local CSV upload.
+
+Use the supplied engineer account and authorized terminal, with the existing
+Python 3.9+ and Fabio. The Lab Profile supplies `WORKSPACE_ID`, `LAKEHOUSE_ID`,
+`SQL_ENDPOINT_ID`, and `SQL_ENDPOINT_HOST`. These must identify
+**contoso_fresh and its SQL endpoint**, not the operational SQL database or
+its mirror. Do not install tools, choose a replacement runtime, or sign in
+with a personal account.
+
+1. Inspect the workspace for **contoso_temperature_refresh**. If it exists,
+   verify that it is this workshop's pipeline, with the guarded temperature
+   query and destination lakehouse. Reuse it only when those settings match.
+   Check that no earlier run is active before rebinding it.
+1. If it is absent, create it in the supplied workspace:
+
+   ```bash
+   fabio data-pipeline create \
+     --workspace "$WORKSPACE_ID" --name contoso_temperature_refresh \
+     --description "PREL41 guarded temperature snapshot refresh; no schedule"
+   ```
+
+1. Set `PIPELINE_ID` to that item's ID. Start with the isolated candidate:
+   `export OUTPUT_TABLE=recall_temperature_pipeline_candidate`.
+1. From the repository root, bind, deploy, run, and check the provided
+   definition:
+
+   ```bash
+   (
+     set -eu
+     definition_dir=$(mktemp -d)
+     trap 'rm -f "$definition_dir/pipeline-content.json" "$definition_dir/snapshot-checks.sql"; rmdir "$definition_dir"' EXIT
+     python3 infra/pipelines/temperature-refresh/bind.py \
+       --workspace "$WORKSPACE_ID" --lakehouse "$LAKEHOUSE_ID" \
+       --sql-endpoint "$SQL_ENDPOINT_ID" --sql-host "$SQL_ENDPOINT_HOST" \
+       --output-table "$OUTPUT_TABLE" \
+       --output "$definition_dir/pipeline-content.json"
+     fabio item validate-definition --type DataPipeline --dir "$definition_dir"
+     fabio data-pipeline update-definition \
+       --workspace "$WORKSPACE_ID" --id "$PIPELINE_ID" \
+       --file "$definition_dir/pipeline-content.json"
+     fabio data-pipeline run \
+       --workspace "$WORKSPACE_ID" --id "$PIPELINE_ID" \
+       --wait --timeout 600 --cancel-on-timeout
+     fabio sql-endpoint refresh-metadata \
+       --workspace "$WORKSPACE_ID" --id "$SQL_ENDPOINT_ID"
+     sed "s/dbo[.]recall_temperature_status/dbo.$OUTPUT_TABLE/g" \
+       src/sql/temperature-snapshot-checks.sql > "$definition_dir/snapshot-checks.sql"
+     fabio sql-endpoint query \
+       --workspace "$WORKSPACE_ID" --id "$SQL_ENDPOINT_ID" \
+       --sql @"$definition_dir/snapshot-checks.sql"
+   )
+   ```
+
+1. Inspect the pipeline's Copy activity: SQL source, guarded transformation
+   query, Delta sink, and overwrite behavior. Its source SQL and item IDs are
+   fixed at deployment, not editable run-time parameters.
+1. Confirm a **Completed** job and accepted candidate output: **13 shipments,
+   two breaches, eleven no-breach**, with an analysis timestamp inside that
+   job's recorded UTC start/end interval. The acceptance checks also validate
+   each shipment's readings, duration, coverage, history context, and schema.
+1. If the production table already exists, inspect its fourteen columns and
+   confirm that it is this workshop's derived snapshot, not an unrelated
+   authored table. Set `OUTPUT_TABLE=recall_temperature_status`, repeat the
+   same block, and verify the production result again.
+1. Keep the candidate as engineer-only validation evidence. Do not add it,
+   raw telemetry, or local deployment files to the manager or partner roles.
+   The Lab Profile reset owns cleanup of learner-created validation tables.
+
+SQL registration can lag a completed write. If the table is not registered,
+repeat metadata refresh and acceptance after registration; do not repeatedly
+start new writes. A failed or timed-out run can still have written rows:
+neither a job result alone nor correct-looking rows alone establish success.
+Inspect the actual job state before an explicit retry, keep its error, and
+require both a completed run and fresh accepted output.
+
+**Completion check:** You deployed the guarded Data Factory pipeline,
+validated a candidate, and promoted a verified production snapshot without
+copying a local CSV, bypassing source guards, or expanding reader permissions.
 
 ===
 
@@ -685,9 +815,17 @@ cached result or access token for a restricted account.
    partner only eight CAR-02 rows. Explicitly request an out-of-scope store
    or carrier and verify that no rows are returned.
 1. As either restricted identity, request `dbo.truck_temperature_events`
-   and the snapshot staging files. Neither may be readable. A missing raw
-   table is not a denial pass: have the engineer confirm that the resource
-   exists before testing access.
+   and `dbo.recall_temperature_pipeline_candidate`. Neither may be readable.
+   Have the engineer confirm both tables exist before testing access.
+   If the environment also retains snapshot staging files, test those
+   existing files; an absent file is not a denial pass.
+1. Try to open the separate **contoso_operations_sql** database and its
+   mirrored SQL endpoint as each restricted identity. Neither may provide
+   an unfiltered alternative to the destination's governed tables. Confirm
+   that the source, mirror, and `workshop.mirroring_probe` are inaccessible.
+   A successful query returning zero rows from the empty probe is not a
+   denial pass. The same exclusion applies to any supplied operational
+   query fallback.
 
 Allow up to five minutes for SQL analytics endpoint security synchronization
 after a policy change. Refresh the restricted session and repeat the checks.

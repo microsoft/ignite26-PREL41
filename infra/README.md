@@ -155,11 +155,84 @@ flow, which uses an already provisioned connection rather than author setup.
 
 ## Operational source
 
-Module 1 uses **contoso_operations**, a separate schema-enabled lakehouse
-containing seven managed Delta tables loaded from
+Module 1 uses **contoso_operations_sql**, a Fabric SQL database with automatic
+native mirroring into OneLake. Its separate SQL analytics endpoint reads the
+mirrored Delta data. Module 2 still owns the destination lakehouse's Iceberg
+tables; do not provision the operational source in that destination.
+
+### Provision the mirrored SQL source
+
+Choose the canonical name when creating the database: Fabric does not permit
+renaming SQL database items afterward.
+
+```bash
+fabio sql-database create \
+  --workspace "$WORKSPACE_ID" --name contoso_operations_sql \
+  --description "PREL41 operational source with automatic OneLake mirroring"
+```
+
+Set `SOURCE_SQL_DATABASE_ID` to its ID. Inspect the new item and verify that
+it is empty before executing the
+[typed bootstrap](../src/sql/operational-source-schema.sql). That batch rejects
+an existing user table or caller-owned transaction; it never drops tables.
+
+```bash
+fabio sql-database query \
+  --workspace "$WORKSPACE_ID" --id "$SOURCE_SQL_DATABASE_ID" \
+  --sql @src/sql/operational-source-schema.sql
+(
+  for table in suppliers products locations carriers trucks lots store_inventory; do
+    fabio sql-database import \
+      --workspace "$WORKSPACE_ID" --id "$SOURCE_SQL_DATABASE_ID" \
+      --file "data/reference/$table.csv" --table "$table" --no-create-table \
+      || exit 1
+  done
+)
+```
+
+Run the bootstrap and seed only once on that new source. On resume, compare
+existing schemas, keys, and every canonical value instead of blindly importing
+again. Primary keys reject duplicate imports. If loading stops partway,
+inspect the failed batch and actual rows; do not drop existing tables or
+rerun all inserts as a success-shaped recovery.
+
+The source has seven `dbo` reference tables and an isolated
+`workshop.mirroring_probe`. Keep the probe empty at launch. The latter exists
+only for real insert/update/delete replication checks; it must not change
+the fixed recall data or become part of the data agent's nine-table selection.
+
+Discover the generated **contoso_operations_sql** SQL analytics endpoint and
+bind its distinct ID as `SOURCE_SQL_ENDPOINT_ID`:
+
+```bash
+fabio sql-endpoint list --workspace "$WORKSPACE_ID" \
+  --query "[?displayName=='contoso_operations_sql'].{id:id,name:displayName}"
+```
+
+Verify all seven table counts below and compare every row/column against the
+CSV sources through both the transactional database and its mirrored endpoint.
+Then execute the [Exercise 1.1 probe](../instructions/README.md#observe-changes-arriving-through-mirroring)
+and the exact nine-store inventory query against the mirror. Observe each
+insert/update/delete before advancing, including matching timestamps, and
+finish with zero probe rows on both sides. Initial table registration can lag;
+metadata refresh is not ingestion and does not replace observing actual data.
+
+This is [automatic mirroring for SQL database in Fabric](https://learn.microsoft.com/fabric/database/sql/mirroring-overview),
+not setup of an external Azure SQL connection or a manual copy process.
+Do not stop or reconfigure SQL database mirroring. Source auto-pause, capacity
+state, and competing work can delay replication, so pre-warm and measure it in
+fresh Lab Profiles. Never grant restricted readers alternate access to this
+unfiltered source, its mirror, or the training schema.
+
+### Legacy CSV query-only fallback
+
+The earlier **contoso_operations** schema-enabled lakehouse contains seven
+managed Delta tables loaded from
 [the committed reference CSVs](../data/reference/). Module 2 writes its
-Iceberg tables to **contoso_fresh** instead. Do not use the destination
-lakehouse ID for this provisioning step.
+Iceberg tables to **contoso_fresh** instead. This older source can supply
+current-inventory answers during SQL source repair, but it does not prove
+mirroring or replace Exercise 1.1. Do not provision it as a second source by
+default in a fresh lab.
 
 In a new authorized workspace, create the operational source:
 
@@ -199,8 +272,8 @@ overwrite mode on existing or unrelated tables without explicit approval.
 Use ordinary SQL endpoint metadata refresh if a successfully loaded table
 is not registered; do not recreate the endpoint.
 
-The consolidation source passed complete, type-normalized row comparisons
-against all seven CSVs:
+Both the earlier Delta source and the native SQL source/mirror passed complete,
+type-normalized row comparisons against all seven CSVs:
 
 | Table | Rows |
 |---|---:|
@@ -420,7 +493,7 @@ complete-recall supplement supplies those observations.
 
 ### Native pipeline refresh
 
-The author-owned **contoso_temperature_refresh** Data Factory pipeline runs
+The engineer-owned **contoso_temperature_refresh** Data Factory pipeline runs
 the [guarded analysis](../src/sql/module-3-temperature-status.sql) against the
 lakehouse SQL endpoint and overwrites only the selected derived Delta table.
 It is manually triggered, with no schedule or automatic replay trigger.
@@ -431,9 +504,11 @@ literal query/destination settings and no run-time parameters. Starting a job
 must not be a way to change its SQL or redirect its writes. Inline Fabric linked
 services reference the supplied items; they are not an application identity connector.
 
-Provision and run this as the engineer. Do not grant learners write access to
-the pipeline or raw telemetry just to request a refresh. Before promotion,
-confirm that the production destination is this workshop's author-owned
+Provision and run this as the engineer. Exercise 3.3 uses the learner's supplied
+engineer account; author preflight is a separate run, not a completed learner
+exercise. Never grant restricted manager/partner identities pipeline write
+access or raw telemetry access just to request a refresh. Before promotion,
+confirm that the production destination is this workshop's derived
 snapshot, inspect its fourteen columns, and preserve its existing role paths.
 Never point this template at an unrelated table.
 
@@ -466,60 +541,11 @@ bind and deploy again rather than leaving the pipeline on an older query.
   PIPELINE_DEFINITION_DIR=$(mktemp -d) || exit 1
   trap 'rm -f "$PIPELINE_DEFINITION_DIR/pipeline-content.json" "$PIPELINE_DEFINITION_DIR/snapshot-checks.sql"; rmdir "$PIPELINE_DEFINITION_DIR"' EXIT
 
-  python3 - <<'PY'
-import json
-import os
-import re
-from pathlib import Path
-from uuid import UUID
-
-settings = {}
-for parameter, variable in (
-    ("workspace_id", "WORKSPACE_ID"),
-    ("lakehouse_id", "LAKEHOUSE_ID"),
-    ("sql_endpoint_id", "SQL_ENDPOINT_ID"),
-):
-    value = os.environ.get(variable, "").strip()
-    try:
-        identifier = UUID(value)
-    except ValueError:
-        raise SystemExit(f"{variable} must be a nonzero UUID.")
-    if not identifier.int:
-        raise SystemExit(f"{variable} must be a nonzero UUID.")
-    settings[parameter] = str(identifier)
-
-host = os.environ.get("SQL_ENDPOINT_HOST", "").strip()
-if not re.fullmatch(r"[a-z0-9-]+\.datawarehouse\.fabric\.microsoft\.com", host):
-    raise SystemExit("SQL_ENDPOINT_HOST must be a bare managed Fabric SQL hostname.")
-output = os.environ["OUTPUT_TABLE"]
-if output not in {"recall_temperature_pipeline_candidate", "recall_temperature_status"}:
-    raise SystemExit("OUTPUT_TABLE must be the candidate or production temperature snapshot.")
-settings.update(
-    sql_endpoint_host=host,
-    output_table=output,
-    analysis_sql=Path("src/sql/module-3-temperature-status.sql").read_text(encoding="utf-8"),
-)
-template = Path("infra/pipelines/temperature-refresh/pipeline-content.json")
-definition = json.loads(template.read_text(encoding="utf-8"))
-activity = definition["properties"]["activities"][0]["typeProperties"]
-source = activity["source"]
-source["sqlReaderQuery"] = settings["analysis_sql"]
-source["datasetSettings"]["linkedService"]["properties"]["typeProperties"].update(
-    endpoint=settings["sql_endpoint_host"],
-    artifactId=settings["sql_endpoint_id"],
-    workspaceId=settings["workspace_id"],
-)
-sink = activity["sink"]
-sink["datasetSettings"]["typeProperties"]["table"] = output
-sink["datasetSettings"]["linkedService"]["properties"]["typeProperties"].update(
-    artifactId=settings["lakehouse_id"],
-    workspaceId=settings["workspace_id"],
-)
-target = Path(os.environ["PIPELINE_DEFINITION_DIR"]) / "pipeline-content.json"
-with target.open("x", encoding="utf-8") as handle:
-    json.dump(definition, handle, indent=2)
-    handle.write("\n")
-PY
+  python3 infra/pipelines/temperature-refresh/bind.py \
+    --workspace "$WORKSPACE_ID" --lakehouse "$LAKEHOUSE_ID" \
+    --sql-endpoint "$SQL_ENDPOINT_ID" --sql-host "$SQL_ENDPOINT_HOST" \
+    --output-table "$OUTPUT_TABLE" \
+    --output "$PIPELINE_DEFINITION_DIR/pipeline-content.json"
 
   fabio item validate-definition --type DataPipeline --dir "$PIPELINE_DEFINITION_DIR"
   fabio data-pipeline update-definition \
@@ -527,7 +553,7 @@ PY
     --file "$PIPELINE_DEFINITION_DIR/pipeline-content.json"
   fabio data-pipeline run \
     --workspace "$WORKSPACE_ID" --id "$PIPELINE_ID" \
-    --wait --timeout 300 --cancel-on-timeout
+    --wait --timeout 600 --cancel-on-timeout
   fabio sql-endpoint refresh-metadata \
     --workspace "$WORKSPACE_ID" --id "$SQL_ENDPOINT_ID"
   sed "s/dbo[.]recall_temperature_status/dbo.$OUTPUT_TABLE/g" \
@@ -594,7 +620,8 @@ and rerun production acceptance. Never delete production to reset a probe.
 
 ### Create or refresh an author-owned snapshot
 
-Use the destination lakehouse and its SQL endpoint, not **contoso_operations**.
+Use the destination lakehouse and its SQL endpoint, not **contoso_operations_sql**
+or its mirror.
 Before first creation, confirm that no authored table exists at
 `dbo.recall_temperature_status`. On refresh, confirm it is this workshop's
 snapshot and inspect its current schema. Never overwrite an unrelated table.

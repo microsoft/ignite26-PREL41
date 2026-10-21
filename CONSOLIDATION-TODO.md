@@ -58,8 +58,9 @@ the account, and its Admin role and capacity assignment were verified:
 | Telemetry Eventstream | contoso_truck_telemetry, 27712fbe-9867-4894-8f6e-019c0bb53edb |
 | Telemetry destination | dbo.truck_temperature_events, managed Delta |
 | Recall Console item | contoso_recall_console, 451acf30-8346-491b-aba6-b7ab95ddc71c; AppBackend metadata only |
-| Operational source | contoso_operations, aad9a5d8-7742-41b3-befa-84f34be2a46c |
-| Operational SQL endpoint | 37b5c6b2-da51-4d64-9195-02d563ab09b6; separate from Module 2 |
+| Operational SQL database | contoso_operations_sql, 8bdf621c-b02f-4b1e-b85a-bb83cfca03e7 |
+| Operational mirrored SQL endpoint | a844c4ff-f4e2-4f4b-be20-7368d2fa604a; separate from Module 2 |
+| Legacy operational query fallback | contoso_operations, aad9a5d8-7742-41b3-befa-84f34be2a46c; endpoint 37b5c6b2-da51-4d64-9195-02d563ab09b6 |
 | Spark-recovery data | contoso_recall_fallback, 36ab1f02-106b-4266-a68d-e49ed78a5e7e |
 | Fallback SQL endpoint | 57210129-b6ad-4fb4-a409-832d5616d68a |
 
@@ -177,9 +178,9 @@ stores. No restricted-identity pass is claimed.
 - [x] Document a 240-minute core run of show, learner checkpoints, and optional
   extensions outside that allowance.
 - [ ] Measure and confirm the four-hour core path in a fresh learner instance.
-- [ ] Reconcile the authored session-description promise of mirroring and
-  ETL/ELT pipeline work with the canonical path, which has no such learner
-  exercises. Do not count CSV shortcut transformation as those features.
+- [x] Reconcile the authored session-description promise with actual native SQL
+  mirroring in Exercise 1.1 and learner-deployed SQL-to-Delta Copy in Exercise 3.3.
+  Neither CSV shortcut transformation nor seeded rows alone count as mirroring.
 
 ## Phase 2: Complete all learner modules
 
@@ -189,6 +190,11 @@ stores. No restricted-identity pass is claimed.
   transformations, completion checks, and downstream handoff.
 - [x] Provision the separate seven-table operational source with native Fabio
   CSV loads, compare all 1,990 rows/columns, and run the exact learner inventory query.
+- [x] Promote the operational source to a correctly named native SQL database;
+  compare every column in both source and mirror, observe actual probe
+  insert/update/delete propagation, and verify state/transaction/read-only guards.
+- [x] Execute the exact new Exercise 3.3 binding utility and learner block for
+  candidate and production, including strict output/job-interval checks.
 - [ ] Module 2: historical-data generation, Iceberg writes and row changes,
   snapshots, REST catalog, DuckDB tracing, AI Functions, and data agent.
 - [ ] Module 3: supplied/replayable telemetry, Eventstream path, the
@@ -432,8 +438,8 @@ restored before promotion.
 Initial promotion job `d60f7d00-f1fb-4738-b181-7d0a93af75a1` completed in
 **46.84 seconds**. The final fixed-binding job
 `3e9504a9-bb7c-4101-aef5-cce6aaea67d6` completed in **63.95 seconds**.
-The persisted analysis timestamp is now
-`2026-10-21T00:32:30.198646Z`, inside that job's interval. The new
+That run persisted analysis timestamp
+`2026-10-21T00:32:30.198646Z`, inside its job interval. The new
 [acceptance batch](src/sql/temperature-snapshot-checks.sql) passed against
 both the previous baseline and refreshed production: all thirteen shipment
 results, exact durations and reading counts, two breaches, eleven no-breach,
@@ -443,10 +449,11 @@ remained 509; owner dataset scopes remained eight North and eight CAR-02.
 Policy read-back retained empty reader memberships and DefaultReader
 semantics. These remain owner checks, not effective-reader tests.
 
-No schedule was created. A replay still requires an explicit instructor
-refresh and verification. This implements a real author-owned Copy pipeline,
-not mirroring, a learner-built ETL exercise, automatic streaming freshness,
-or Skillable delivery.
+No schedule was created. That milestone provided an explicit author refresh
+and verification path, not a learner deployment exercise or mirroring.
+The subsequent native mirroring work and Exercise 3.3 now supply those
+distinct features; neither establishes automatic streaming freshness or
+Skillable delivery.
 
 The author-created one-row probe and thirteen-row candidate were removed
 using their exact inspected `Tables/dbo/...` paths. SQL metadata confirmed
@@ -499,7 +506,7 @@ with two breaches and eight CAR-02 rows with one breach. Actual restricted
 identity tests remain outstanding. The Eventstream destination was confirmed
 **Paused** after this completed validation; resume it before further replay.
 
-### Separate operational-source evidence
+### Legacy operational query-source evidence
 
 Fabio created the schema-enabled **contoso_operations** lakehouse and loaded
 the seven committed reference CSVs through native `upload-table` operations.
@@ -513,10 +520,72 @@ The exact Exercise 1.4 query then ran against this separate source endpoint
 and returned nine current stores, eight North and one East, with the documented
 IDs and positive quantities. No Module 2 table was loaded or overwritten by
 these source-provisioning operations. The
-[native recipe](infra/README.md#operational-source) documents new-source
-creation, resume safeguards, and restricted-identity exclusions. SharePoint
-content, certificate transformation, and a fresh Skillable launch remain
-separate outstanding checks.
+[legacy recipe](infra/README.md#legacy-csv-query-only-fallback) preserves this
+query-only fallback. It is not the canonical mirroring source. SharePoint
+connector setup, certificate transformation, and a fresh Skillable launch
+remain separate outstanding checks.
+
+### Native operational mirroring
+
+The canonical **contoso_operations_sql** database now contains the seven
+typed reference tables plus an isolated, empty `workshop.mirroring_probe`.
+All **1,990 records and every column** matched the committed CSVs through
+both the transactional source and its separate automatically mirrored SQL
+endpoint. The exact current-inventory query returned nine stores: eight North,
+one East. No destination recall table was modified.
+
+Native source insert, update, and delete were each observed in the mirror
+with matching values and timestamps. Canonical observations took at most
+95.684, 51.568, and 45.473 seconds from their respective write-call starts;
+these include validation/registration overhead, not replication SLAs.
+The probe finished empty on both surfaces. Wrong-state/invalid-action
+errors 50211-50214 left no transaction open; caller-transaction error 50210
+preserved the caller's transaction. Bootstrap rejected a nonempty database
+with 50201. A write against the mirror raised engine error 24559,
+**DML statements are not supported for this table type**.
+
+The first validation database could not be renamed: Fabric returned
+`SQLDatabaseDisplayNameCannotBeChanged`. The canonical source was therefore
+created with its final name and the full validation repeated. The isolated
+`contoso_operations_sql_validation` prototype is not a learner resource.
+It was removed using recoverable native deletion of its exact item ID;
+the subsequent inventory contained only the canonical database and mirror.
+Both retained 1,990 reference rows and an empty probe after cleanup.
+Restricted reader identities must receive no source, mirror, probe, or fallback
+access. Exercise 1.1 now guides the real lifecycle; fresh launch, resume,
+reset, concurrency, and timing still require Skillable validation.
+
+### Learner pipeline deployment
+
+The reusable [binding utility](infra/pipelines/temperature-refresh/bind.py)
+and the exact Exercise 3.3 shell block now passed native candidate and
+production execution through the requested engineer account. Candidate job
+`4617ca16-b2cb-40f9-9cab-0c633d4813f7` completed in **62.30 seconds**;
+production job `036c35be-5115-43fe-8f48-cb7d5206227b` completed in
+**50.69 seconds**. Both definitions passed validation with no findings.
+
+Strict acceptance returned **13 shipments, two breaches, eleven no-breach**
+for each table. Candidate timestamp `2026-10-21T01:22:10.753593Z` and current
+production timestamp `2026-10-21T01:24:23.895502Z` lie strictly inside their
+respective completed job intervals. Native bidirectional `EXCEPT` found zero
+differences across all thirteen non-refresh-time fields. Raw telemetry
+remained 509 rows; owner row scopes remained eight North/eight CAR-02.
+
+The candidate is intentionally retained as engineer-only evidence for the
+new learner exercise and denied-access checks. Production remains the fixed
+pipeline destination; the saved SQL digest is unchanged and there are no
+run-time parameters or schedules. Both restricted role definitions still
+match the committed policies, with empty memberships and unchanged
+DefaultReader semantics. This is not effective-reader evidence.
+
+The terminal must retain its configured credential provider. An initial
+author validation shell omitted Azure CLI from `PATH` and correctly failed
+with `AUTH_REQUIRED` before changing the definition. Preserving the existing
+environment resolved that harness error without changing the account.
+Python syntax/diagnostics and binding rejection cases passed. Focused content
+checks covered 23 Markdown files, 104 local targets, 24 fragments, 21 Bash
+blocks, exactly three outcomes, and matching eight-interval/checkpoint
+240-minute schedules. Actual fresh-instance completion time remains unmeasured.
 
 ### Independent historical fallback
 

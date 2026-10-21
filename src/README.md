@@ -1,5 +1,11 @@
 # Source
 
+- [Operational SQL schema](sql/operational-source-schema.sql) bootstraps only a
+  new, empty Fabric SQL source with seven typed canonical tables and an isolated
+  mirroring training table. It does not seed or overwrite existing records.
+- [Mirroring exercise](sql/mirroring-probe.sql) defaults to read-only inspection.
+  Its explicit insert/update/delete actions affect only the training probe,
+  reject out-of-order state changes, and preserve caller transaction ownership.
 - [Module 2 notebook](notebooks/module-2-shipment-history.ipynb) generates
   reference and historical data and guides Iceberg, SQL, AI, and data-agent
   exercises.
