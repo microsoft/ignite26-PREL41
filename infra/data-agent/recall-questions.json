@@ -1,0 +1,14 @@
+[
+  {
+    "question": "Which stores currently hold lot YG-2291?",
+    "expected": "9 stores"
+  },
+  {
+    "question": "How many stores received lot YG-2291? List every distinct store ID.",
+    "expected": "13 stores"
+  },
+  {
+    "question": "Which stores currently hold lot PREL41-NOT-A-LOT?",
+    "expected": "0 stores"
+  }
+]

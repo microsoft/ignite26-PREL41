@@ -1,0 +1,19 @@
+CONTOSO FRESH SUPPLIER QUALITY CERTIFICATE
+
+Certificate ID: CERT-2026-008
+Supplier ID: SUP-008
+Supplier name: Fabrikam Produce Partners
+Certification: GLOBALG.A.P. Integrated Farm Assurance
+Certificate number: GGN-4049929000087
+Certifying body: Contoso Quality Assurance Services
+Issued date: 2026-02-15
+Expiration date: 2027-02-14
+Status: Active
+Audit score: 93
+Product scope: Fresh produce
+
+The certifying body confirms that the supplier quality system met the stated
+certification requirements on the issue date. Continued approval depends on
+maintaining the certified controls and reporting material changes.
+
+This is synthetic workshop content and is not a real certification record.

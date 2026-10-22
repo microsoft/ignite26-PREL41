@@ -39,37 +39,134 @@ Learn how to connect, ingest, mirror, and virtualize data across your organizati
 
 ### 🚀 Getting started
 
+#### For the current Fabric author review
+
+The owner is reviewing the lab directly in the
+[selected 2612 Fabric workspace](https://app.powerbi.com/groups/68713569-71b7-43bf-a61e-aa71b60381da/list?experience=power-bi).
+Skillable provisioning follows approval of that Fabric lab.
+Use the [current resource inventory and evidence](CONSOLIDATION-TODO.md#current-fabric-destination),
+[author setup and recovery procedures](infra/README.md), and
+[test matrix](docs/authoring/test-matrix.md). Inspect existing state before
+resuming; do not bootstrap over the supplied source or regenerate authored
+tables. The attendee paths below describe the intended later delivery, not a
+claim that all integrations have passed.
+
 #### In a guided session
 
 If you're following along during a live session:
 
-1. Step 1
-2. Step 2
-3. Open [`instructions/`](instructions/README.md) when this session includes
-   attendee step-by-step guidance
+1. Open the supplied Skillable lab and sign in with its supplied account.
+   Open the pre-provisioned Contoso Fresh Fabric workspace.
+2. Open the [workshop instructions](instructions/README.md) and complete
+   **Prepare your environment**. Locate the supplied Fabric SQL database
+   operational source and its mirrored OneLake SQL endpoint, lakehouse,
+   Module 2 notebook, and SharePoint connection; confirm that the telemetry
+   replay, guarded temperature Copy pipeline deployment template, existing
+   authorized terminal, restricted test identities, and Recall Console starter
+   are available for later modules.
+3. Follow the instructor's checkpoints through the Contoso Fresh recall
+   investigation for lot **YG-2291**. Use each exercise's completion check
+   before moving to the next module.
 
 #### On your own
 
 If you're learning at your own pace:
 
-1. Clone this repository
-2. Set up your environment
-3. Follow the session guidance in [`instructions/`](instructions/README.md), or
-   use the linked docs-site entry point when this repository uses that pattern
+1. Open your supplied Skillable lab and sign in with its supplied account.
+   Self-paced delivery requires the same pre-provisioned environment as the
+   guided session; cloning this repository does not provide a runnable lab.
+2. Start at [the workshop instructions](instructions/README.md), complete
+   **Prepare your environment**, and review the five recall questions for
+   lot **YG-2291**. Locate the supplied mirrored operational source and use
+   only the lab's existing authorized terminal for steps that require it.
+3. Work through the modules in order and complete each observable check before
+   continuing. When resuming an exercise, inspect its existing state as
+   directed rather than creating duplicate resources.
+
+### Workshop path and scope
+
+Use the [canonical workshop instructions](instructions/README.md) for both
+guided and self-paced delivery. Use only the accounts, connections, and
+resources supplied in the Skillable lab. If a required item, identity, or
+connection is missing, stop and notify the instructor or lab support; do not
+create personal replacements, additional capacities, tenants, or external
+accounts.
+
+This path uses a pre-provisioned SQL database in Fabric with automatic
+mirroring into OneLake, SharePoint document shortcuts and CSV transformation,
+Iceberg shipment history, Eventstream telemetry, OneLake governance, and
+Fabric Apps. The mirroring exercise investigates native SQL database-in-Fabric
+replication; it does not configure an external SQL or third-party source.
+In Exercise 3.3, the engineer deploys and runs the guarded Data Factory
+temperature Copy pipeline from the supplied deployment template. Deployment
+binds the source SQL, resource IDs, and target; the pipeline accepts no runtime
+query or target overrides. This is a learner pipeline deployment, not only
+an instructor refresh.
+
+Native validation matched every column of all **1,990 canonical current-state
+records** in both the source database and mirrored OneLake SQL endpoint to
+the committed CSVs. A separate probe demonstrated automatic insert, update,
+and delete replication with matching source timestamps, then returned to an
+empty state without changing canonical recall rows. The guarded temperature
+Copy pipeline has also been verified natively; these checks do not establish
+end-to-end workshop readiness.
+
+The target duration is **240 minutes**, including a 10-minute break; this is a
+planning target, not a measured completion time. End-to-end readiness remains
+under validation. Full-workshop runtime behavior and completion time,
+restricted-identity access, and the deployed Recall Console's governed data
+path have not been confirmed as passed. Follow the completion checks and record
+any skipped exercise rather than treating it as completed. Module 2 stays on
+the supplied notebook and dataset; it has no alternate-data completion path.
+
+The author workspace now also has a working SharePoint connection and document
+shortcut: all seven source files match the repository, and the native CSV
+transformation produced all four certificate records with matching source
+fields and no corrupt rows. This does not establish fresh learner access.
+
+The current author review is a Fabric deployment in the owner's selected
+workspace. Skillable provisioning, preview, resume, and reset checks are a
+separate phase after the owner approves the working Fabric lab; they are not
+prerequisites for continuing the Fabric deployment.
+
+The Module 2 contributor reports successful DuckDB and data-agent SDK runs,
+including the session-local `%pip` setup in cells 16 and 24. The independent
+selected-workspace validation has not replayed those paths; package absence
+before the install cells is expected, not evidence of a broken exercise.
+The actual Rayfin application, effective restricted-identity access, and
+the final integrated adversarial review remain unverified or incomplete.
+The [consolidation ledger](CONSOLIDATION-TODO.md#current-fabric-destination)
+records the current destination and its actual native results separately
+from earlier isolated-workspace evidence.
 
 ### 🎯 Learning outcomes
 
 By the end of this session, you will be able to:
 
-- Outcome 1
-- Outcome 2
-- Outcome 3
+- Unify operational and reference data in OneLake using automatic SQL
+  database-in-Fabric mirroring, SharePoint document shortcuts, and CSV
+  certificate-metadata transformation to support the Contoso Fresh recall
+  investigation.
+- Investigate five-year Iceberg shipment history with Spark, DuckDB, AI
+  Functions, and a data agent, and combine it with streaming cold-chain
+  signals to identify temperature breaches and deploy and run the supplied
+  guarded Data Factory temperature Copy pipeline.
+- Apply OneLake row and column security, then use the governed Recall Console
+  to investigate inventory, shipments, temperature status, and supplier
+  documents with the supplied restricted identities.
 
 ### 💻 Technologies used
 
-- Technology 1
-- Technology 2
-- Technology 3
+- **Data estate:** SQL database in Microsoft Fabric with automatic OneLake
+  mirroring, OneLake, lakehouse, and SQL analytics endpoint.
+- **Historical analysis:** Apache Spark, Apache Iceberg, and DuckDB.
+- **Supplier documents:** SharePoint document shortcuts and CSV transformation.
+- **Streaming telemetry:** Microsoft Fabric Eventstream.
+- **Temperature pipeline:** Data Factory in Microsoft Fabric, using the
+  supplied guarded Copy pipeline deployment template.
+- **Governance:** OneLake Security for row and column access.
+- **Recall application:** Fabric Apps (preview), built on Rayfin, and the OneLake Read API.
+- **AI-assisted investigation:** Microsoft Fabric AI Functions and data agent.
 
 ### 📚 Continue your learning
 

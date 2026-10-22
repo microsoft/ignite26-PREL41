@@ -1,0 +1,25 @@
+product_id,product_name,supplier_id,category,pack_size,shelf_life_days,max_storage_c
+PRD-001,Contoso Fresh Baby Spinach 200 g,SUP-008,Salad,200 g,6,4
+PRD-002,Contoso Fresh Mixed Salad Leaves 150 g,SUP-008,Salad,150 g,6,4
+PRD-003,Contoso Fresh Cherry Tomatoes 250 g,SUP-008,Vegetables,250 g,9,8
+PRD-004,Contoso Fresh Strawberries 400 g,SUP-008,Fruit,400 g,5,4
+PRD-005,Contoso Fresh Ripe Avocados 2 pack,SUP-008,Fruit,2 pack,7,8
+PRD-006,Contoso Fresh Basil 30 g,SUP-008,Herbs,30 g,7,8
+PRD-007,Contoso Fresh Greek Yogurt 500 g,SUP-014,Yogurt,500 g,28,4
+PRD-008,Contoso Fresh Natural Yogurt 1 kg,SUP-014,Yogurt,1 kg,28,4
+PRD-009,Contoso Fresh Strawberry Yogurt 4 x 125 g,SUP-014,Yogurt,4 x 125 g,24,4
+PRD-010,Contoso Fresh Kefir 1 L,SUP-014,Cultured dairy,1 L,21,4
+PRD-011,Contoso Fresh Fromage Blanc 500 g,SUP-014,Cultured dairy,500 g,21,4
+PRD-012,Contoso Fresh Sour Cream 200 ml,SUP-014,Cultured dairy,200 ml,30,4
+PRD-013,Contoso Fresh Beef Lasagne 400 g,SUP-021,Frozen meals,400 g,180,-18
+PRD-014,Contoso Fresh Vegetable Curry 350 g,SUP-021,Frozen meals,350 g,180,-18
+PRD-015,Contoso Fresh Fish Pie 400 g,SUP-021,Frozen meals,400 g,180,-18
+PRD-016,Contoso Fresh Margherita Pizza 350 g,SUP-021,Frozen pizza,350 g,180,-18
+PRD-017,Contoso Fresh Vegetable Spring Rolls 12 pack,SUP-021,Frozen snacks,12 pack,180,-18
+PRD-018,Contoso Fresh Chicken Stir-Fry 500 g,SUP-021,Frozen meals,500 g,180,-18
+PRD-019,Contoso Fresh Mozzarella 125 g,SUP-027,Cheese,125 g,21,4
+PRD-020,Contoso Fresh Mature Cheddar 400 g,SUP-027,Cheese,400 g,120,4
+PRD-021,Contoso Fresh Brie 200 g,SUP-027,Cheese,200 g,35,4
+PRD-022,Contoso Fresh Grated Parmesan 100 g,SUP-027,Cheese,100 g,60,4
+PRD-023,Contoso Fresh Unsalted Butter 250 g,SUP-027,Butter and cream,250 g,60,4
+PRD-024,Contoso Fresh Double Cream 300 ml,SUP-027,Butter and cream,300 ml,14,4

@@ -1,0 +1,41 @@
+truck_id,carrier_id,home_dc_id,reefer_model
+TRK-001,CAR-01,DC-01,Litware CoolRun 1200
+TRK-002,CAR-01,DC-01,Lamna FrostLine 900
+TRK-003,CAR-01,DC-01,Lamna FrostLine 900
+TRK-004,CAR-01,DC-01,Lamna FrostLine 900
+TRK-005,CAR-01,DC-01,Litware CoolRun 1500 MT
+TRK-006,CAR-01,DC-01,Lamna FrostLine 900
+TRK-007,CAR-02,DC-01,Litware CoolRun 1200
+TRK-008,CAR-02,DC-01,Litware CoolRun 1200
+TRK-009,CAR-02,DC-01,Lamna FrostLine 900
+TRK-010,CAR-02,DC-01,Lamna FrostLine 900
+TRK-011,CAR-02,DC-01,Litware CoolRun 1200
+TRK-012,CAR-04,DC-01,Litware CoolRun 1500 MT
+TRK-013,CAR-04,DC-01,Lamna FrostLine 900
+TRK-014,CAR-04,DC-01,Litware CoolRun 1200
+TRK-015,CAR-01,DC-02,Litware CoolRun 1500 MT
+TRK-016,CAR-01,DC-02,Lamna FrostLine 900
+TRK-017,CAR-01,DC-02,Litware CoolRun 1200
+TRK-018,CAR-01,DC-02,Litware CoolRun 1500 MT
+TRK-019,CAR-01,DC-02,Lamna FrostLine 900
+TRK-020,CAR-01,DC-02,Litware CoolRun 1200
+TRK-021,CAR-02,DC-02,Litware CoolRun 1200
+TRK-022,CAR-02,DC-02,Lamna FrostLine 900
+TRK-023,CAR-02,DC-02,Litware CoolRun 1500 MT
+TRK-024,CAR-02,DC-02,Lamna FrostLine 900
+TRK-025,CAR-02,DC-02,Litware CoolRun 1500 MT
+TRK-026,CAR-03,DC-02,Litware CoolRun 1200
+TRK-027,CAR-03,DC-02,Litware CoolRun 1500 MT
+TRK-028,CAR-03,DC-02,Litware CoolRun 1500 MT
+TRK-029,CAR-03,DC-02,Litware CoolRun 1500 MT
+TRK-030,CAR-01,DC-03,Litware CoolRun 1500 MT
+TRK-031,CAR-01,DC-03,Litware CoolRun 1200
+TRK-032,CAR-01,DC-03,Litware CoolRun 1200
+TRK-033,CAR-01,DC-03,Litware CoolRun 1500 MT
+TRK-034,CAR-03,DC-03,Litware CoolRun 1200
+TRK-035,CAR-03,DC-03,Lamna FrostLine 900
+TRK-036,CAR-03,DC-03,Lamna FrostLine 900
+TRK-037,CAR-03,DC-03,Lamna FrostLine 900
+TRK-038,CAR-04,DC-03,Litware CoolRun 1500 MT
+TRK-039,CAR-04,DC-03,Litware CoolRun 1500 MT
+TRK-040,CAR-04,DC-03,Litware CoolRun 1200

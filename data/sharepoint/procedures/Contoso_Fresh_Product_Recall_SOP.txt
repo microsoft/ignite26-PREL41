@@ -1,0 +1,85 @@
+CONTOSO FRESH PRODUCT RECALL STANDARD OPERATING PROCEDURE
+
+Document ID: CF-QA-SOP-004
+Version: 3.2
+Effective date: 2026-07-01
+Owner: Supplier Quality and Food Safety
+Classification: Internal workshop content
+
+1. Purpose
+
+This procedure defines how Contoso Fresh investigates a supplier quality
+notice, identifies affected inventory and shipments, and provides governed
+recall information to authorized users.
+
+2. Recall objectives
+
+The recall team must answer these questions:
+
+1. Which stores currently hold the affected lot?
+2. Which historical lots are related to the supplier batch window?
+3. Which trucks carried the affected lots?
+4. Did any affected shipment exceed the cold-chain threshold?
+5. Is the supplier certification current?
+6. Which users are authorized to view each result?
+
+3. Roles
+
+Incident lead
+Coordinates the investigation and approves status updates.
+
+Data and analytics engineer
+Unifies the required data, validates joins, and publishes the recall console.
+
+Supplier quality lead
+Reviews supplier notices, certificates, and corrective actions.
+
+Regional manager
+Reviews affected inventory and shipments for an assigned region.
+
+Logistics partner
+Reviews only the partner's shipments and cannot view supplier cost data.
+
+4. Required data sources
+
+- Operational orders, shipments, and store inventory.
+- Five years of shipment and lot history.
+- Truck temperature telemetry.
+- Supplier quality certificates and recall notices.
+- User and role assignments for governed access.
+
+5. Investigation procedure
+
+1. Record the supplier ID, product, lot, and production window from the notice.
+2. Place the affected lot on hold in the operational process.
+3. Query current inventory to identify stores holding the affected lot.
+4. Trace shipments and trucks associated with the lot.
+5. Compare telemetry with the cold-chain threshold.
+6. Review the supplier certificate status and expiration date.
+7. Identify related lots from the same supplier batch window.
+8. Apply regional and partner access restrictions.
+9. Publish the validated results in the recall console.
+10. Record the final disposition after the supplier investigation is complete.
+
+6. Cold-chain threshold
+
+For this workshop scenario, flag a shipment when recorded temperature remains
+above 4 C for more than 20 minutes.
+
+7. Access rules
+
+- Regional managers can view only stores and shipments in their region.
+- Logistics partners can view only their shipments.
+- Supplier cost data is hidden from logistics partners.
+- Supplier quality staff can review certificate and notice documents.
+
+8. Completion criteria
+
+The investigation is ready for management review when the recall console:
+
+- Identifies affected stores and related shipments.
+- Shows the temperature status for each affected shipment.
+- Links to the supplier notice and certification evidence.
+- Returns only the data authorized for the signed-in role.
+
+This is fictional workshop content and is not operational food-safety guidance.

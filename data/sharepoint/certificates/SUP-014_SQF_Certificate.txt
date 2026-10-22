@@ -1,0 +1,22 @@
+CONTOSO FRESH SUPPLIER QUALITY CERTIFICATE
+
+Certificate ID: CERT-2026-014
+Supplier ID: SUP-014
+Supplier name: Alpine Valley Dairy Cooperative
+Certification: SQF Food Safety Code
+Certificate number: SQF-AVD-2026-0412
+Certifying body: Contoso Quality Assurance Services
+Issued date: 2026-03-01
+Expiration date: 2027-02-28
+Status: Active
+Audit score: 96
+Product scope: Cultured dairy products
+
+The certifying body confirms that the supplier quality system met the stated
+certification requirements on the issue date. Continued approval depends on
+maintaining the certified controls and reporting material changes.
+
+This certificate applies to the supplier associated with yogurt lot YG-2291.
+Certification status does not replace the recall investigation.
+
+This is synthetic workshop content and is not a real certification record.

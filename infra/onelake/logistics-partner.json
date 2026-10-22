@@ -1,0 +1,75 @@
+{
+  "name": "LogisticsPartner",
+  "kind": "Policy",
+  "decisionRules": [
+    {
+      "effect": "Permit",
+      "permission": [
+        {
+          "attributeName": "Path",
+          "attributeValueIncludedIn": [
+            "/Tables/history/shipment_history",
+            "/Tables/dbo/recall_temperature_status",
+            "/Tables/dbo/carriers",
+            "/Tables/dbo/trucks",
+            "/Tables/dbo/products",
+            "/Tables/dbo/locations",
+            "/Tables/dbo/supplier_certificates",
+            "/Files/SupplierQuality"
+          ]
+        },
+        {
+          "attributeName": "Action",
+          "attributeValueIncludedIn": ["Read"]
+        }
+      ],
+      "constraints": {
+        "rows": [
+          {
+            "tablePath": "/Tables/history/shipment_history",
+            "value": "SELECT * FROM history.shipment_history WHERE carrier_id = 'CAR-02'"
+          },
+          {
+            "tablePath": "/Tables/dbo/carriers",
+            "value": "SELECT * FROM dbo.carriers WHERE carrier_id = 'CAR-02'"
+          },
+          {
+            "tablePath": "/Tables/dbo/trucks",
+            "value": "SELECT * FROM dbo.trucks WHERE carrier_id = 'CAR-02'"
+          },
+          {
+            "tablePath": "/Tables/dbo/recall_temperature_status",
+            "value": "SELECT * FROM dbo.recall_temperature_status WHERE carrier_id = 'CAR-02'"
+          }
+        ],
+        "columns": [
+          {
+            "tablePath": "/Tables/history/shipment_history",
+            "columnAction": ["Read"],
+            "columnEffect": "Permit",
+            "columnNames": [
+              "shipment_id",
+              "line_no",
+              "shipped_at_utc",
+              "delivered_at_utc",
+              "origin_dc_id",
+              "store_id",
+              "carrier_id",
+              "truck_id",
+              "lot_id",
+              "product_id",
+              "supplier_id",
+              "cases",
+              "status",
+              "driver_note"
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "members": {
+    "fabricItemMembers": [],
+    "microsoftEntraMembers": []
+  }
+}

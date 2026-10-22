@@ -1,10 +1,20 @@
-# Docs
+# Workshop authoring documentation
 
-<!-- IGNITE TEMPLATE PLACEHOLDER: remove this folder when the session needs no additional documentation. -->
+The learner-facing Skillable instruction source is
+[`instructions/README.md`](../instructions/README.md).
 
-Use this folder for supporting documentation such as reference material and
-architecture/context.
+Author and reviewer resources:
 
-If this repository intentionally uses MkDocs or another docs-site pattern,
-attendee instructions can remain here. Link the attendee entry point clearly
-from the root README.
+- [Lab contract](authoring/lab-contract.md)
+- [Studio inventory](authoring/studio-inventory.md)
+- [Test matrix](authoring/test-matrix.md)
+- [Contoso Fresh data model](authoring/contoso-fresh-data-model.md)
+- [Fabric setup and recovery](../infra/README.md)
+- [Current Fabric inventory and evidence](../CONSOLIDATION-TODO.md#current-fabric-destination)
+
+Current author review runs directly in the owner's selected Fabric workspace.
+Skillable provisioning, learner preview, resume, and reset checks follow approval
+of the Fabric lab. The inventory and test matrix distinguish actual native
+results from outstanding notebook, application, and restricted-reader checks.
+The Studio requirements describe later delivery; these documents do not
+configure a Lab Profile or prove an unexecuted integration.
