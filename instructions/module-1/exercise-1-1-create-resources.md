@@ -13,21 +13,21 @@ Supplier quality data is typically stored in SharePoint document libraries for C
     - **Username:** `@lab.CloudPortalCredential(User1).Username`
     - **TAP:** `@lab.CloudPortalCredential(User1).TAP`
 
-    ![Sign In](images/sign-in.png)
+    ![Sign In](./media/sign-in.png)
 
 1. After signing in, you should have access to the Contoso Fresh Supplier Quality site.
 
-1. Select the **Supplier Quality** document libary from the left navigation pane.
+1. Select the **Supplier Quality** document library from the left navigation pane.
 
-    ![Supplier Quality Document Library](images/supplier-quality-doc-library.png)
+    ![Supplier Quality Document Library](./media/supplier-quality-doc-library.png)
 
 1. There are multiple folders and files within the document library, organized by supplier, certificates, notices, and audits.
 
-    ![Supplier Quality Folders](images/supplier-quality-folders.png)
+    ![Supplier Quality Folders](./media/supplier-quality-folders.png)
 
 1. When you open the **Audits** folder, you will see a list of audits conducted for different suppliers. We need to make this data available as one table in OneLake for further analysis. Keep this in mind for the **Shortcut Transformation** step later in the exercise.
 
-    ![Audits Folder](images/audits-folder.png)
+    ![Audits Folder](./media/audits-folder.png)
 
 ## Task 2: Create a New Workspace
 
@@ -37,26 +37,26 @@ Supplier quality data is typically stored in SharePoint document libraries for C
 
 1. On the left navigation pane, select **Workspaces** then select the **+ New Workspace** button.
 
-    ![New Workspace](images/new-workspace.png)
+    ![New Workspace](./media/new-workspace.png)
 
-1. In the **New Workspace** pane, provide this name for the workspace: `Contoso Fresh_@lab.LabInstance.Id`. Under **Advanced** ensure that *Fabric* is selected as an option and a fabric capacity is provided.
+1. In the **New Workspace** pane, provide this name for the workspace: `ContosoFresh_@lab.LabInstance.Id`. Under **Advanced** ensure that *Fabric* is selected as an option and a fabric capacity is provided.
 
-    ![New Workspace Pane](images/new-workspace-pane.png)
+    ![New Workspace Pane](./media/new-workspace-pane.png)
 
 1. Select **Apply** to create the new workspace.
 
 
 ## Task 3: Create a Lakehouse
 
-1. In the newly created workspace **Contoso Fresh_@lab.LabInstance.Id**, select the **+ New item** button. Search for and select `Lakehouse`.
+1. In the newly created workspace **ContosoFresh_@lab.LabInstance.Id**, select the **+ New item** button. Search for and select `Lakehouse`.
 
-    ![New Lakehouse](images/new-lakehouse.png)
+    ![New Lakehouse](./media/new-lakehouse.png)
 
 1. Enter a name for the lakehouse: `SupplierQuality` and ensure that **Lakehouse schemas** is checked.
 
 1. Select **Create** to create the new lakehouse.
 
-    ![Create Lakehouse](images/create-lakehouse.png)
+    ![Create Lakehouse](./media/create-lakehouse.png)
 
 ## Next Steps
 
