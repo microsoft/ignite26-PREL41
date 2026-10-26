@@ -8,11 +8,11 @@ In this exercise, you will connect to the supplier quality data stored in ShareP
 
 1. Select **New shortcut**
 
-    ![New Shortcut](images/new-shortcut.png)
+    ![New Shortcut](./media/new-shortcut.png)
 
 1. In the **New shorcut** menu, look for and select the **SharePoint Folder** option.
 
-    ![SharePoint Folder Option](images/sharepoint-folder-option.png)
+    ![SharePoint Folder Option](./media/sharepoint-folder-option.png)
 
 1. In the **SharePoint Folder** menu, select the **New connection** option to connect to your SharePoint site.
 
@@ -23,7 +23,7 @@ In this exercise, you will connect to the supplier quality data stored in ShareP
     - **Connection name**: Enter `supplierQuality-conn`
     - **Authentication kind**: Select **Organizational account**. Select sign in if required.
 
-    ![Connection Settings](images/connection-settings.png)
+    ![Connection Settings](./media/connection-settings.png)
 
     > [!IMPORTANT]
     > When creating this connection, Fabric will try to automatically use an existing connection. If this happens, ensure that you select **Edit connection** to modify the connection settings so that you can create a new connection with the desired settings.
@@ -32,13 +32,17 @@ In this exercise, you will connect to the supplier quality data stored in ShareP
 
 1. Under **Select a directory**, expand the **Supplier Quality** folder and select the **Certificates** folder. It contains the supplier certificates and recall procedures.
 
-    ![Select Directory](images/select-directory.png)
+    ![Select Directory](./media/select-directory.png)
 
 1. Select **Next**.
 
+1. In the **Transform** pane, select the **Skip** button because we are not performing any transformations on the data at this stage. You will do Shortcut Transformations later when creating delta tables on **Task 2**.
+
+    ![Skip Transform](./media/transform-step-skip.png)
+
 1. Under **Actions**, select the pencil icon and enter `SupplierQuality` as the name for the shortcut. Then select the checkmark to save the name.
 
-    ![Rename Shortcut](images/rename-shortcut.png)
+    ![Rename Shortcut](./media/rename-shortcut.png)
 
 1. Select **Create** to create the shortcut to the SharePoint folder in your lakehouse.
 
@@ -46,11 +50,13 @@ In this exercise, you will connect to the supplier quality data stored in ShareP
 
 1. You should now see supplier certificates and recall procedures (files from the **Certificates** folder in SharePoint) available under the **SupplierQuality** folder in your lakehouse.
 
+    ![Supplier Quality Files](./media/supplier-quality-files.png)
+
 ## Task 2: Create delta tables with Shortcut Transformations
 
 1. In the **SupplierQuality** lakehouse, under the **Tables** select the **(...)** next to **dbo** and select **New table shortcut**.
 
-    ![New Table Shortcut](images/new-table-shortcut.png)
+    ![New Table Shortcut](./media/new-table-shortcut.png)
 
 1. In the **New shortcut** menu, look for and select the **SharePoint Folder** option.
 
@@ -60,19 +66,19 @@ In this exercise, you will connect to the supplier quality data stored in ShareP
 
 1. Expand the **Supplier Quality** folder then expand the **Certificates** folder. Select the **metadata** folder which contains the **supplier-certificates.csv** file.
 
-    ![Select Metadata Folder](images/select-metadata-folder.png)
+    ![Select Metadata Folder](./media/select-metadata-folder.png)
 
 1. Select **Next**.
 
 1. Configure the CSV transformation settings with comma delimiter and use **First row as header** option.
 
-    ![CSV Transformation Settings](images/csv-transformation-settings.png)
+    ![CSV Transformation Settings](./media/csv-transformation-settings.png)
 
 1. Select **Next** to proceed with the table creation.
 
 1. Under **Actions**, select the pencil icon and enter `supplier_certificates` as the name for the shortcut. Then select the checkmark to save the name.
 
-    ![Rename Metadata Shortcut](images/rename-metadata-shortcut.png)
+    ![Rename Metadata Shortcut](./media/rename-metadata-shortcut.png)
 
 1. Select **Create** to create the table shortcut in your lakehouse.
 
@@ -106,19 +112,17 @@ This task will guide you in consolidating and transforming the audit data for ea
 
 1. Expand the **Supplier Quality** folder then select the **Audits** folder.
 
-    ![Select Audits Folder](images/select-audits-folder.png)
+    ![Select Audits Folder](./media/select-audits-folder.png)
 
 1. Select **Next** to proceed with the table creation.
 
 1. Configure the CSV transformation settings with comma delimiter and use **First row as header** option.
 
-    ![CSV Transformation Settings](images/csv-transformation-settings.png)
+    ![CSV Transformation Settings](./media/audits-csv-transformation.png)
 
 1. Select **Next**.
 
 1. Enter `supplier_audits` as the name for the table shortcut and select the checkmark to save the name.
-
-    ![Rename Metadata Shortcut](images/rename-metadata-shortcut.png)
 
 1. Select **Create** to create the table shortcut in your lakehouse.
 
@@ -128,7 +132,7 @@ This task will guide you in consolidating and transforming the audit data for ea
 
 1. Confirm that the table contains **176 audit records** and pay attention to the *__filepath__* column which shows the different csv files each record came from.
 
-    ![Supplier Audits Table](images/supplier-audits-table.png)
+    ![Supplier Audits Table](./media/supplier-audits-table.png)
 
     > [!Knowledge]
     > When you are creating a table shortcut that consolidates data from multiple files, the files should be in the same folder and should share the same schema. That ensures the data can be combined correctly into a single table.
