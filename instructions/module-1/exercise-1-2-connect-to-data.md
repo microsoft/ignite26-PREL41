@@ -98,6 +98,34 @@ In this exercise, you will connect to the supplier quality data stored in ShareP
 
 1. Open that certificate through the document shortcut. Also open *notices/YG-2291_Supplier_Recall_Notice.txt* and the recall procedure under *procedures/* relative to **Files > SupplierQuality**. An active supplier certificate does not make a recalled lot safe: the recall notice still applies.
 
+1. In the **SupplierQuality** lakehouse, under the **Tables** folder, select the **(...)** next to **dbo** and select **New table shortcut**.
+
+1. In the **New shortcut** menu, look for and select the **SharePoint Folder** option.
+
+1. Select the **Existing connection** option and choose the connection you created earlier (**supplierQuality-conn**).
+
+1. Select **Next**.
+
+1. Expand the **Supplier Quality** folder and select the **Suppliers** folder.
+
+    ![Select Suppliers Folder](./media/select-suppliers-folder.png)
+
+1. Select **Next** to proceed with the table creation.
+
+1. Configure the CSV transformation settings with comma delimiter and use **First row as header** option.
+
+    ![CSV Transformation Settings](./media/suppliers-csv-transformation.png)
+
+1. Select the pencil icon and enter `suppliers` as the name for the table shortcut.
+
+    ![Enter Table Name](./media/suppliers-table-name.png)
+
+1. Select **Create** to create the table shortcut in your lakehouse.
+
+1. Wait for a few seconds then under the **Tables**, select **(...)** next to **dbo** and select **Refresh** to see the newly added table shortcut.
+
+1. You should now see the `suppliers` table under **dbo** in your lakehouse. You will use this table in **Exercise 2**.
+
 ## Task 3: Transform Audit Data
 
 This task will guide you in consolidating and transforming the audit data for each supplier over a period of time. This data is available in the SharePoint library as 4 separate csv files.
