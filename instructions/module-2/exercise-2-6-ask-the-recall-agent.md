@@ -99,3 +99,5 @@ A data agent has two versions. The draft is what you edit and what the chat box 
     The published version now queries the same 9 tables you tested. You can keep changing the draft without changing what regional managers see.
 
 **Completion check:** The agent answers from the lakehouse tables: 9 stores hold YG-2291, and 13 received it. You published it with all 9 tables selected.
+
+In [Module 4: Create a OneLake security role](../module-4/exercise-4-1-create-a-onelake-security-role.md), you'll define who can read the underlying data, then add row and column restrictions.
