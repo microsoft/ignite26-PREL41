@@ -2,13 +2,13 @@
 
 In this exercise, you will explore the supplier quality data stored in SharePoint. You will learn how to navigate the SharePoint site, locate the relevant data and prepare it for ingestion into OneLake.
 
-## Task 1: Understand SharePoint Data
+## Task 1: Build SharePoint Document Library with Data
 
 Supplier quality data is typically stored in SharePoint document libraries for Contoso Fresh. Each document library may contain multiple folders and files, organized by supplier, certificates, notices and audits.
 
-1. In the lab VM open a web browser and navigate to the Contoso Fresh Supplier Quality site
+1. In the lab VM open a web browser and navigate to SharePoint
 
-    - Site url: `https://lodsprodmca.sharepoint.com/sites/ContosoFresh`.
+    - SharePoint url: `https://lodsprodmslearnmca.sharepoint.com/`.
 
 1. When prompted, sign in with the following credentials:
 
@@ -17,21 +17,86 @@ Supplier quality data is typically stored in SharePoint document libraries for C
 
     ![Sign In](media/sign-in.png)
 
-1. After signing in, you should have access to the Contoso Fresh Supplier Quality site.
+1. After signing in, select the **Build** tab from the left navigation pane.
 
-1. Select the **Supplier Quality** document library from the left navigation pane.
+    ![Build Tab](media/build-tab.png)
 
-    ![Supplier Quality Document Library](media/supplier-quality-doc-library.png)
+1. Select the **Site** option under the **Start building** section.
 
-1. There are multiple folders and files within the document library, organized by supplier, certificates, notices, and audits.
+1. On the **Select a site template** page, choose the **Standard team** template. Then select **Use template**.
 
-    ![Supplier Quality Folders](media/supplier-quality-folders.png)
+    ![Select Site Template](media/select-site-template.png)
 
-1. When you open the **Audits** folder, you will see a list of audits conducted for different suppliers. We need to make this data available as one table in OneLake for further analysis. Keep this in mind for the **Shortcut Transformation** step later in the exercise.
+1. Enter a name for the new site: `ContosoFresh_@lab.LabInstance.Id`. Select **Create** to create the new site.
 
-    ![Audits Folder](media/audits-folder.png)
+    ![Create Site](media/create-site.png)
 
-## Task 2: Create a New Workspace
+1. Select **Go to site** to navigate to the newly created site.
+
+1. In the newly created site, select **+ New** and then choose **Document Library**.
+
+    ![New Document Library](media/new-document-library.png)
+
+1. On the **Create new document library** page, select **Blank library**.
+
+1. Enter name for the new document library: `SupplierQuality`. Select **Create** to create the document library.
+
+## Task 2: Upload Data to SharePoint Document Library
+
+1. Navigate to the **SupplierQuality** document library created in Task 1 by selecting it from the left navigation pane.
+
+1. Select the **+ Create or upload** button, select the **Folder** option.
+
+    ![Create Folder](media/create-folder.png)
+
+1. Enter a name for the new folder: `Audits` then select **Create** to create the folder.
+
+1. Repeat the previous step to create the `Certificates` folder and then the `Suppliers` folder.
+
+    ![Folders Created](media/folders-created.png)
+
+1. Select the newly created **Audits** folder to open it. Select **+ Create or upload** and then choose **Upload files** to upload audit documents.
+
+1. Under the **downloads** folder in the machine, select the audit documents **_audits_2023.csv_**, **_audits_2024.csv_**, **audits_2025.csv_**, **_audits_2026.csv_** and select **Open** to upload them to the `Audits` folder.
+
+1. Select the newly created **Certificates** folder to open it. Select **+ Create or upload** and then choose the **Folder** option.
+
+1. Enter a name for the new folder: `notices` then select **Create** to create the folder.
+
+1. Repeat the previous step to create the `procedures` and `metadata` folders inside the **Certificates** folder.
+
+    ![Folders Created](media/folders-created-certificates.png)
+
+1. Select the newly created **Notices** folder to open it. Select **+ Create or upload** and then choose **Upload files** to upload notice documents.
+
+1. Under the **downloads** folder in the machine, select the notice document **YG-2291_Supplier_Recall_Notice.txt** and select **Open** to upload it to the **Notices** folder.
+
+1. Navigate to the **procedures** folder to open it. Select **+ Create or upload** and then choose **Upload files** to upload procedure documents.
+
+1. Under the **downloads** folder in the machine, select the procedure document **Contoso_Fresh_Product_Recall_SOP.txt** and select **Open** to upload it to the **procedures** folder.
+
+1. Navigate to the **metadata** folder to open it. Select **+ Create or upload** and then choose **Upload files** to upload metadata documents.
+
+1. Under the **downloads** folder in the machine, select the metadata document **supplier-certificates.csv** and select **Open** to upload it to the **metadata** folder.
+
+1. Navigate to the **Certificates** folder to open it. Select **+ Create or upload** and then choose **Upload files** to upload supplier documents.
+
+1. Under the **downloads** folder in the machine, select the following supplier certificates:
+
+    - **SUP-008_GLOBALGAP_Certificate.txt**
+    - **SUP-014_SQF_Certificate.txt**
+    - **SUP-021_BRCGS_Certificate.txt**
+    - **SUP-027_FSSC22000_Certificate.txt**
+
+1. Select **Open** to upload it to the **Certificates** folder.
+
+    ![Certificates Uploaded](media/certificates-uploaded.png)
+
+1. Navigate to the **Suppliers** folder to open it. Select **+ Create or upload** and then choose **Upload files** to upload supplier documents.
+
+1. Under the **downloads** folder in the machine, select the supplier document **suppliers.csv** and select **Open** to upload it to the **Suppliers** folder.
+
+## Task 3: Create a New Workspace
 
 1. In the lab VM open a new tab in the browser and navigate to **Microsoft Fabric** using this url: `https://app.fabric.microsoft.com`.
 
