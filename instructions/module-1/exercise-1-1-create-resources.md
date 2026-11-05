@@ -45,56 +45,18 @@ Supplier quality data is typically stored in SharePoint document libraries for C
 
 1. Navigate to the **SupplierQuality** document library created in Task 1 by selecting it from the left navigation pane.
 
-1. Select the **+ Create or upload** button, select the **Folder** option.
+1. Select the **+ Create or upload** button, select the **Folder upload** option.
 
-    ![Create Folder](media/create-folder.png)
+1. In the file picker dialog that appears, navigate to the **downloads** folder on the VM. Upload the following folders:
 
-1. Enter a name for the new folder: `Audits` then select **Create** to create the folder.
+    - **Audits**
+    - **Certificates**
+    - **Suppliers**
 
-1. Repeat the previous step to create the `Certificates` folder and then the `Suppliers` folder.
+    > [!NOTE]
+    > Ensure that you upload these folders one at a time. **Suppliers** and **Audits** contain csv files while **Certificates** contains text files and subfolders.
 
     ![Folders Created](media/folders-created.png)
-
-1. Select the newly created **Audits** folder to open it. Select **+ Create or upload** and then choose **Upload files** to upload audit documents.
-
-1. Under the **downloads** folder in the machine, select the audit documents **_audits_2023.csv_**, **_audits_2024.csv_**, **audits_2025.csv_**, **_audits_2026.csv_** and select **Open** to upload them to the `Audits` folder.
-
-1. Select the newly created **Certificates** folder to open it. Select **+ Create or upload** and then choose the **Folder** option.
-
-1. Enter a name for the new folder: `notices` then select **Create** to create the folder.
-
-1. Repeat the previous step to create the `procedures` and `metadata` folders inside the **Certificates** folder.
-
-    ![Folders Created](media/folders-created-certificates.png)
-
-1. Select the newly created **Notices** folder to open it. Select **+ Create or upload** and then choose **Upload files** to upload notice documents.
-
-1. Under the **downloads** folder in the machine, select the notice document **YG-2291_Supplier_Recall_Notice.txt** and select **Open** to upload it to the **Notices** folder.
-
-1. Navigate to the **procedures** folder to open it. Select **+ Create or upload** and then choose **Upload files** to upload procedure documents.
-
-1. Under the **downloads** folder in the machine, select the procedure document **Contoso_Fresh_Product_Recall_SOP.txt** and select **Open** to upload it to the **procedures** folder.
-
-1. Navigate to the **metadata** folder to open it. Select **+ Create or upload** and then choose **Upload files** to upload metadata documents.
-
-1. Under the **downloads** folder in the machine, select the metadata document **supplier-certificates.csv** and select **Open** to upload it to the **metadata** folder.
-
-1. Navigate to the **Certificates** folder to open it. Select **+ Create or upload** and then choose **Upload files** to upload supplier documents.
-
-1. Under the **downloads** folder in the machine, select the following supplier certificates:
-
-    - **SUP-008_GLOBALGAP_Certificate.txt**
-    - **SUP-014_SQF_Certificate.txt**
-    - **SUP-021_BRCGS_Certificate.txt**
-    - **SUP-027_FSSC22000_Certificate.txt**
-
-1. Select **Open** to upload it to the **Certificates** folder.
-
-    ![Certificates Uploaded](media/certificates-uploaded.png)
-
-1. Navigate to the **Suppliers** folder to open it. Select **+ Create or upload** and then choose **Upload files** to upload supplier documents.
-
-1. Under the **downloads** folder in the machine, select the supplier document **suppliers.csv** and select **Open** to upload it to the **Suppliers** folder.
 
 ## Task 3: Create a New Workspace
 

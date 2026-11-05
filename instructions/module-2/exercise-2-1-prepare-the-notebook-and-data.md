@@ -6,9 +6,15 @@ In this exercise, you connect the Module 2 notebook to your lakehouse and genera
 
 ## Open the notebook and add the lakehouse
 
-1. In the workspace, open the notebook **module-2-shipment-history**.
+1. In the workspace, select **Import**, **Notebook** then select **From this computer**.
 
-    <!-- Screenshot TODO: exercise-2-1-open-notebook.png; show the notebook in the workspace item list. -->
+1. On the **Import status** pane, select the **Upload** button.
+
+1. On the pop-up dialog box, select **Downloads** and then select the **module-2-shipment-history.ipynb** to upload the notebook.
+
+1. Open the notebook **module-2-shipment-history**.
+
+    ![Open Notebook](media/exercise-2-1-open-notebook.png)
 
     If a **Notebook Copilot Updates** window opens, select **Skip for now**.
 
@@ -50,7 +56,7 @@ Contoso Fresh's data comes from a generator in the first code cell. The cell wri
 
 The cell's code is collapsed, so it reads **Input is hidden**.
 
-1. Select the first code cell, then select **Run cell** to its left. 
+1. Select the first code cell, then select **Run cell** to its left.
 
     <!-- Screenshot TODO: exercise-2-1-run-cell.png; show Run cell beside the first cell with Input is hidden. -->
 
