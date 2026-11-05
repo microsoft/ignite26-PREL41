@@ -8,6 +8,8 @@ In this exercise, you connect the Module 2 notebook to your lakehouse and genera
 
 1. In the workspace, select **Import**, **Notebook** then select **From this computer**.
 
+    ![Import Notebook](media/upload-notebook.png)
+
 1. On the **Import status** pane, select the **Upload** button.
 
 1. On the pop-up dialog box, select **Downloads** and then select the **module-2-shipment-history.ipynb** to upload the notebook.
@@ -26,13 +28,13 @@ In this exercise, you connect the Module 2 notebook to your lakehouse and genera
 
 1. Find the lakehouse. Its name is listed twice: one row is the lakehouse and the other is its SQL analytics endpoint. Select the row with the lakehouse icon, then select **Add**.
 
-    <!-- Screenshot TODO: exercise-2-1-onelake-catalog.png; show the lakehouse selected, not its SQL analytics endpoint. -->
+    ![Select Lakehouse](media/lakehouse-selected.png)
 
     The SQL analytics endpoint is a read-only SQL view of the lakehouse tables. The notebook needs the lakehouse itself because it writes files.
 
 1. Check that the lakehouse shows under **OneLake** with a pin.
 
-    <!-- Screenshot TODO: exercise-2-1-lakehouse-pinned.png; show the default lakehouse pin in Explorer. -->
+    ![Lakehouse Pinned](media/lakehouse-pinned.png)
 
     The pin marks the notebook's default lakehouse. Paths such as `Files/history` in the notebook point to it.
 
@@ -58,8 +60,7 @@ The cell's code is collapsed, so it reads **Input is hidden**.
 
 1. Select the first code cell, then select **Run cell** to its left.
 
-    <!-- Screenshot TODO: exercise-2-1-run-cell.png; show Run cell beside the first cell with Input is hidden. -->
-
+    ![Run Cell](media/run-cell.png)
     > [!Note] The first run also starts the Spark session so it may take a few moments to complete.
 
 1. Check that the output includes `Wrote lot_history, shipment_history (109,480 shipments) and the correction file`, followed by 10 row counts. The first 7 run from `suppliers: 4 rows` to `store_inventory: 1,533 rows`. The last 3 are `lot_history: 16,961 rows`, `shipment_history: 1,165,391 rows` and `corrections: 24 rows`.

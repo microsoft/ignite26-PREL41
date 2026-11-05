@@ -63,7 +63,7 @@ The 20 `delete` rows are the lines of shipments `SHP-208999` and `SHP-209240`. T
 1. In cell 13, find the line `condition = None`.
 1. Replace `None` with a SQL condition, as a Python string, that matches the 20 `delete` rows in `corrections` on both `shipment_id` and `line_no`.
 
-    <!-- Screenshot TODO: exercise-2-3-cell-13-condition.png; show the condition line in cell 13 before the learner edits it. -->
+    ![Cell 13 Condition](media/cell-13-condition.png)
 
 1. Run the cell.
 1. Check that it prints `20 rows deleted`.
