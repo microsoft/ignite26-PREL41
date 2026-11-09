@@ -4,6 +4,48 @@ Use **Pass**, **Fail**, **Needs Fabric verification**,
 **Needs Studio verification**, or **Not applicable**.
 Record evidence for every completed test.
 
+## New app integration evidence
+
+The canonical path now builds Rayfin in Module 3, revisits the app after
+OneLake Security in Module 4 with a learner-created service principal, and
+has a title-only Module 5 handoff. Original telemetry/pipeline exercises are
+[optional supporting material](../../instructions/optional-telemetry.md).
+Historical test records below retain their original exercise numbers and
+scopes; they do **not** validate the new apps.
+
+Local validation on 2026-11-04 used synthetic tokens, fixtures, and mocked
+endpoints:
+
+- Standalone `src/console`: **62 unit and protocol tests** and **6 Chromium
+  browser tests** passed; type-checking and build passed.
+- Completed `src/console-final` (same app code, Rayfin static hosting):
+  the same **62 unit and protocol tests** and **6 Chromium browser tests**
+  passed; type-checking and build passed. The pinned Rayfin CLI loaded and
+  validated `rayfin/rayfin.yml` (static hosting only, protected assets) and
+  the built static folder. `rayfin init` was also trialed on a temporary
+  copy of the starter to confirm what it generates.
+- Real-browser CORS probe against the Table API with fake IDs and an invalid
+  token: Chromium 145 and Firefox 146 both returned **401**, not a CORS
+  block. Firefox logged a CORS warning.
+
+None of this is live Fabric, real-token, service principal creation,
+deployment, or real OneLake permission evidence. No Fabric resources were
+created or changed. The pinned `1.37.0-alpha.2159` CLI has transitive npm
+advisories; it is a development tool and none of it ships in the browser
+bundle, whose production dependencies report no advisories.
+
+| New integration check | Status | Required evidence |
+|---|---|---|
+| Bearer sign-in with My account | Needs Fabric verification | Real Storage-audience token from Azure CLI; the Identity tab shows the expected principal and the engineer sees nine current stores. |
+| Service principal in RegionalManagerNorth | Needs Fabric verification | App registration permission and the **Service principals can call Fabric public APIs** tenant setting confirmed; workspace Viewer only; no broader DefaultReader or ReadAll grant. Expect eight North current stores and eight North temperature rows with two breaches, confirmed in DevTools Network and Identity. No client-side filtering. Service principal and app registration deleted at lab end. |
+| Identity isolation | Needs Fabric verification | Switching identities never shows another identity's tables, rows, or Network entries; each identity keeps its own DuckDB data. |
+| Direct Table API calls and browser CORS | Needs Fabric verification | Hosted app reads with a real token in the delivery browsers, with no proxy; record any CORS block. The local probe used fake IDs and an invalid token only. |
+| Supplied snapshot and documents | Needs Fabric verification | Verified `dbo.recall_temperature_status`, actual analysis time, and independently authorized document access; no app-created snapshot. |
+| Hosted deployment | Needs Fabric verification | Real hosted URL after deployment; protected hosting asks for Fabric sign-in before the page loads; no stale-session data; denial checks against known existing resources. |
+
+The table specifies pending integration work, not new passes. Documentation
+checks do not perform Fabric operations or rerun historical tests.
+
 The owner selected a Fabric-only review on 2026-10-21. Skillable provisioning
 and learner delivery follow approval of the working Fabric lab. Rows marked
 **Needs Studio verification** describe that deferred phase, not prerequisites

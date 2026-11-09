@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.env
+.env.local
+.env.*.local
+.env.fabric-*
+*.tsbuildinfo
+test-results/
+playwright-report/
