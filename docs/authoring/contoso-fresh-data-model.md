@@ -111,7 +111,7 @@ holds about 110,000 shipments and 1.2 million lines. The key is
 | origin_dc_id | locations | |
 | store_id | locations | |
 | carrier_id | carriers | |
-| truck_id | trucks | Module 3 joins telemetry on shipment, truck, and journey time. |
+| truck_id | trucks | The optional telemetry analysis joins on shipment, truck, and journey time. |
 | lot_id | lot_history | |
 | product_id | products | |
 | supplier_id | suppliers | |
@@ -184,7 +184,7 @@ builds from the Iceberg metadata without copying data.
 
 ## Telemetry observations
 
-Module 3's [boundary contract](../../data/telemetry/README.md) defines
+The optional telemetry [boundary contract](../../data/telemetry/README.md) defines
 `event_id`, `shipment_id`, `truck_id`, `event_time_utc`, and `temperature_c`.
 An exact retry preserves its event ID and payload. Conflicting event IDs or
 readings at one journey timestamp require explicit rejection or resolution,

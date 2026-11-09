@@ -61,9 +61,12 @@ If you're following along during a live session:
    **Prepare your environment**. Locate the supplied Fabric SQL database
    operational source and its mirrored OneLake SQL endpoint, lakehouse,
    Module 2 notebook, and SharePoint connection; confirm that the telemetry
-   replay, guarded temperature Copy pipeline deployment template, existing
-   authorized terminal, restricted test identities, and Recall Console starter
-   are available for later modules.
+   snapshot `dbo.recall_temperature_status`, existing authorized terminal
+   with Azure CLI, restricted test identities, permission to create the
+   Module 4 service principal, and the
+   [Recall Console starter](src/console/README.md) are available for later
+   modules. Telemetry replay and pipeline deployment are optional supporting
+   exercises.
 3. Follow the instructor's checkpoints through the Contoso Fresh recall
    investigation for lot **YG-2291**. Use each exercise's completion check
    before moving to the next module.
@@ -97,11 +100,26 @@ mirroring into OneLake, SharePoint document shortcuts and CSV transformation,
 Iceberg shipment history, Eventstream telemetry, OneLake governance, and
 Fabric Apps. The mirroring exercise investigates native SQL database-in-Fabric
 replication; it does not configure an external SQL or third-party source.
-In Exercise 3.3, the engineer deploys and runs the guarded Data Factory
-temperature Copy pipeline from the supplied deployment template. Deployment
-binds the source SQL, resource IDs, and target; the pipeline accepts no runtime
-query or target overrides. This is a learner pipeline deployment, not only
-an instructor refresh.
+The [five-module path](instructions/README.md#workshop-modules) now builds the
+Rayfin data app in Module 3, then revisits it after OneLake Security in Module 4.
+Module 5 is a title-only Fabric/DuckDB/ClickHouse handoff. The original
+[telemetry and guarded Data Factory deployment exercises](instructions/optional-telemetry.md)
+remain optional, unchanged supporting material. The core app requires a
+supplied, verified `dbo.recall_temperature_status`; it does not create one.
+
+Start with [src/console](src/console/README.md); use the independent
+[src/console-final](src/console-final/README.md) as the completed Rayfin
+reference. Both sign in with **bearer tokens** from Azure CLI
+(`az account get-access-token --resource https://storage.azure.com`). Each
+token is one identity, and OneLake applies that identity's permissions,
+row-level security, and column-level security, so the same app can compare
+identities against OneLake Security. Module 3 uses **My account**; Module 4
+adds a **Service principal** through the security group from Exercise 4.2.
+Each identity keeps its own in-memory DuckDB data, and the app does no
+client-side filtering.
+The browser calls the Table API directly and streams Arrow results
+incrementally; there is no proxy. Rayfin only hosts the app as a Fabric App.
+Public build-time `VITE_*` settings contain no bearer tokens or secrets.
 
 Native validation matched every column of all **1,990 canonical current-state
 records** in both the source database and mirrored OneLake SQL endpoint to
@@ -133,8 +151,12 @@ The Module 2 contributor reports successful DuckDB and data-agent SDK runs,
 including the session-local `%pip` setup in cells 16 and 24. The independent
 selected-workspace validation has not replayed those paths; package absence
 before the install cells is expected, not evidence of a broken exercise.
-The actual Rayfin application, effective restricted-identity access, and
-the final integrated adversarial review remain unverified or incomplete.
+The new apps' local validation is recorded separately from these historical
+checks in the [test matrix](docs/authoring/test-matrix.md#new-app-integration-evidence).
+Fabric deployment, real-token and service principal reads, effective
+OneLake permissions, hosted-app CORS behavior, document access, and the
+final integrated adversarial review remain unverified until run; local
+synthetic tests do not establish live passes.
 The [consolidation ledger](CONSOLIDATION-TODO.md#current-fabric-destination)
 records the current destination and its actual native results separately
 from earlier isolated-workspace evidence.
