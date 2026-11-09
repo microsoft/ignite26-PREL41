@@ -21,7 +21,7 @@ The console reads 6 tables from the `dbo` schema of your lakehouse. They include
 
 The console is a Vite app, so it needs Node.js to install its packages and run a local web server.
 
-1. On the lab VM, select **Start**, type ++Terminal++, then select **Terminal**.
+1. On the lab VM, select **Start**, type `Terminal`, then select **Terminal**.
 
 1. Install the long-term support (LTS) release of Node.js with winget:
 

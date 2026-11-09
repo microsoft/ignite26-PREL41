@@ -12,7 +12,7 @@ In Exercise 3.1, **Load data** loaded all 6 tables. You need the workspace ID yo
 
 ## Task 1: Add the Rayfin CLI
 
-1. In the first Terminal tab, where the console is running, press **Ctrl+C** to stop it. If asked **Terminate batch job (Y/N)?**, enter ++Y++.
+1. In the first Terminal tab, where the console is running, press **Ctrl+C** to stop it. If asked **Terminate batch job (Y/N)?**, enter `Y`.
 
     Stay in the **Downloads\console** folder for the rest of this module.
 
@@ -36,7 +36,7 @@ In Exercise 3.1, **Load data** loaded all 6 tables. You need the workspace ID yo
 
     The other options create a new app from a template. The console already exists, so you only add a Rayfin configuration to it. Rayfin shows its banner and **Initialize a new Rayfin project**, then asks the next question.
 
-1. For **What is your project name?**, enter ++contoso-recall-console++.
+1. For **What is your project name?**, enter `contoso-recall-console`.
 
     Rayfin uses the name as the project ID in `rayfin.yml`.
 
@@ -44,11 +44,11 @@ In Exercise 3.1, **Load data** loaded all 6 tables. You need the workspace ID yo
 
     The console doesn't use Rayfin auth, data, storage, or functions. It reads OneLake with the token you paste.
 
-1. Rayfin shows **Frontend build script detected in package.json**. For **Enable static hosting? (builds and deploys ./dist on rayfin up)**, enter ++Y++, then press **Enter**.
+1. Rayfin shows **Frontend build script detected in package.json**. For **Enable static hosting? (builds and deploys ./dist on rayfin up)**, enter `Y`, then press **Enter**.
 
     Static hosting is the only Rayfin feature the console uses: Rayfin serves the built app from the **dist** folder.
 
-1. For **.gitignore already exists. Do you want to overwrite it?**, enter ++N++, then press **Enter**.
+1. For **.gitignore already exists. Do you want to overwrite it?**, enter `N`, then press **Enter**.
 
     This keeps the console's own `.gitignore`.
 
@@ -56,7 +56,7 @@ In Exercise 3.1, **Load data** loaded all 6 tables. You need the workspace ID yo
 
     The output also says that `"dev"` now runs `"rayfin dev"`. Task 3 explains what that changes.
 
-    > [!Note] If you gave a wrong answer, run `npx --no-install rayfin init` again and answer the questions again. When asked **rayfin.yml already exists. Do you want to overwrite it?**, enter ++Y++. Enter ++N++ for any other existing file.
+    > [!Note] If you gave a wrong answer, run `npx --no-install rayfin init` again and answer the questions again. When asked **rayfin.yml already exists. Do you want to overwrite it?**, enter `Y`. Enter `N` for any other existing file.
 
 1. Open the Rayfin configuration file:
 
