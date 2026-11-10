@@ -8,7 +8,7 @@ In this exercise, you add the Rayfin CLI to the console, turn the console into a
 
 ## Check your starting point
 
-In Exercise 3.1, **Load data** loaded all 6 tables. You need the workspace ID you found there. If you don't have it, open the lakehouse again and copy it from the address, as in Exercise 3.1.
+In Exercise 3.1, **Load data** loaded all 5 tables. You need the workspace ID you found there. If you don't have it, open the lakehouse again and copy it from the address, as in Exercise 3.1.
 
 ## Task 1: Add the Rayfin CLI
 
@@ -43,6 +43,8 @@ In Exercise 3.1, **Load data** loaded all 6 tables. You need the workspace ID yo
 1. For **Which services would you like to enable?**, **Auth** and **Data** are selected by default. Move to **Data**  and press **Space** to clear it, so that only _Auth_ service is selected. Then press **Enter**.
 
     The console doesn't use Rayfin auth, data, storage, or functions. It reads OneLake with the token you paste.
+
+1. For **Which auth methods would you like to enable?**, select **Fabric (Entra SSO)**, then press **Enter**.
 
 1. Rayfin shows **Frontend build script detected in package.json**. For **Enable static hosting? (builds and deploys ./dist on rayfin up)**, enter `Y`, then press **Enter**.
 

@@ -60,10 +60,9 @@ If you're following along during a live session:
 2. Open the [workshop instructions](instructions/README.md) and complete
    **Prepare your environment**. Locate the supplied Fabric SQL database
    operational source and its mirrored OneLake SQL endpoint, lakehouse,
-   Module 2 notebook, and SharePoint connection; confirm that the telemetry
-   snapshot `dbo.recall_temperature_status`, existing authorized terminal
-   with Azure CLI, restricted test identities, permission to create the
-   Module 4 service principal, and the
+   Module 2 notebook, and SharePoint connection; confirm that an authorized
+   terminal with Azure CLI, permission to create the Module 4 service
+   principal, and the
    [Recall Console starter](src/console/README.md) are available for later
    modules. Telemetry replay and pipeline deployment are optional supporting
    exercises.
@@ -104,8 +103,7 @@ The [five-module path](instructions/README.md#workshop-modules) now builds the
 Rayfin data app in Module 3, then revisits it after OneLake Security in Module 4.
 Module 5 is a title-only Fabric/DuckDB/ClickHouse handoff. The original
 [telemetry and guarded Data Factory deployment exercises](instructions/optional-telemetry.md)
-remain optional, unchanged supporting material. The core app requires a
-supplied, verified `dbo.recall_temperature_status`; it does not create one.
+remain optional, unchanged supporting material.
 
 Start with [src/console](src/console/README.md); use the independent
 [src/console-final](src/console-final/README.md) as the completed Rayfin
@@ -114,7 +112,8 @@ reference. Both sign in with **bearer tokens** from Azure CLI
 token is one identity, and OneLake applies that identity's permissions,
 row-level security, and column-level security, so the same app can compare
 identities against OneLake Security. Module 3 uses **My account**; Module 4
-adds a **Service principal** through the security group from Exercise 4.2.
+adds a **Service principal** that Exercise 4.3 adds directly to the
+**RecallSupplierReader** OneLake security role.
 Each identity keeps its own in-memory DuckDB data, and the app does no
 client-side filtering.
 The browser calls the Table API directly and streams Arrow results

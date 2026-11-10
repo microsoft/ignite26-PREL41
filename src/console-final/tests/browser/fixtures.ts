@@ -27,8 +27,6 @@ export function fixtureTables(variant: 'full' | 'restricted' = 'full') {
     store_inventory: [...Array.from({ length: 9 }, (_, i) => ({ location_id: `STORE-${i + 1}`, lot_id: 'YG-2291', units_on_hand: i + 1 })),
       { location_id: 'DC-01', lot_id: 'YG-2291', units_on_hand: 100 },
       { location_id: 'STORE-10', lot_id: 'YG-2291', units_on_hand: 0 }],
-    recall_temperature_status: shipments.map((s, i) => ({ ...s, shipment_temperature_status: i < 2 ? 'breach' : 'no_breach',
-      analysis_time_utc: '2026-10-13T04:00:00Z' })),
     supplier_certificates: [{ certificate_id: 'SYNTHETIC-CERT', supplier_id: 'SUP-014',
       certificate_type: 'Synthetic safety certificate', status: 'Test only',
       expiration_date: '2027-01-01', document_path: 'certificates/SUP-014.txt' }],

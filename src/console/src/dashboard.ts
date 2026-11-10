@@ -2,7 +2,7 @@ import { literal } from './database';
 import type { Resource } from './transport';
 
 export const AS_OF = '2026-10-13 04:00:00';
-export const MANIFEST: Resource[] = ['lots', 'products', 'locations', 'store_inventory', 'recall_temperature_status', 'supplier_certificates']
+export const MANIFEST: Resource[] = ['lots', 'products', 'locations', 'store_inventory', 'supplier_certificates']
   .map(table => ({ schema: 'dbo', table }));
 export const key = (r: Resource) => `${r.schema}.${r.table}`;
 /** Loaded on demand. Only the columns the related-lot analysis needs keep shipment_history inside the download budget. */
@@ -50,14 +50,6 @@ export function dashboardQueries(lot: string, loaded: ReadonlySet<string> = new 
       sql: `SELECT COUNT(DISTINCT i.location_id) AS stores, COALESCE(SUM(i.units_on_hand), 0) AS units
         FROM dbo.store_inventory i JOIN dbo.locations loc USING(location_id)
         WHERE i.lot_id = ${l} AND i.units_on_hand > 0 AND loc.location_type = 'store'`,
-    },
-    temperature: {
-      requires: ['dbo.recall_temperature_status'],
-      sql: `SELECT shipment_temperature_status, COUNT(DISTINCT shipment_id) AS journeys,
-        MIN(CAST(analysis_time_utc AS VARCHAR)) AS oldest_analysis,
-        MAX(CAST(analysis_time_utc AS VARCHAR)) AS newest_analysis
-        FROM dbo.recall_temperature_status WHERE lot_id = ${l}
-        GROUP BY shipment_temperature_status ORDER BY shipment_temperature_status`,
     },
     documents: {
       requires: ['dbo.supplier_certificates', 'dbo.lots'],

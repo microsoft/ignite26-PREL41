@@ -7,7 +7,7 @@ For learning purposes, the console doesn't sign you in. Instead, you paste a bea
 Because the token decides who reads, the same app can show what different readers see. You use two identities:
 
 - **Your user account**, in this module. It reads all of the recall data.
-- **A service principal**, in Module 4. You add it to the security group that receives a OneLake security role limited to one supplier, then switch between the two identities in the console. Your account sees the lots of every supplier; the service principal sees only that supplier's lots, and OneLake blocks the tables outside its role.
+- **A service principal**, in Module 4. You add it directly to a OneLake security role limited to one supplier, then switch between the two identities in the console. Your account sees the lots of every supplier; the service principal sees only that supplier's lots, and OneLake blocks the tables outside its role.
 
 The console sends the same requests for both identities and does no filtering of its own. Any difference in the data comes from OneLake security.
 
@@ -15,7 +15,21 @@ In this exercise, you install Node.js on the lab VM, start the console, sign in 
 
 ## Check your starting point
 
-The console reads 6 tables from the `dbo` schema of your lakehouse. They include `dbo.supplier_certificates` from Module 1 and `dbo.recall_temperature_status`, the cold-chain snapshot the instructor supplies. If you haven't finished Modules 1 and 2, finish them first. If the snapshot is missing, ask the instructor; don't create it yourself.
+The console reads 5 tables from the `dbo` schema of your lakehouse: `lots`, `products`, `locations`, `store_inventory`, and `supplier_certificates`. If you haven't finished Modules 1 and 2, finish them first.
+
+1. Open the **module-2-shipment-history** notebook with your **SupplierQuality** lakehouse attached, add a new **PySpark (Python)** code cell, then paste and run the following code:
+
+    ```python
+    df = spark.read.table("supplier_certificates")
+    df.drop("__filepath__", "__corrupt__", "__ingestion_timestamp__") \
+      .write.mode("overwrite") \
+      .option("overwriteSchema", "true") \
+      .saveAsTable("supplier_certificates")
+    ```
+
+    Wait for the cell to finish before continuing.
+
+    > [!Note] This is a temporary workaround that removes ingestion metadata columns from **supplier_certificates** so the console can read it. The Table Read API is in preview, and this issue is expected to be fixed soon.
 
 ## Task 1: Install Node.js
 
@@ -143,12 +157,12 @@ The console also needs to know which lakehouse to read. Fabric shows the workspa
 
 1. Select **Load data**.
 
-1. Check that the toolbar shows **6/6 tables loaded** with your name, and that the dashboard fills in for lot **YG-2291**.
+1. Check that the toolbar shows **5/5 tables loaded** with your name, and that the dashboard fills in for lot **YG-2291**.
 
-    <!-- Screenshot TODO: exercise-3-1-data-loaded.png; show the dashboard with 6/6 tables loaded. -->
+    <!-- Screenshot TODO: exercise-3-1-data-loaded.png; show the dashboard with 5/5 tables loaded. -->
 
     The browser sent each request straight to the OneLake Table API with your token. OneLake checked your permissions and returned the rows your account is allowed to read.
 
-> [!Help] If your identity shows **expired**, request a new token as in Task 3, then select **Identities** > **Replace token**. If fewer than 6 tables load, select **Sign out**, check the workspace and lakehouse IDs against the lakehouse address, and sign in again. If a table is still missing, check that you finished Modules 1 and 2, and ask the instructor about `dbo.recall_temperature_status`.
+> [!Help] If your identity shows **expired**, request a new token as in Task 3, then select **Identities** > **Replace token**. If fewer than 5 tables load, select **Sign out**, check the workspace and lakehouse IDs against the lakehouse address, and sign in again. If a table is still missing, check that you finished Modules 1 and 2, then ask the instructor.
 
-**Completion check:** The console runs on the lab VM, you signed in with your own access token, and **Load data** loaded all 6 tables for lot YG-2291.
+**Completion check:** The console runs on the lab VM, you signed in with your own access token, and **Load data** loaded all 5 tables for lot YG-2291.

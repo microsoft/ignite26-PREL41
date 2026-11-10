@@ -135,15 +135,7 @@ small { font-size: .78rem; }
 .access code { font-family: var(--mono); font-size: .78rem; flex: 1; min-width: 0; overflow-wrap: anywhere; }
 .access small { color: var(--muted); min-width: 4.5rem; text-align: right; white-space: nowrap; }
 .columns { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; }
-.temp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-.temp { border-radius: 8px; padding: 10px 12px; display: grid; }
-.temp strong { font-size: 1.6rem; line-height: 1.1; }
-.temp span { font-size: .8rem; font-weight: 600; }
-.temp.breach { background: var(--danger-bg); color: var(--danger); }
-.temp.ok { background: var(--ok-bg); color: var(--ok); }
-.temp.unknown { background: var(--warn-bg); color: var(--warn); }
 .meta { color: var(--muted); font-size: .82rem; }
-.snapshot { font-family: var(--mono); font-size: .76rem; }
 .docs { list-style: none; padding: 0; display: grid; gap: 6px; }
 .docs li { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #edf1ed; }
 .docs li > div { display: grid; flex: 1; min-width: 0; }
@@ -239,7 +231,6 @@ small { font-size: .78rem; }
 }
 @media (max-width: 560px) {
   .row { grid-template-columns: 1fr; }
-  .temp-grid { grid-template-columns: 1fr; }
   .toolbar-status { margin-left: 0; width: 100%; }
   .devtools kbd { display: none; }
 }

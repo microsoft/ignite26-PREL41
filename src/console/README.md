@@ -20,7 +20,7 @@ the same app:
 | Identity | Module | How you get the token |
 |---|---|---|
 | **My account** | 3 | Your lab user, from `az login` |
-| **Service principal** | 4 | An app registration you create and add to the security group from Exercise 4.2 |
+| **Service principal** | 4 | An app registration you create and add to the **RecallSupplierReader** role in Exercise 4.3 |
 
 The header switch moves between identities. Each identity has its **own**
 local database, tables, request log, and download budget, so data from one
@@ -83,8 +83,8 @@ not paste them into source files, `.env` files, chats, or screenshots.
 
 ## Dashboard
 
-The console reads six tables from the `dbo` schema: `lots`, `products`,
-`locations`, `store_inventory`, `recall_temperature_status`, and
+The console reads five tables from the `dbo` schema: `lots`, `products`,
+`locations`, `store_inventory`, and
 `supplier_certificates`.
 
 - **Lot**: product, supplier ID, production line and window, and expiry. The
@@ -94,9 +94,6 @@ The console reads six tables from the `dbo` schema: `lots`, `products`,
   grouped by supplier. Row-level security shows up here as missing suppliers.
 - **Table access**: each table's result for the active identity: readable
   with its row count, or blocked with the HTTP status OneLake returned.
-- **Cold-chain status**: breach, no breach, and insufficient data from
-  `dbo.recall_temperature_status`. Missing or denied evidence is never shown
-  as no breach. The analysis time and its age are shown.
 - **Supplier certificates**: optional links under an HTTPS document library
   URL (gear icon). Paths with traversal, queries, or credentials are rejected.
 - **Related lots**: select **Load history** to read `history.lot_history`

@@ -23,7 +23,7 @@ You can sign in with two identities and switch between them in the header:
 | Identity | Module | Token from |
 |---|---|---|
 | **My account** | 3 | `az login` as your lab user |
-| **Service principal** | 4 | An app registration in the security group from Exercise 4.2 |
+| **Service principal** | 4 | An app registration in the **RecallSupplierReader** role from Exercise 4.3 |
 
 Each identity has its own in-memory DuckDB database, tables, Network log, and
 download budget. Switching never mixes data between identities.
@@ -135,9 +135,6 @@ npx --no-install rayfin up status --json
 Review the dry-run target first. Open the hosted URL, sign in to Fabric when
 asked, then sign in to the console with your bearer token and verify each
 dashboard section, the Network log, and the Identity tab.
-
-The supplied, verified `dbo.recall_temperature_status` snapshot is a
-prerequisite for the cold-chain section.
 
 ## Preview CLI caveat
 

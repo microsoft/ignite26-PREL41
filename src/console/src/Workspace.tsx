@@ -213,13 +213,6 @@ export function Workspace({ slot, identity, settings, active, devtools, onDevtoo
   const blockedTables = tables.filter(t => states[key(t)]?.state === 'error' && BLOCKED.test(states[key(t)].message ?? '')).length;
   const supplierRows = sections.supplierLots.rows;
   const visibleLots = supplierRows.reduce((n, r) => n + Number(r.lots), 0);
-  const temp = sections.temperature.rows;
-  const tempCount = (status: string) => temp.filter(r => r.shipment_temperature_status === status).reduce((n, r) => n + Number(r.journeys), 0);
-  const tempTotal = temp.reduce((n, r) => n + Number(r.journeys), 0);
-  const unknownStatus = temp.filter(r => !['breach', 'no_breach'].includes(String(r.shipment_temperature_status))).reduce((n, r) => n + Number(r.journeys), 0);
-  const snapshot = temp.map(r => text(r.oldest_analysis)).filter(t => t !== '—').sort()[0];
-  const snapshotMs = snapshot ? Date.parse(snapshot.replace(' ', 'T') + (/[zZ]|[+-]\d\d:\d\d$/.test(snapshot) ? '' : 'Z')) : NaN;
-  const ageDays = Math.floor((now - snapshotMs) / 86400000);
   const procedureUrl = documentUrl(docRoot, procedure);
   const related = sections.relatedLots.rows;
   const reach = sections.relatedReach.rows;
@@ -349,20 +342,6 @@ export function Workspace({ slot, identity, settings, active, devtools, onDevtoo
         <p className="kpi-foot">What OneLake returned to this identity</p></article>
     </section>
 
-    <div className="columns">
-      <section className="card" id="temperature" aria-label="Cold chain">
-        <header><h3>Cold-chain status</h3><span className="pill">Snapshot</span></header>
-        <Evidence section={sections.temperature}>{tempTotal ? <>
-          <div className="temp-grid">
-            <div className="temp breach"><strong>{tempCount('breach')}</strong><span>Breach</span></div>
-            <div className="temp ok"><strong>{tempCount('no_breach')}</strong><span>No breach</span></div>
-            <div className="temp unknown"><strong>{unknownStatus}</strong><span>Insufficient data</span></div>
-          </div>
-          <p className="meta">Snapshot covers {plural(tempTotal, 'shipment')} · breach = above 4 °C for more than 20 min</p>
-          <p className="meta snapshot">Analysis {snapshot ?? 'time unavailable'}{snapshot ? ' UTC' : ''} · {Number.isFinite(ageDays) ? ageDays >= 0 ? `${ageDays} d old` : 'future timestamp' : 'age unknown'}</p>
-          {temp.some(r => !r.oldest_analysis) && <p className="state warn">Some rows have no analysis time.</p>}
-        </> : <p className="state warn">No temperature evidence for this lot. This is not a no-breach result.</p>}</Evidence>
-      </section>
       <section className="card" id="documents" aria-label="Supplier documents">
         <header><h3>Supplier certificates</h3>
           <details className="doc-settings"><summary aria-label="Document settings">⚙</summary><div className="doc-panel">
@@ -377,7 +356,6 @@ export function Workspace({ slot, identity, settings, active, devtools, onDevtoo
         })}</ul> : <p className="state warn">No certificate returned.</p>}</Evidence>
         {procedureUrl && <a className="procedure" href={procedureUrl} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer">Recall procedure</a>}
       </section>
-    </div>
     <section className="card" id="related-lots" aria-label="Related lots">
       <header><h3>Related lots</h3><span className="pill">Shipment history</span>
         <button className="history-load" disabled={busy || identity.expired} onClick={() => void load(HISTORY)}>
