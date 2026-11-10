@@ -40,7 +40,7 @@ In Exercise 3.1, **Load data** loaded all 6 tables. You need the workspace ID yo
 
     Rayfin uses the name as the project ID in `rayfin.yml`.
 
-1. For **Which services would you like to enable?**, **Auth** and **Data** are selected by default. Move to each of them and press **Space** to clear it, so that no service is selected. Then press **Enter**.
+1. For **Which services would you like to enable?**, **Auth** and **Data** are selected by default. Move to **Data**  and press **Space** to clear it, so that only _Auth_ service is selected. Then press **Enter**.
 
     The console doesn't use Rayfin auth, data, storage, or functions. It reads OneLake with the token you paste.
 
