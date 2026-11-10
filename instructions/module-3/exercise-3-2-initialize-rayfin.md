@@ -44,6 +44,8 @@ In Exercise 3.1, **Load data** loaded all 5 tables. You need the workspace ID yo
 
     The console doesn't use Rayfin auth, data, storage, or functions. It reads OneLake with the token you paste.
 
+1. For **Which auth methods would you like to enable?**, select **Fabric (Entra SSO)**, then press **Enter**.
+
 1. Rayfin shows **Frontend build script detected in package.json**. For **Enable static hosting? (builds and deploys ./dist on rayfin up)**, enter `Y`, then press **Enter**.
 
     Static hosting is the only Rayfin feature the console uses: Rayfin serves the built app from the **dist** folder.
