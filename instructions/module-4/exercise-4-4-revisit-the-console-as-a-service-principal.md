@@ -4,11 +4,11 @@ In Exercise 4.3, you watched OneLake security restrict a reader's SQL queries. A
 
 In Exercise 3.1, you saw that the token you paste in the console tells OneLake who is reading. The console sends the same requests for every identity and does no filtering of its own. Any difference in the data comes from OneLake security.
 
-In this exercise, you create a service principal and add it to the security group from Exercise 4.2, so it receives the same OneLake security role. You then sign in to the console as the service principal, next to your own account, and compare what OneLake returns to each identity. You don't write any SQL: the console shows the result of each check.
+In this exercise, you create a service principal and add it directly to the **RecallSupplierReader** role in OneLake security. You then sign in to the console as the service principal, next to your own account, and compare what OneLake returns to each identity. You don't write any SQL: the console shows the result of each check.
 
 ## Check your starting point
 
-In Exercise 4.2, you made your security group a member of the **RecallSupplierReader** role, which limits **dbo.lots** to supplier **SUP-014**. Check that the group is still a member of the role, and keep the group's name at hand. You need it in Task 2.
+In Exercise 4.2, you configured the **RecallSupplierReader** role to limit **dbo.lots** to supplier **SUP-014** and hide **supplier_unit_cost_eur**. Check that the role still includes only **dbo.lots** with those restrictions, and keep your lab account as a member. You add the service principal as another member in Task 2.
 
 You also need the console you deployed in Exercise 3.3, with **My account** signed in and **6/6 tables loaded** in the toolbar.
 
@@ -47,7 +47,7 @@ You create an app registration, its service principal, and a client secret with 
     $appId; $spId; $tenantId
     ```
 
-    The command prints three IDs, each 36 characters long. `$appId` is the application (client) ID that identifies the app. `$spId` is the service principal's object ID: the identity that groups and OneLake security roles use.
+    The command prints three IDs, each 36 characters long. `$appId` is the application (client) ID that identifies the app. `$spId` is the service principal's object ID: the identity you add to the OneLake security role.
 
 1. Create a client secret that expires in two hours:
 
@@ -61,28 +61,27 @@ You create an app registration, its service principal, and a client secret with 
     > [!IMPORTANT]
     > The secret works like a password for the service principal. Don't print it, paste it, or save it in a file.
 
-## Task 2: Add the service principal to the group
+## Task 2: Add the service principal directly to OneLake security
 
-Your security group is a member of the **RecallSupplierReader** role. When you add the service principal to the group, it receives the group's access, including that role.
+Add the service principal directly to **RecallSupplierReader** in the lakehouse's OneLake security pane. It receives the role's table, row, and column permissions without joining a security group.
 
-1. Add the service principal to the group. When prompted, enter the name of the group you created in Exercise 4.2:
-
-    ```powershell
-    $group = Read-Host 'Name of the group you created in Exercise 4.2'
-    az ad group member add --group $group --member-id $spId
-    ```
-
-1. Check the membership:
+1. In Terminal, copy the service principal's object ID to the clipboard:
 
     ```powershell
-    az ad group member check --group $group --member-id $spId --query value -o tsv
+    $spId | Set-Clipboard
     ```
 
-    The command prints `true`.
+1. In Fabric, open the **SupplierQuality** lakehouse in your **ContosoFresh_@lab.LabInstance.Id** workspace, then select **Manage OneLake security** from the lakehouse's item menu.
 
-    > [!Note] OneLake can take up to about an hour to apply a change to group membership. Until it does, OneLake blocks every table for the service principal, including **dbo.lots**. Continue with the next tasks.
+1. Open **RecallSupplierReader**, select **Members in role**, then select **Add members**.
 
-> [!Help] If `az ad group member add` fails with **Insufficient privileges**, ask the instructor. Don't add the service principal to another group or directly to a role.
+1. In **Add members to your role**, paste the service principal's object ID. Select the matching **recall-supplier-reader-@lab.LabInstance.Id** identity from the suggestions, then select the check icon to confirm.
+
+1. Wait for the success notification, then check that **Members in role** lists the service principal alongside your lab account.
+
+    Don't add it to **DefaultReader**, grant it **ReadAll**, or give it a workspace role. Those grants could let it read data outside **RecallSupplierReader**.
+
+> [!Help] If the new service principal doesn't appear in the suggestions, wait a minute and try again. If adding it fails, keep the error and ask the instructor. Don't work around the error by granting broader access.
 
 ## Task 3: Get the service principal's token
 
@@ -123,7 +122,7 @@ The console holds two identities at once, **My account** and **Service principal
 
     The console sent the same requests as for your account, this time with the service principal's token.
 
-> [!Help] If **dbo.lots** is also blocked, OneLake hasn't applied the group membership yet: wait a few minutes and select **Reload data**. If the identity shows **expired**, repeat Task 3, then select **Identities** > **Replace token** in the **Service principal** section.
+> [!Help] If **dbo.lots** is also blocked, return to **Manage OneLake security** and check that the service principal is listed directly in **RecallSupplierReader** and that the role includes **dbo.lots**. Correct any missing membership as in Task 2, then select **Reload data**. If it is still blocked, keep the error and ask the instructor. If the identity shows **expired**, repeat Task 3, then select **Identities** > **Replace token** in the **Service principal** section.
 
 ## Task 5: Compare what each identity can read
 

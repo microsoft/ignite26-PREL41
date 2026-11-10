@@ -7,7 +7,7 @@ For learning purposes, the console doesn't sign you in. Instead, you paste a bea
 Because the token decides who reads, the same app can show what different readers see. You use two identities:
 
 - **Your user account**, in this module. It reads all of the recall data.
-- **A service principal**, in Module 4. You add it to the security group that receives a OneLake security role limited to one supplier, then switch between the two identities in the console. Your account sees the lots of every supplier; the service principal sees only that supplier's lots, and OneLake blocks the tables outside its role.
+- **A service principal**, in Module 4. You add it directly to a OneLake security role limited to one supplier, then switch between the two identities in the console. Your account sees the lots of every supplier; the service principal sees only that supplier's lots, and OneLake blocks the tables outside its role.
 
 The console sends the same requests for both identities and does no filtering of its own. Any difference in the data comes from OneLake security.
 
