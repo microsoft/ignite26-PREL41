@@ -37,9 +37,12 @@ You should run the code cells in order, one at a time. To run a cell, select it,
 If the session cannot start or a cell fails, retain the error and follow
 [the Module 2 troubleshooting guidance](../README.md#if-a-module-2-cell-fails)
 with the instructor. Keep the same notebook and lakehouse; do not substitute
-another dataset or endpoint.
+another dataset or endpoint. If the error is `TooManyRequestForThisCapacity`, please wait
+around 5 minutes. In the previous exercise, you have used a Spark session behind the scenes to  
 
 > [!Note] Each section below matches a cell in the notebook, and **Run the next code cell** moves you one code cell down.
+
+> [!NOTE] If you encounter a TooManyRequestForThisCapacity error, wait around 5 minutes, then retry. The previous exercise started a Spark session behind the scenes to verify the shortcut setup using Spark SQL. That session needs time to be discarded and release capacity.
 
 ## Cell 1: Generate data
 
