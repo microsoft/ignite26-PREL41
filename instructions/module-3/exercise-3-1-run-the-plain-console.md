@@ -17,6 +17,20 @@ In this exercise, you install Node.js on the lab VM, start the console, sign in 
 
 The console reads 6 tables from the `dbo` schema of your lakehouse. They include `dbo.supplier_certificates` from Module 1 and `dbo.recall_temperature_status`, the cold-chain snapshot the instructor supplies. If you haven't finished Modules 1 and 2, finish them first. If the snapshot is missing, ask the instructor; don't create it yourself.
 
+1. Open the **module-2-shipment-history** notebook with your **SupplierQuality** lakehouse attached, add a new **PySpark (Python)** code cell, then paste and run the following code:
+
+    ```python
+    df = spark.read.table("supplier_certificates")
+    df.drop("__filepath__", "__corrupt__", "__ingestion_timestamp__") \
+      .write.mode("overwrite") \
+      .option("overwriteSchema", "true") \
+      .saveAsTable("supplier_certificates")
+    ```
+
+    Wait for the cell to finish before continuing.
+
+    > [!Note] This is a temporary workaround that removes ingestion metadata columns from **supplier_certificates** so the console can read it. The Table Read API is in preview, and this issue is expected to be fixed soon.
+
 ## Task 1: Install Node.js
 
 The console is a Vite app, so it needs Node.js to install its packages and run a local web server.
