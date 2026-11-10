@@ -10,7 +10,7 @@ In this exercise, you create a service principal and add it directly to the **Re
 
 In Exercise 4.2, you configured the **RecallSupplierReader** role to limit **dbo.lots** to supplier **SUP-014** and hide **supplier_unit_cost_eur**. Check that the role still includes only **dbo.lots** with those restrictions, and keep your lab account as a member. You add the service principal as another member in Task 2.
 
-You also need the console you deployed in Exercise 3.3, with **My account** signed in and **6/6 tables loaded** in the toolbar.
+You also need the console you deployed in Exercise 3.3, with **My account** signed in and **5/5 tables loaded** in the toolbar.
 
 > [!Help]
 > If **My account** shows **expired** in the console's header, request a new token in the second Terminal tab and copy it to the clipboard:
@@ -116,9 +116,9 @@ The console holds two identities at once, **My account** and **Service principal
 
 1. Select **Load data**.
 
-1. Check that the message under the toolbar says **Load finished. 5 tables not readable by this identity.**
+1. Check that the message under the toolbar says **Load finished. 4 tables not readable by this identity.**
 
-    <!-- Screenshot TODO: exercise-4-4-service-principal-loaded.png; show the Service principal dashboard with 1/6 tables readable. -->
+    <!-- Screenshot TODO: exercise-4-4-service-principal-loaded.png; show the Service principal dashboard with 1/5 tables readable. -->
 
     The console sent the same requests as for your account, this time with the service principal's token.
 
@@ -151,14 +151,14 @@ Switch between **My account** and **Service principal** in the header. Switching
 
 1. Find the **Table access** card for each identity:
 
-    - **My account** shows **6/6 tables readable** and **None blocked**.
-    - **Service principal** shows **1/6 tables readable** and **5 blocked by OneLake**. **dbo.lots** is **Readable**, and the other five tables are **Blocked**, each with the HTTP status OneLake returned.
+    - **My account** shows **5/5 tables readable** and **None blocked**.
+    - **Service principal** shows **1/5 tables readable** and **4 blocked by OneLake**. **dbo.lots** is **Readable**, and the other four tables are **Blocked**, each with the HTTP status OneLake returned.
 
-    <!-- Screenshot TODO: exercise-4-4-compare-identities.png; show Lots by supplier and Table access for the Service principal, with SUP-014 only and five blocked tables. -->
+    <!-- Screenshot TODO: exercise-4-4-compare-identities.png; show Lots by supplier and Table access for the Service principal, with SUP-014 only and four blocked tables. -->
 
     A blocked table is evidence of OneLake security only because your own account reads the same table. A missing table or a typo would also fail.
 
-1. Check the other cards for each identity. For **My account**, **Current inventory** shows 9 stores. For **Service principal**, **Current inventory**, **Cold-chain status**, and **Supplier certificates** show the access error of the table each one needs.
+1. Check the other cards for each identity. For **My account**, **Current inventory** shows 9 stores. For **Service principal**, **Current inventory** and **Supplier certificates** show the access error of the table each one needs.
 
 1. With **Service principal** selected, select **DevTools** at the bottom of the window, or press **Ctrl+`**.
 
@@ -168,4 +168,4 @@ Switch between **My account** and **Service principal** in the header. Switching
 
 > [!Help] If the service principal shows a supplier other than SUP-014, stop and tell the instructor: another role, **DefaultReader**, or a workspace role might grant it broader access.
 
-**Completion check:** In the same console, with the same requests, your account reads 302 lots from 4 suppliers and all 6 tables, while the service principal reads only SUP-014's 55 lots and OneLake blocks the other 5 tables. You can explain why: each bearer token is a separate identity, and OneLake applies that identity's roles before any data reaches the browser.
+**Completion check:** In the same console, with the same requests, your account reads 302 lots from 4 suppliers and all 5 tables, while the service principal reads only SUP-014's 55 lots and OneLake blocks the other 4 tables. You can explain why: each bearer token is a separate identity, and OneLake applies that identity's roles before any data reaches the browser.

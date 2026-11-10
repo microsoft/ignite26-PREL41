@@ -43,29 +43,28 @@ test('user and service principal keep isolated data and the switch shows each id
   await expect(supplierLots()).toContainText('5 lots');
   await expect(supplierLots()).toContainText('from 3 suppliers');
   for (const supplier of ['SUP-008', 'SUP-014', 'SUP-021']) await expect(supplierLots()).toContainText(supplier);
-  await expect(tableAccess()).toContainText('6/6 tables readable');
+  await expect(tableAccess()).toContainText('5/5 tables readable');
   await expect(tableAccess()).toContainText('None blocked');
   await expect(visibleWorkspace(page).locator('.lot-card')).toContainText('Synthetic Greek yogurt 500 g');
-  await expect(visibleWorkspace(page).locator('.temp.breach')).toContainText('2');
-  await expect(visibleWorkspace(page).locator('.temp.ok')).toContainText('11');
-  await expect(visibleWorkspace(page).locator('#temperature')).toContainText('Snapshot covers 13 shipments');
+  await expect(visibleWorkspace(page).getByRole('heading', { name: 'Cold-chain status' })).toHaveCount(0);
+  expect([...new Set(seen.map(s => s.table))].sort()).toEqual(['locations', 'lots', 'products', 'store_inventory', 'supplier_certificates']);
   expect(seen.every(s => s.token === USER_TOKEN)).toBe(true);
   await page.screenshot({ path: 'test-results/user-dashboard.png', fullPage: true });
 
   await spnTab.click();
   await expect(spnTab).toHaveAttribute('aria-checked', 'true');
   await expect(kpi(page, 'Current inventory')).toContainText('Not loaded');
-  await expect(tableAccess()).toContainText('0/6 tables readable');
+  await expect(tableAccess()).toContainText('0/5 tables readable');
   const before = seen.length;
   await loadData(page);
   expect(seen.slice(before).every(s => s.token === SPN_TOKEN)).toBe(true);
-  await expect(visibleWorkspace(page).locator('.notice')).toContainText('5 tables not readable by this identity');
+  await expect(visibleWorkspace(page).locator('.notice')).toContainText('4 tables not readable by this identity');
   await expect(supplierLots()).toContainText('2 lots', { timeout: 20000 });
   await expect(supplierLots()).toContainText('from 1 supplier');
   await expect(supplierLots()).toContainText('SUP-014');
   for (const supplier of ['SUP-008', 'SUP-021']) await expect(supplierLots()).not.toContainText(supplier);
-  await expect(tableAccess()).toContainText('1/6 tables readable');
-  await expect(tableAccess()).toContainText('5 blocked by OneLake');
+  await expect(tableAccess()).toContainText('1/5 tables readable');
+  await expect(tableAccess()).toContainText('4 blocked by OneLake');
   await expect(tableAccess().locator('li', { hasText: 'dbo.lots' })).toContainText('Readable');
   await expect(tableAccess().locator('li', { hasText: 'dbo.store_inventory' })).toContainText('BlockedHTTP 403');
   await expect(kpi(page, 'Current inventory')).toContainText('dbo.store_inventory: Access denied. HTTP 403.');
@@ -73,7 +72,6 @@ test('user and service principal keep isolated data and the switch shows each id
   await expect(lotCard).toContainText('SUP-014');
   await expect(lotCard).toContainText('AVD-L2');
   await expect(lotCard).toContainText('PRD-007');
-  await expect(visibleWorkspace(page).locator('#temperature')).toContainText('Access denied');
   await page.screenshot({ path: 'test-results/spn-dashboard.png', fullPage: true });
 
   // A lot from another supplier is outside the row rule: only the service principal loses it.
@@ -103,7 +101,7 @@ test('related lots load history on demand and count the stores they reached', as
   const card = visibleWorkspace(page).locator('#related-lots');
   await expect(card).toContainText('Not loaded');
   expect(seen.some(s => s.table.endsWith('_history'))).toBe(false);
-  await expect(visibleWorkspace(page).locator('#table-access')).toContainText('6/6 tables readable');
+  await expect(visibleWorkspace(page).locator('#table-access')).toContainText('5/5 tables readable');
 
   await card.getByRole('button', { name: 'Load history' }).click();
   await expect(visibleWorkspace(page).locator('.notice')).toContainText('Load finished', { timeout: 60000 });
@@ -115,7 +113,7 @@ test('related lots load history on demand and count the stores they reached', as
   await expect(card).toContainText('in 2 regions');
   await expect(card.locator('.bars li', { hasText: 'North' })).toContainText('8');
   await expect(card.locator('.bars li', { hasText: 'South' })).toContainText('5');
-  await expect(visibleWorkspace(page).locator('#table-access')).toContainText('6/6 tables readable');
+  await expect(visibleWorkspace(page).locator('#table-access')).toContainText('5/5 tables readable');
   await page.screenshot({ path: 'test-results/related-lots.png', fullPage: true });
 
   await page.getByRole('radio', { name: /Service principal/ }).click();

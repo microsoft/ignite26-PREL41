@@ -8,7 +8,7 @@ In this exercise, you add the Rayfin CLI to the console, turn the console into a
 
 ## Check your starting point
 
-In Exercise 3.1, **Load data** loaded all 6 tables. You need the workspace ID you found there. If you don't have it, open the lakehouse again and copy it from the address, as in Exercise 3.1.
+In Exercise 3.1, **Load data** loaded all 5 tables. You need the workspace ID you found there. If you don't have it, open the lakehouse again and copy it from the address, as in Exercise 3.1.
 
 ## Task 1: Add the Rayfin CLI
 

@@ -136,9 +136,6 @@ Review the dry-run target first. Open the hosted URL, sign in to Fabric when
 asked, then sign in to the console with your bearer token and verify each
 dashboard section, the Network log, and the Identity tab.
 
-The supplied, verified `dbo.recall_temperature_status` snapshot is a
-prerequisite for the cold-chain section.
-
 ## Preview CLI caveat
 
 The pinned prerelease Rayfin CLI brings transitive npm advisories. It is a

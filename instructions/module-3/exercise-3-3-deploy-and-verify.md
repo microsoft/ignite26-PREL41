@@ -61,7 +61,7 @@ The hosted app has a different address from the console you ran on the lab VM, s
 
 1. Paste the token into **My account access token**, then select **Sign in**.
 
-1. Select **Load data**. Check that the toolbar shows **6/6 tables loaded** with your name, as in Exercise 3.1.
+1. Select **Load data**. Check that the toolbar shows **5/5 tables loaded** with your name, as in Exercise 3.1.
 
 1. Select **DevTools** at the bottom of the window, or press **Ctrl+`**.
 
@@ -73,4 +73,4 @@ The hosted app has a different address from the console you ran on the lab VM, s
 
 > [!Help] If a request fails with a network or CORS error, note the browser and its version, and tell the instructor.
 
-**Completion check:** The hosted Fabric App asks for Fabric sign-in, opens on the console's sign-in page, and loads all 6 tables with your own token. DevTools shows your identity on requests sent straight to the Table API.
+**Completion check:** The hosted Fabric App asks for Fabric sign-in, opens on the console's sign-in page, and loads all 5 tables with your own token. DevTools shows your identity on requests sent straight to the Table API.
