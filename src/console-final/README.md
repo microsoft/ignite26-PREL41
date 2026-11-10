@@ -23,7 +23,7 @@ You can sign in with two identities and switch between them in the header:
 | Identity | Module | Token from |
 |---|---|---|
 | **My account** | 3 | `az login` as your lab user |
-| **Service principal** | 4 | An app registration in the security group from Exercise 4.2 |
+| **Service principal** | 4 | An app registration in the **RecallSupplierReader** role from Exercise 4.3 |
 
 Each identity has its own in-memory DuckDB database, tables, Network log, and
 download budget. Switching never mixes data between identities.

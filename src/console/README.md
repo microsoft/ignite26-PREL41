@@ -20,7 +20,7 @@ the same app:
 | Identity | Module | How you get the token |
 |---|---|---|
 | **My account** | 3 | Your lab user, from `az login` |
-| **Service principal** | 4 | An app registration you create and add to the security group from Exercise 4.2 |
+| **Service principal** | 4 | An app registration you create and add to the **RecallSupplierReader** role in Exercise 4.3 |
 
 The header switch moves between identities. Each identity has its **own**
 local database, tables, request log, and download budget, so data from one

@@ -78,12 +78,10 @@ complete each check before moving on.
 
 Before continuing, locate the operational data source, the schema-enabled
 lakehouse, the Module 2 notebook, and the supplied SharePoint connection.
-Later modules also require restricted test identities and the Recall Console
-starter. Telemetry replay is optional supporting material;
-the core path requires the instructor-supplied, verified
-`dbo.recall_temperature_status` snapshot, Table API settings, and separately
-obtained test-identity tokens. If an item or identity is missing, notify the
-instructor; do not create a personal replacement or use your own account.
+Later modules also require the Recall Console starter and permission to
+create the Module 4 service principal. Telemetry replay is optional
+supporting material. If an item is missing, notify the instructor; do not
+create a personal replacement.
 
 ## Exercise 0.2: Review the recall
 
@@ -407,15 +405,11 @@ with Rayfin. Start from **src/console/**. The independent
 > Module 4 you add a **service principal** and switch between the two.
 
 The dashboard shows the affected lot, current inventory, lots by supplier,
-the tables the signed-in identity can read, the cold-chain snapshot, and
-supplier certificates. A
+the tables the signed-in identity can read, and supplier certificates. A
 **DevTools** bar, docked at the bottom and collapsed by default, shows the
 tables, local SQL, every Table API request, and the active token's claims.
 
-Before starting, the instructor must supply and verify
-**dbo.recall_temperature_status**: all thirteen affected shipments, two
-breaches, eleven fully observed no-breach journeys, and the actual
-`analysis_time_utc`. These exercises do not create or refresh it. The original
+The original
 telemetry and pipeline exercises remain [optional supporting material](optional-telemetry.md).
 
 Complete the exercises in order for guided and self-paced delivery:
@@ -435,9 +429,10 @@ always sees the bearer token you paste.
 
 # Module 4: Apply OneLake Security, then revisit the app
 
-> **Revisit the app.** After the roles below are in place, Exercise 4.4
-> creates a service principal, adds it to the security group from
-> Exercise 4.2, and signs in to the Recall Console with its token. Switching
+> **Revisit the app.** Exercise 4.3 creates a service principal, adds it
+> directly to the **RecallSupplierReader** role, signs in to the Recall
+> Console with its token, queries what OneLake returns, then compares it
+> with your own account. Switching
 > between your account and the service principal shows OneLake returning
 > different rows and tables for each identity, with no filtering in the app.
 
@@ -640,14 +635,6 @@ shipments, supplier costs, or ungoverned raw files.
 
 ===
 
-## Exercise 4.4: Revisit the console as a service principal
-
-Create a service principal, add it to the security group from Exercise 4.2,
-and sign in to the Recall Console with its token. Follow
-[Exercise 4.4: Revisit the console as a service principal](module-4/exercise-4-4-revisit-the-console-as-a-service-principal.md).
-
-===
-
 # Module 5: Query Fabric with DuckDB and ClickHouse
 
 ===
@@ -668,7 +655,7 @@ scenario.
 | Where else has the supplier's product traveled? | Thirteen stores received YG-2291 after the carrier corrections. The thirteen related production lots reached forty-five stores across five regions. |
 | Were the trucks kept within the cold-chain rule? | After complete-recall replay, SHP-209403 and SHP-209415 have a confirmed continuous breach; the other eleven deliveries have full no-breach coverage. Exactly 4 C and exactly twenty minutes are not breaches. Before the supplement, preserve insufficient-data results. |
 | Which users can see each part? | The North manager sees eight permitted current stores and eight derived shipment results. The CAR-02 partner sees only its carrier's shipments and eight derived results, without supplier costs or raw-event access. Demonstrate denied reads, not only visible page filters. |
-| Can managers investigate through one console? | The deployed Recall Console shows inventory, lots by supplier, table access, temperature results with the analysis time, and authorized supplier-document links. Switching between your account and the service principal shows OneLake returning only SUP-014 lots to the service principal and blocking the tables outside its role, with no filtering in the app. A workspace app item without deployed content is not a running app. |
+| Can managers investigate through one console? | The deployed Recall Console shows inventory, lots by supplier, table access, and authorized supplier-document links. Switching between your account and the service principal shows OneLake returning only SUP-014 lots to the service principal and blocking the tables outside its role, with no filtering in the app. A workspace app item without deployed content is not a running app. |
 
 Use the fixed investigation clock, **2026-10-13 04:00 UTC**, when explaining
 the historical recall. Keep the temperature snapshot's actual analysis time

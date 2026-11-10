@@ -164,11 +164,10 @@ workspace; real restricted-reader tests remain required.
 
 ### Validate before release
 
-Follow [Exercise 4.3](../instructions/README.md#exercise-43-compare-identities)
-with the actual supplied reader accounts. Confirm user identity mode on the
-SQL analytics endpoint and remove conflicting broad grants for those test
-accounts only. Owner queries and successful role creation do not prove
-authorization.
+Follow [Exercise 4.3](../instructions/module-4/exercise-4-3-query-secured-data-through-sql.md)
+with a service principal whose only data access is **RecallSupplierReader**.
+Confirm that no broader grant applies to that service principal. Owner
+queries and successful role creation do not prove authorization.
 
 The certificate transformation, document shortcut, telemetry, and console
 still require their own provisioning and effective-identity checks. Adding a
