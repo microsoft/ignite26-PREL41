@@ -31,7 +31,7 @@ OneLake row rules use a SQL statement that describes the allowed rows. This walk
 1. On the role's **Data in role** tab, find **dbo.lots**.
 1. Select more options (**...**) next to the table, then select **Row security**.
 
-    <!-- Screenshot TODO: exercise-4-2-row-security.png; show Row security on dbo.lots in RecallSupplierReader. -->
+    ![Row security on dbo.lots in RecallSupplierReader](media/exercise-4-2-row-security.png)
 
 1. Enter this statement in the code editor:
 
@@ -43,18 +43,16 @@ OneLake row rules use a SQL statement that describes the allowed rows. This walk
 
 1. Select **Save** and wait for confirmation. If validation fails, keep the error and check the table name, column name, and quoted supplier ID. Don't replace the rule with unrestricted access.
 
-    <!-- Screenshot TODO: exercise-4-2-supplier-rule.png; show the saved SUP-014 row rule. -->
-
 The rule refers only to columns in this table. OneLake RLS doesn't support multitable queries or a join to a supplier lookup table.
 
 ## Hide supplier unit costs
 
-1. Still on **Data in role**, select more options (**...**) next to **dbo.lots**, then select **Column security**.
+1. Still on **Row and column security**, select the **Column security** tab.
 1. Find **supplier_unit_cost_eur** and set its **Permission** to **Hide**.
 1. Leave the other columns allowed, including **lot_id**, **product_id**, **supplier_id**, and **production_line**.
 1. Select **Save** and wait for confirmation.
 
-    <!-- Screenshot TODO: exercise-4-2-column-security.png; show supplier_unit_cost_eur set to Hide and the other columns allowed. -->
+    ![Column security with supplier_unit_cost_eur set to Hide and the other columns allowed](media/exercise-4-2-column-security.png)
 
 1. Check that **Data in role** shows both row and column restrictions on **dbo.lots**. Reopen each setting and confirm the saved rule and hidden column.
 1. Check **Members in role** again. Keep your lab account as the member; no separate reader identity is needed to configure these rules.

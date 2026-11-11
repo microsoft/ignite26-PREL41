@@ -38,12 +38,12 @@ Lakehouses start with a **DefaultReader** role. By default, it grants **Read** a
 
 1. In the lakehouse's item menu, select **Manage OneLake security**.
 
-    <!-- Screenshot TODO: exercise-4-1-manage-security.png; show Manage OneLake security in the lakehouse item menu. -->
+    ![Manage OneLake security in the lakehouse item menu](media/exercise-4-1-manage-security.png)
 
 1. On the **All lakehouse roles** tab, open **DefaultReader**.
 1. Inspect **Data in role** and **Members in role**. Compare the configured scope and membership with the default behavior above.
 
-    <!-- Screenshot TODO: exercise-4-1-defaultreader.png; show DefaultReader's data scope and permission-based membership. -->
+    ![DefaultReader data scope and permission-based membership](media/exercise-4-1-defaultreader.png)
 
 1. Return to the security pane and open **Members**. Review the listed users and groups. Select a listed member, if available, and inspect **Roles** and **Granted data**.
 
@@ -64,7 +64,7 @@ Start with access to one whole table. In Exercise 4.2, you'll narrow that same r
 1. Choose **Selected data**, then select **Edit**.
 1. Expand **Tables** > **dbo** and select only **lots**. Don't select the entire schema, **All data**, or anything under **Files**.
 
-    <!-- Screenshot TODO: exercise-4-1-select-lots.png; show only Tables/dbo/lots selected. -->
+    ![Only the lots table selected under Tables > dbo](media/exercise-4-1-select-lots.png)
 
     Granting access to raw CSV files under **Files/reference** would give the reader a separate route to the source data. Table rules don't filter those files.
 
@@ -72,7 +72,7 @@ Start with access to one whole table. In Exercise 4.2, you'll narrow that same r
 1. In **Add members to your role**, enter your lab account's email address and select your matching identity. Don't select an entire permission group through **Advanced configuration**.
 1. Review the selection, then select **Create**. Wait for the success notification.
 
-    <!-- Screenshot TODO: exercise-4-1-created-role.png; show RecallSupplierReader with Read, Grant, dbo.lots, and the lab user's own account. -->
+    ![RecallSupplierReader role with Read permission, Grant type, dbo.lots, and the lab account as a member](media/exercise-4-1-created-role.png)
 
 **Completion check:** **RecallSupplierReader** grants **Read** access to only **dbo.lots**, with your lab account as its member. You can explain how DefaultReader can grant broader access and why your admin account still has access to all data. This check verifies the role's configuration, not effective restricted access.
 

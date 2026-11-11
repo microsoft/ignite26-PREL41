@@ -67,9 +67,9 @@ You create an app registration, its service principal, and a client secret with 
     > [!IMPORTANT]
     > The secret works like a password for the service principal. Don't print it, paste it, or save it in a file.
 
-## Task 2: Add the service principal to the role
+## Task 2: Add the service principal to the role and workspace
 
-Add the service principal directly to **RecallSupplierReader** in the lakehouse's OneLake security pane. It receives the role's table, row, and column permissions without joining a security group.
+Add the service principal directly to **RecallSupplierReader** in the lakehouse's OneLake security pane. It receives the role's table, row, and column permissions without joining a security group. Also add the service principal to the workspace as a Viewer.
 
 1. In Terminal, copy the service principal's object ID to the clipboard:
 
@@ -88,6 +88,12 @@ Add the service principal directly to **RecallSupplierReader** in the lakehouse'
     Don't add it to **DefaultReader**, grant it **ReadAll**, or give it a workspace role. Those grants could let it read data outside **RecallSupplierReader**.
 
 > [!Help] If the new service principal doesn't appear in the suggestions, wait a minute and try again. If adding it fails, keep the error and ask the instructor. Don't work around the error by granting broader access.
+
+1. Navigate to the **ContosoFresh_@lab.LabInstance.Id** workspace, and select **Manage access**.
+
+1. Select **Add people or groups** and paste in the service principal ID from the clipboard. Select the matching identity from the suggestions.
+
+1. Make sure the drop down has **Viewer** selected as the role, and then choose **Add**.
 
 ## Task 3: Get the service principal's token
 
@@ -124,7 +130,7 @@ The console holds two identities at once, **My account** and **Service principal
 
 1. Check that the message under the toolbar says **Load finished. 4 tables not readable by this identity.**
 
-    <!-- Screenshot TODO: exercise-4-3-service-principal-loaded.png; show the Service principal dashboard with 1/5 tables readable. -->
+    ![Service principal dashboard with 1/5 tables readable](media/exercise-4-3-service-principal-loaded.png)
 
     The console sent the same requests as for your account, this time with the service principal's token.
 
@@ -160,7 +166,7 @@ The console keeps the data OneLake returned to each identity in a separate DuckD
 
 1. Check that exactly one supplier appears: **SUP-014**, with **55** lots.
 
-    <!-- Screenshot TODO: exercise-4-3-visible-supplier.png; show SUP-014 as the only group, with 55 lots, in the console's SQL tab. -->
+    ![Console SQL results showing SUP-014 as the only supplier, with 55 lots](media/exercise-4-3-visible-supplier.png)
 
 The console asked OneLake for the whole **dbo.lots** table. The row rule filtered it before any row reached the browser, so you didn't need `WHERE supplier_id = 'SUP-014'` to make the policy apply.
 
@@ -212,7 +218,7 @@ The positive check matters: an empty table would also return zero rows for the q
 
 1. Switch to **My account** in the header. In the SQL tab, run the first query of this task again. Check that it returns a cost for **YG-2291**: the column exists, and your account can read it. Then switch back to **Service principal**.
 
-    <!-- Screenshot TODO: exercise-4-3-hidden-cost.png; show the Service principal's SELECT * result without supplier_unit_cost_eur. -->
+    ![Service principal SELECT * result without supplier_unit_cost_eur](media/exercise-4-3-hidden-cost.png)
 
 Column-level security isn't data masking. OneLake didn't send the hidden column to the browser at all, not even as empty values.
 
@@ -247,7 +253,7 @@ The console sends the same requests for every identity and does no filtering of 
 
     The **Current inventory** and **Supplier certificates** cards show the access error of the table each one needs.
 
-    <!-- Screenshot TODO: exercise-4-3-compare-identities.png; show the Service principal dashboard with SUP-014 only in Lots by supplier and PRD-007 on the lot card. -->
+    ![Service principal dashboard showing only SUP-014 in Lots by supplier and PRD-007 on the lot card](media/exercise-4-3-compare-identities.png)
 
 1. Open DevTools again, then select **Network**. Check that the console sent a `POST /read` request for each table. OneLake answered **200** for **dbo.lots** and refused the other tables.
 
