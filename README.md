@@ -130,6 +130,11 @@ For more information, visit the [Learn MCP Server repo](https://aka.ms/learnmcp)
         <sub><b>Aaron Merrill</b></sub></a><br />
             <a href="https://github.com/aamerril" title="talk">📢</a>
     </td>
+    <td align="center"><a href="http://github.com/toolboc">
+        <img src="https://github.com/toolboc.png" width="100px;" alt="Paul DeCarlo"/><br />
+        <sub><b>Paul DeCarlo</b></sub></a><br />
+            <a href="https://github.com/toolboc" title="talk">📢</a>
+    </td>
 </tr></table>
 
 ### ⚖️ Trademarks
