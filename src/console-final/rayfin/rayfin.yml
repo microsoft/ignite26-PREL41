@@ -1,0 +1,14 @@
+id: contoso-recall-console
+name: Contoso Fresh recall console
+version: 1.0.0
+services:
+  auth:
+    enabled: false
+  data:
+    enabled: false
+  staticHosting:
+    enabled: true
+    folder: dist
+    buildCommand: npm run build
+    indexDocument: index.html
+    assetAccess: protected

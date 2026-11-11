@@ -164,11 +164,10 @@ workspace; real restricted-reader tests remain required.
 
 ### Validate before release
 
-Follow [Exercise 4.3](../instructions/README.md#exercise-43-compare-identities)
-with the actual supplied reader accounts. Confirm user identity mode on the
-SQL analytics endpoint and remove conflicting broad grants for those test
-accounts only. Owner queries and successful role creation do not prove
-authorization.
+Follow [Exercise 4.3](../instructions/module-4/exercise-4-3-query-secured-data-through-sql.md)
+with a service principal whose only data access is **RecallSupplierReader**.
+Confirm that no broader grant applies to that service principal. Owner
+queries and successful role creation do not prove authorization.
 
 The certificate transformation, document shortcut, telemetry, and console
 still require their own provisioning and effective-identity checks. Adding a
@@ -774,7 +773,11 @@ literal query/destination settings and no run-time parameters. Starting a job
 must not be a way to change its SQL or redirect its writes. Inline Fabric linked
 services reference the supplied items; they are not an application identity connector.
 
-Provision and run this as the engineer. Exercise 3.3 uses the learner's supplied
+The core app path requires a supplied, verified `dbo.recall_temperature_status`
+before Module 3; it does not create one. The original learner deployment flow
+is retained in [optional telemetry Exercise 3.3](../instructions/optional-telemetry.md#exercise-33-deploy-the-guarded-refresh-pipeline).
+
+Provision and run this as the engineer. Optional telemetry Exercise 3.3 uses the learner's supplied
 engineer account; author preflight is a separate run, not a completed learner
 exercise. Never grant restricted manager/partner identities pipeline write
 access or raw telemetry access just to request a refresh. Before promotion,

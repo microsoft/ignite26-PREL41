@@ -18,9 +18,9 @@ and data access concepts. Product-specific actions remain guided.
 |---|---|
 | Unify operational and document data | Observe insert/update/delete from the native SQL source through its OneLake mirror, then read nine affected current stores. The document shortcut is zero-copy; certificate transformation materializes a managed Delta table. |
 | Add interoperable historical data | The supplied Spark flow produces Apache Iceberg tables that are accessible through OneLake. |
-| Add and interpret a real-time signal | Truck telemetry identifies shipments above 4 C for more than 20 minutes; the learner deploys a guarded Data Factory SQL-to-Delta refresh and validates candidate and production results. |
+| Interpret the supplied temperature snapshot | Read verified `dbo.recall_temperature_status` and its actual analysis time. The preserved replay and guarded refresh exercises are optional supporting material. |
 | Govern data access | Regional manager and logistics partner identities receive the intended rows and columns. |
-| Build a recall experience | The Recall Console displays stores, shipment history, temperature status, and supplier document links through governed access. |
+| Build a recall experience | Start in `src/console/`, add Rayfin using independent `src/console-final/` as reference, and retain stores, history, temperature, documents, and the DevTools bar. Each pasted bearer token is one OneLake identity; Module 4 compares **My account** with a service principal in `RegionalManagerNorth`. |
 
 ## Duration
 
@@ -33,17 +33,16 @@ completion-time claim:
 | 00:15-01:05 | Unify operational and unstructured data | 50 minutes | Source insert/update/delete reach the mirror, documents open, four certificate records resolve, and the mirrored endpoint returns nine current stores. |
 | 01:05-01:55 | Spark writes Iceberg | 50 minutes | Corrected history, DuckDB, AI Functions, and the published nine-table agent pass their own checks. |
 | 01:55-02:05 | Break | 10 minutes | Preserve the notebook, workspace, and signed-in session. |
-| 02:05-02:30 | Real-time signal and Data Factory | 25 minutes | Actual sink output covers all thirteen deliveries; learner-deployed pipeline candidate and production checks return two breaches and eleven no-breach journeys. |
-| 02:30-03:05 | Govern with OneLake Security | 35 minutes | Actual North and CAR-02 readers pass positive and denied-access checks. |
-| 03:05-03:45 | Build the Recall Console | 40 minutes | Deployed content uses the verified user-identity data path and authorized document links. |
+| 02:05-03:05 | Build the Rayfin data app | 60 minutes | Bearer sign-in and dashboard work with **My account**; Rayfin is initialized and the app is deployed as a Fabric App with direct Table API reads; local checks are reviewed. |
+| 03:05-03:45 | Govern with OneLake Security and revisit app | 40 minutes | Actual North and CAR-02 readers pass positive and denied-access checks. In the app, **My account** shows nine current stores and the service principal in `RegionalManagerNorth` shows eight North stores. |
 | 03:45-04:00 | Wrap-up | 15 minutes | Demonstrate the five answers, freshness, and restricted-identity evidence. |
 
 Spark session startup and other variable service delays must be measured during
 fresh-instance testing. Record actual start/end times and time waiting for
 Spark, transformations, SQL refresh, telemetry persistence, security
-synchronization, and application deployment. In particular, the twenty-five-minute
-telemetry/pipeline allowance must include persistence, deployment, and verified
-candidate/production refresh, not just accepted sends. The rebalanced allowances
+synchronization, and application deployment. Optional telemetry/pipeline
+work is outside this core allowance. Module 5 has only a handoff title; no
+engine exercises or measured runtime are implied. The rebalanced allowances
 remain unmeasured planning targets, not evidence that the new sequence fits.
 
 If a checkpoint is missed, repair the supplied environment and record the
@@ -73,7 +72,19 @@ The Skillable environment must provide:
 - A preconfigured SharePoint cloud connection for the shortcut exercise.
 - Supplied operational, historical, and telemetry data.
 - Any identities required to validate OneLake Security.
-- The Rayfin starter and OneLake Read API access required by Module 5.
+- The plain console starter and completed Rayfin reference for Module 3,
+  with pinned tooling, Azure CLI, and supplied Table API settings.
+- A supplied, verified `dbo.recall_temperature_status` before Module 3:
+  thirteen shipments, two breaches, eleven fully observed no-breach journeys,
+  and the actual `analysis_time_utc`. The core app does not create a snapshot.
+- For the Module 4 service principal: permission to create app
+  registrations, and the Fabric tenant setting **Service principals can call
+  Fabric public APIs** enabled for that principal or its security group.
+  Learners give it workspace **Viewer** only, because Admin, Member, and
+  Contributor bypass OneLake security roles, and add it to the existing
+  `RegionalManagerNorth` role. Confirm DefaultReader or another ReadAll grant
+  does not give it broader access. Learners delete the service principal and
+  its app registration at the end of the lab.
 
 Exact learner workspace, item, connection, identity, and SharePoint names must
 be reconciled with the Lab Profile before release. The author-only
@@ -121,8 +132,8 @@ or credentials into the learner path.
 | Module 2 notebook and tables | Author imports the supplied notebook. Learner attaches the destination and creates seven `dbo` Iceberg tables and two `history` tables. | Reuse only notebook-owned tables with `contoso.owner = prel41-module-2`; retain the certificate table. Never replace unrelated tables or switch to alternate data to bypass an exercise. |
 | `contoso_recall_agent` | Created by the learner with the explicit nine-table selection. | Recheck selection and final publication. Certificate, telemetry, and snapshot additions do not enlarge the agent's scope. |
 | `contoso_truck_telemetry` | Author supplies the inlet, destination, replay utility/control, and authorized terminal. Raw output may be absent before the first replay. | Verify the actual destination state, then replay stable IDs. Preserve retries and use canonical payloads rather than a fixed raw-row total. |
-| `contoso_temperature_refresh` and candidate | Absent for a fresh Exercise 3.3; learner binds/deploys the supplied template and creates the engineer-only candidate. Existing instances follow the explicit resume checks. | Reuse only matching workshop settings and wait for active runs. Reset owns the learner-created item/candidate; never grant readers candidate access. |
-| `dbo.recall_temperature_status` | Created/promoted by Exercise 3.3 from verified complete telemetry before governed reads. It is not an automatically updated stream. | Refresh after the intended complete replay, verify all thirteen rows and job interval, and retain the analysis timestamp. Do not overwrite unrelated tables or expose deployment files. |
+| `contoso_temperature_refresh` and candidate | Optional telemetry Exercise 3.3 retains the original learner-deployment and resume flow. Not required learner creation in the core app path. | Reuse only matching workshop settings and wait for active runs. Reset owns the optional learner-created item/candidate; never grant readers candidate access. |
+| `dbo.recall_temperature_status` | Author supplies verified complete output before core Module 3. It is not an automatically updated stream and the app does not create it. | Instructor refreshes after changed observations, verifies all thirteen rows and job interval, and retains the analysis timestamp. Do not overwrite unrelated tables or expose deployment files. |
 | `RegionalManagerNorth` and `LogisticsPartner` | Learner creates selected-path roles and assigns the supplied restricted identities. | Inspect existing memberships and grants before reuse. Empty author templates must not overwrite assigned roles or DefaultReader. |
 | `contoso_recall_console` | Author supplies the target AppBackend, runnable starter, configured connector, and existing tools; learner completes the application flow. | Reuse the configured item. An empty item is not deployed content. Reset must clear instance-specific sessions and cached data without deleting shared services. |
 
@@ -137,9 +148,12 @@ Exercises are ordered so each module contributes data or policy used later:
 1. Confirm the environment and recall questions.
 1. Unify operational and supplier data.
 1. Add shipment history through Iceberg.
-1. Add the truck temperature signal.
-1. Apply OneLake Security.
-1. Build and validate the Recall Console.
+1. Build the Rayfin data app with **My account**, using the supplied verified temperature snapshot.
+1. Apply OneLake Security, then revisit the app with a service principal in `RegionalManagerNorth`.
+1. Hand off to Module 5: Query Fabric with DuckDB and ClickHouse (title only).
+
+The original [telemetry and pipeline exercises](../../instructions/optional-telemetry.md)
+remain optional with unchanged exercise numbers and technical assets.
 
 If a learner resumes the lab, each exercise must begin with an observable state
 check. Destructive cleanup is not part of the learner path unless the Lab
@@ -167,9 +181,11 @@ between launches.
 
 ## Completion
 
-The learner completes the workshop when the Recall Console answers the five
-scenario questions and returns different governed results for the supplied
-manager and partner identities.
+The learner completes the implemented path when the Recall Console answers
+the five scenario questions and, in Module 4, shows different
+OneLake-governed results for **My account** and the **Service principal** in
+`RegionalManagerNorth`. OneLake evaluates the pasted bearer token on every
+read. No client-side policy filtering is acceptable.
 
 ## Objective coverage
 
@@ -177,15 +193,16 @@ manager and partner identities.
 |---|---|---|
 | Unify operational and document data | [1.1-1.4](../../instructions/README.md#unify-operational-data) | Source probe insert/update/delete and matching timestamps arrive through the separate mirror; probe ends empty. The mirrored endpoint returns nine current stores; document shortcuts expose six text files and four transformed certificates with working paths. |
 | Add interoperable history | [2.1-2.3](../../instructions/module-2/exercise-2-3-write-shipment-history-as-iceberg.md), [2.4](../../instructions/module-2/exercise-2-4-trace-related-lots-with-duckdb.md), [2.5](../../instructions/module-2/exercise-2-5-read-shipment-notes-with-ai-functions.md), [2.6](../../instructions/module-2/exercise-2-6-ask-the-recall-agent.md) | Corrected history has 1,165,374 lines and thirteen YG-2291 receiving stores. DuckDB finds thirteen related lots reaching forty-five stores in five regions; AI produces thirty temperatures, twenty-three durations, and six summaries; the published nine-table agent distinguishes nine current from thirteen historical stores. Each engine must run; one engine's result does not prove another's execution. |
-| Interpret the real-time signal | [3.1-3.3](../../instructions/README.md#check-temperature-telemetry) | Persist all 438 canonical payloads; distinguish thresholds, gaps, retries, and ordering. Deploy the guarded Copy pipeline, accept the isolated candidate, then promote and accept the two-breach/eleven-no-breach snapshot with a timestamp inside its completed job. |
+| Interpret the real-time signal (optional) | [Original 3.1-3.3](../../instructions/optional-telemetry.md#check-temperature-telemetry) | Persist all 438 canonical payloads; distinguish thresholds, gaps, retries, and ordering. Deploy the guarded Copy pipeline, accept the isolated candidate, then promote and accept the two-breach/eleven-no-breach snapshot with a timestamp inside its completed job. |
 | Govern access | [4.1-4.3](../../instructions/README.md#govern-recall-access) | The North identity sees eight current stores and eight derived rows. CAR-02 sees eight affected derived rows, no other carrier, no supplier costs, and no raw-file alternative. Both identities perform positive and denied-access reads against existing resources. |
-| Build the recall experience | [5.1-5.3](../../instructions/README.md#build-the-recall-console) and [wrap-up](../../instructions/README.md#review-the-investigation) | Actual deployed app responses, not browser-side filtering, contain only permitted inventory/history/temperature data. Show signed-in identity, snapshot age, authorized document links, and no prior-user cache leakage. |
+| Build the recall experience | [3.1-3.3](../../instructions/README.md#module-3-build-a-data-app-with-rayfin), [4.3](../../instructions/module-4/exercise-4-3-query-secured-data-through-sql.md), and [wrap-up](../../instructions/README.md#review-the-investigation) | Retain the dashboard and DevTools bar. Compare **My account** (nine current stores) with the service principal in `RegionalManagerNorth` (eight North stores, eight North temperature rows with two breaches) in DevTools **Network** and **Identity**, without client filtering. Show snapshot time, authorized documents, direct Table API requests, and separate per-identity data. Record local checks separately from pending live runs. |
 
 ### Mirroring and pipeline scope
 
-The canonical path now includes automatic mirroring for **SQL database in
-Fabric**, with learner-observed insert/update/delete, and deployment of a
-Data Factory SQL-to-Delta temperature pipeline. Initial CSV seeding alone is
+The canonical path includes automatic mirroring for **SQL database in
+Fabric**, with learner-observed insert/update/delete. Deployment of the
+Data Factory SQL-to-Delta temperature pipeline is preserved in the optional
+supporting path. Initial CSV seeding alone is
 not mirroring evidence; the change-propagation checks are required. Pipeline
 item creation alone is likewise insufficient: both destination checks must pass.
 

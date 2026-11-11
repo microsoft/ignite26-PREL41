@@ -2,13 +2,13 @@
 
 In this exercise, you will explore the supplier quality data stored in SharePoint. You will learn how to navigate the SharePoint site, locate the relevant data and prepare it for ingestion into OneLake.
 
-## Task 1: Understand SharePoint Data
+## Task 1: Build SharePoint Document Library with Data
 
 Supplier quality data is typically stored in SharePoint document libraries for Contoso Fresh. Each document library may contain multiple folders and files, organized by supplier, certificates, notices and audits.
 
-1. In the lab VM open a web browser and navigate to the Contoso Fresh Supplier Quality site
+1. In the lab VM open a web browser and navigate to SharePoint
 
-    - Site url: `https://lodsprodmca.sharepoint.com/sites/ContosoFresh`.
+    - SharePoint url: `https://lodsprodmslearnmca.sharepoint.com/`.
 
 1. When prompted, sign in with the following credentials:
 
@@ -17,21 +17,48 @@ Supplier quality data is typically stored in SharePoint document libraries for C
 
     ![Sign In](media/sign-in.png)
 
-1. After signing in, you should have access to the Contoso Fresh Supplier Quality site.
+1. After signing in, select the **Build** tab from the left navigation pane.
 
-1. Select the **Supplier Quality** document library from the left navigation pane.
+    ![Build Tab](media/build-tab.png)
 
-    ![Supplier Quality Document Library](media/supplier-quality-doc-library.png)
+1. Select the **Site** option under the **Start building** section.
 
-1. There are multiple folders and files within the document library, organized by supplier, certificates, notices, and audits.
+1. On the **Select a site template** page, choose the **Standard team** template. Then select **Use template**.
 
-    ![Supplier Quality Folders](media/supplier-quality-folders.png)
+    ![Select Site Template](media/select-site-template.png)
 
-1. When you open the **Audits** folder, you will see a list of audits conducted for different suppliers. We need to make this data available as one table in OneLake for further analysis. Keep this in mind for the **Shortcut Transformation** step later in the exercise.
+1. Enter a name for the new site: `ContosoFresh_@lab.LabInstance.Id`. Select **Create** to create the new site.
 
-    ![Audits Folder](media/audits-folder.png)
+    ![Create Site](media/create-site.png)
 
-## Task 2: Create a New Workspace
+1. Select **Go to site** to navigate to the newly created site.
+
+1. In the newly created site, select **+ New** and then choose **Document Library**.
+
+    ![New Document Library](media/new-document-library.png)
+
+1. On the **Create new document library** page, select **Blank library**.
+
+1. Enter name for the new document library: `SupplierQuality`. Select **Create** to create the document library.
+
+## Task 2: Upload Data to SharePoint Document Library
+
+1. Navigate to the **SupplierQuality** document library created in Task 1 by selecting it from the left navigation pane.
+
+1. Select the **+ Create or upload** button, select the **Folder upload** option.
+
+1. In the file picker dialog that appears, navigate to the **downloads** folder on the VM. Upload the following folders:
+
+    - **Audits**
+    - **Certificates**
+    - **Suppliers**
+
+    > [!NOTE]
+    > Ensure that you upload these folders one at a time. **Suppliers** and **Audits** contain csv files while **Certificates** contains text files and subfolders.
+
+    ![Folders Created](media/folders-created.png)
+
+## Task 3: Create a New Workspace
 
 1. In the lab VM open a new tab in the browser and navigate to **Microsoft Fabric** using this url: `https://app.fabric.microsoft.com`.
 

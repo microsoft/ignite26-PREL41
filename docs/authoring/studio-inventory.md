@@ -26,7 +26,9 @@ Activities.
 | Eventstream | Replays supplied truck telemetry | Needs Studio verification |
 | Authorized terminal | Existing Python 3.9+, Fabio with its working credential provider, repository checkout, supplied engineer identity, and instance-specific replay/pipeline bindings | Native replay and deployment paths verified; terminal delivery and identity isolation need Studio verification |
 | Security test identities | Separate reader-only North manager and CAR-02 partner accounts, without broader grants or access to the separate operational source | Identities and effective permissions require verification |
-| Rayfin starter | Runs in the supplied environment | Starter and deployment toolchain absent; native AppBackend item creation succeeded |
+| Rayfin starter | Learners start in `src/console/`; `src/console-final/` is the independent completed reference | New local implementation evidence is separate from pending hosted/Studio checks; historical native AppBackend creation is not frontend deployment |
+| Temperature snapshot | Supply verified `dbo.recall_temperature_status` before Module 3 | Author snapshot evidence exists; fresh supplied-instance data, time, and reader access need verification |
+| Module 4 service principal | Learners can create an app registration with Azure CLI; the tenant setting **Service principals can call Fabric public APIs** is enabled for the principal or its security group | Needs Fabric verification; learners delete the service principal and app registration at lab end |
 | OneLake Read API | Available to the starter application | Needs Studio verification |
 
 ## Exercise 1.1 configuration
@@ -176,7 +178,7 @@ user-delegated SAS tokens** on, enabled for all users, with the inherited
 It establishes that prerequisite only, not successful credential vending,
 DuckDB reads, or access for a restricted identity.
 
-## Module 3 configuration
+## Optional telemetry configuration
 
 - Provision **contoso_truck_telemetry** with custom inlet **truck_replay**,
   default stream **truck_replay-stream**, and lakehouse destination
@@ -208,12 +210,13 @@ DuckDB reads, or access for a restricted identity.
 - The governed derived table `dbo.recall_temperature_status` is provisioned
   and verified against all 13 analysis rows in the author workspace. It contains
   `lot_id` and `analysis_time_utc` and is a manually triggered snapshot, not an
-  automatic streaming result. Exercise 3.3 now has the engineer deploy
+  automatic streaming result. The preserved optional Exercise 3.3 has the engineer deploy
   **contoso_temperature_refresh** using the
   [template](../../infra/pipelines/temperature-refresh/pipeline-content.json)
   and [binding utility](../../infra/pipelines/temperature-refresh/bind.py).
-  Supply those assets and terminal bindings; pipeline, candidate, and production
-  are absent in a fresh exercise and reused only through matching resume checks.
+  Supply those assets and terminal bindings for the optional path and use its
+  explicit resume checks. In the core app path, the author supplies verified
+  production output before Module 3; learners do not create a snapshot.
   Preflight the native path separately as author before launch. The
   [refresh procedure](../../infra/README.md#native-pipeline-refresh) also remains
   an explicit instructor recovery path, not permission to mark a skipped
@@ -223,8 +226,9 @@ DuckDB reads, or access for a restricted identity.
   not yet through a fresh Lab Profile.
 - Separate North-store and CAR-02 row rules for the snapshot are deployed in
   the unassigned roles. Raw telemetry and staging files remain excluded.
-  Application identity propagation and restricted-reader checks are still
-  required before console integration.
+  Separate restricted-reader checks remain required. The app revisit
+  compares the learner's own bearer token with a service principal's token
+  in `RegionalManagerNorth`; OneLake evaluates each token's identity.
 - The supplied read-only SQL batch validates IDs, timestamps, temperatures,
   retry consistency, journey matches, and history consistency before
   calculating statuses. It returns all 13 YG-2291 shipments, including seven
@@ -280,7 +284,7 @@ Product behavior is described in:
 - [Row-level security syntax](https://learn.microsoft.com/fabric/onelake/security/row-level-security-syntax)
 - [SQL analytics endpoint access modes](https://learn.microsoft.com/fabric/onelake/security/sql-analytics-endpoint-onelake-security)
 
-## Module 5 configuration
+## Module 3 app configuration
 
 - Fabric Apps (preview) is built on Rayfin. Use the
   [current product overview](https://learn.microsoft.com/fabric/apps/overview)
@@ -289,18 +293,15 @@ Product behavior is described in:
 - Fabio successfully created **contoso_recall_console** as an AppBackend in
   the consolidation workspace. This does not deploy frontend assets,
   application services, authentication configuration, or data connectors.
-- Supply the actual application starter and its existing deployment tools
-  before launch. A starter must include its project manifest and
-  `rayfin/rayfin.yml`, target the authorized workspace/item, and document its
-  exact start and deploy commands. Do not require learners to select a
-  framework, install tools, or scaffold a replacement.
-- The current environment has no Rayfin executable or supplied application
-  project. Generic Fabio item-definition retrieval is unsupported for the
-  created AppBackend; it is not a substitute deployment path.
+- Supply [the plain starter](../../src/console/README.md) and
+  [completed Rayfin reference](../../src/console-final/README.md).
+  Learners initialize Rayfin around the starter with the installed pinned
+  CLI; they do not choose a new framework or replace the dashboard.
+  Generic Fabio item-definition retrieval is not a substitute deployment path.
 - The first-party source and published CLI are available:
   [Rayfin CLI installation](https://github.com/microsoft/rayfin/blob/0979439a7a0806abd0ee48c2619b37f297ae1324/packages/guide/assets/docs/cli/installation.md)
   identifies `@microsoft/rayfin-cli`, which publishes the `rayfin` executable.
-  Registry metadata confirmed version `1.36.2`, along with
+  Earlier registry metadata confirmed version `1.36.2`, along with
   `@microsoft/create-rayfin` at that version. `@microsoft/rayfin` is not the
   CLI package: the official `npm create` spelling resolves the separately
   named initializer. Do not replace the prepared CLI with a guessed package.
@@ -311,14 +312,21 @@ Product behavior is described in:
 - Preflight the supplied project against the official
   [CLI creation workflow](https://learn.microsoft.com/fabric/apps/create-app-with-cli)
   and [deployment workflow](https://learn.microsoft.com/fabric/apps/deploy-app).
-  Its existing dependencies must include the Rayfin CLI; learner commands use
-  `npx --no-install`, not package installation or project scaffolding. Inspect
-  the deployment preview before updating the existing app, then verify
-  deployment status and the actual hosted URL. Do not force schema removals.
-- Enable Fabric-brokered Entra SSO in the supplied configuration:
-  `services.auth.enabled` and `services.auth.fabric.enabled` must both be true.
-  Local email/password authentication does not work for deployed Fabric Apps.
-  Keep generated environment/session material out of version control.
+  Pin the Rayfin CLI (`@microsoft/rayfin-cli`, a dev dependency) to the
+  selected experimental `1.37.0-alpha.2159`. Verified tags were
+  `preview=1.36.0-beta.0`, `latest=1.36.2`, and
+  `experimental=1.37.0-alpha.2159`; a tag is not an exact pin. The app uses
+  no Rayfin runtime packages. Learners run `npx --no-install rayfin init`,
+  clear every service so only static hosting remains, and then remove what
+  `init` adds but the app doesn't use, as listed in the reference README.
+  Inspect the deployment preview before updating the existing app, then
+  verify deployment status and the actual hosted URL. Do not force schema
+  removals.
+- `rayfin/rayfin.yml` enables static hosting only, with
+  `assetAccess: protected`: users need permission on the Fabric App item and
+  sign in to Fabric before the page loads. Rayfin auth, data, storage, and
+  functions stay disabled. Keep generated environment/session material out
+  of version control.
   Repository ignore rules cover `.env` and Rayfin's `.env.fabric-*` files,
   including nested starter directories, without excluding `rayfin/rayfin.yml`.
 - Keep Fabric SSO and end-user data authorization distinct. An app's
@@ -331,19 +339,23 @@ Product behavior is described in:
   OneLake access. The [connector catalog](https://github.com/microsoft/rayfin/blob/0979439a7a0806abd0ee48c2619b37f297ae1324/packages/tools/common/src/config/connectors.ts)
   supports explicit delegated authentication for SQL analytics, but defaults
   that connector to application authentication. That SQL connector is also
-  not a direct OneLake Arrow table-read adapter. Neither sample is a drop-in
-  implementation of Exercise 5.2's governed connector contract.
-- Supply the actual connector's table-read base URL, supported request/response
-  contract, and preauthorized user-delegated authentication. The
+  not a direct OneLake Arrow table-read adapter. The Recall Console uses
+  neither path: every read sends the bearer token the learner pastes from
+  Azure CLI, and the app has no Rayfin functions.
+- Supply the Table API endpoint, workspace ID, and lakehouse ID. Every read
+  sends the bearer token the learner pastes from
+  `az account get-access-token --resource https://storage.azure.com`. The
   [table API prerequisites](https://learn.microsoft.com/fabric/onelake/table-apis/table-apis-overview#prerequisites)
   require the Azure Storage token audience; the Fabric management API token or
   app publishable key cannot replace it. Do not invent a preview host or
-  silently fall back to engineer credentials.
+  silently switch identity on failure.
 - The [table read API](https://learn.microsoft.com/fabric/onelake/table-apis/read-table-data-rest-api)
   allocates streams with `POST /read` and returns Arrow IPC through each
   `GET /readStream/{streamId}`. Retrieve every stream before the 60-minute
-  session expiry and process batches without buffering full history in the
-  browser. Streams share their read session's snapshot; separate allocations
+  session expiry. Reads go directly from the browser and consume Arrow
+  incrementally. Each identity's
+  imported data stays in its own in-memory DuckDB database. Streams share their read
+  session's snapshot; separate allocations
   must not be assumed to share a cross-table snapshot.
 - Verify multistream completeness, explicit failure reporting, and identity
   isolation of both results and stream IDs. Unauthorized tables/explicit
@@ -352,12 +364,37 @@ Product behavior is described in:
   tests, and never count authentication/network errors as successful denial.
   Project only necessary columns, avoid allocating a new billed read for
   every keystroke, and do not share cached results across identities.
-- Require the same positive and negative manager/partner checks through the
-  actual deployed app. No owner-key backend, client-side row filtering,
-  anonymous recall data, or raw-telemetry grant is an acceptable substitute.
+- In Module 4's app revisit, learners create a service principal with Azure
+  CLI, give it workspace **Viewer** only (Admin, Member, and Contributor
+  bypass OneLake security roles), and add it to the existing
+  `RegionalManagerNorth` role. Check that DefaultReader or another ReadAll
+  grant does not give it broader access. Switching between **My account**
+  (engineer: nine current stores) and **Service principal** (eight North
+  stores and eight North temperature rows with two breaches) shows OneLake's
+  own filtering in DevTools **Network** and **Identity**. No owner-key
+  backend, client-side row filtering, anonymous recall data, or
+  raw-telemetry grant is an acceptable substitute. Learners delete the
+  service principal and its app registration at lab end.
 - The console must preserve missing-sensor uncertainty and distinguish current
   inventory from shipment history. Do not label all 13 receiving stores as
   current holders or convert absent telemetry into a compliant status.
+
+Public build-time configuration consists of optional sign-in defaults:
+`VITE_TABLE_API_ENDPOINT`, `VITE_FABRIC_WORKSPACE_ID`, `VITE_LAKEHOUSE_ID`,
+and `VITE_DOCUMENT_BASE_URL`. All are public; no bearer token or secret
+belongs there. No Rayfin secrets are required.
+
+The browser calls the Table API directly; there is no proxy. In the
+2026-11-04 probe, the preflight returned `Access-Control-Allow-Origin: *` and
+`Access-Control-Allow-Headers: *`, and Chromium 145 and Firefox 146 both
+allowed bearer requests. Firefox logged a warning because, by specification,
+the header wildcard doesn't cover `Authorization`. Recheck direct calls in
+the browsers used for delivery before launch.
+
+## Module 5 configuration
+
+Title-only handoff: **Query Fabric with DuckDB and ClickHouse**. No new
+exercises, environments, or provisioning steps are defined.
 
 ## Tokens and variables
 
@@ -368,11 +405,11 @@ bindings; the absence of tokens does not provision them:
 
 | Shell binding | Producer and first availability | Consumers and resume rule |
 |---|---|---|
-| `WORKSPACE_ID`, `LAKEHOUSE_ID` | Lab provisioning, before Module 3 | Replay/deployment target the supplied instance's `contoso_fresh`, never the operational source or author validation workspace. |
-| `SQL_ENDPOINT_ID`, `SQL_ENDPOINT_HOST` | Destination lakehouse provisioning, before Exercise 3.3 | Bind that lakehouse's SQL endpoint ID and bare managed hostname. Check IDs again on resume; the source SQL database/mirror is a different endpoint. |
+| `WORKSPACE_ID`, `LAKEHOUSE_ID` | Lab provisioning, before optional replay/deployment | Target the supplied instance's `contoso_fresh`, never the operational source or author validation workspace. |
+| `SQL_ENDPOINT_ID`, `SQL_ENDPOINT_HOST` | Destination provisioning, before optional Exercise 3.3 | Bind that lakehouse's SQL endpoint ID and bare managed hostname. Check IDs again on resume; the source SQL database/mirror is a different endpoint. |
 | `EVENTSTREAM_ID`, `SOURCE_ID` | Eventstream provisioning, before replay | Resolve the supplied stream/inlet and confirm the destination is running. No credential-bearing connection response is stored. |
-| `PIPELINE_ID` | Learner item creation or verified resume in Exercise 3.3 | Reuse the matching workshop item and check active runs before rebinding. |
-| `OUTPUT_TABLE` | Learner, first candidate then production in Exercise 3.3 | Binding accepts only the two documented snapshot names. Do not add a general-purpose destination override. |
+| `PIPELINE_ID` | Learner item creation or verified resume in optional Exercise 3.3 | Reuse the matching workshop item and check active runs before rebinding. |
+| `OUTPUT_TABLE` | Learner, first candidate then production in optional Exercise 3.3 | Binding accepts only the two documented snapshot names. Do not add a general-purpose destination override. |
 
 The retained automotive contribution,
 `instructions/1-ingest-operational-data-from-sharepoint.md`, is not linked from

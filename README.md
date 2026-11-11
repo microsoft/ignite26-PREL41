@@ -1,29 +1,3 @@
-## Before you're done
-
-This repo has been created for your Microsoft Ignite 2026 session. Here's how to get it ready.
-
-**Easiest path — use the agent (recommended):**
-
-- Open GitHub Copilot Chat and say `help me initialize repo`. The agent will walk you through getting the README populated.
-- When you're ready to publish, say `help me finalize repo`. The agent will clean up unused folders, validate everything, and remove this "Before you're done" section and other extra stuff that attendees don't need to see.
-- Curious how it works? Read the [agent workflow](.github/AGENT-WORKFLOW.md).
-
-**Doing it manually?**
-
-Fill in the sections below yourself, then:
-
-- Delete any placeholder folders you don't need (`data/`, `infra/`, etc.)
-- Delete this "Before you're done" section
-- Delete `.github/agents/`, `.github/tests/`, `.github/copilot-instructions.md`, and `.github/AGENT-WORKFLOW.md` — these are template tooling, not part of your published repo
-
-**Folder conventions:**
-
-- Attendee step-by-step guidance goes in `instructions/`. If you use MkDocs or a docs site instead, put it in `docs/` and link to it from this README.
-- Reference material and background reading go in `docs/`.
-- You can add a `.devcontainer/` folder if needed.
-
----
-
 <a name="start-building"></a>
 
 <p align="center">
@@ -39,18 +13,6 @@ Learn how to connect, ingest, mirror, and virtualize data across your organizati
 
 ### 🚀 Getting started
 
-#### For the current Fabric author review
-
-The owner is reviewing the lab directly in the
-[selected 2612 Fabric workspace](https://app.powerbi.com/groups/68713569-71b7-43bf-a61e-aa71b60381da/list?experience=power-bi).
-Skillable provisioning follows approval of that Fabric lab.
-Use the [current resource inventory and evidence](CONSOLIDATION-TODO.md#current-fabric-destination),
-[author setup and recovery procedures](infra/README.md), and
-[test matrix](docs/authoring/test-matrix.md). Inspect existing state before
-resuming; do not bootstrap over the supplied source or regenerate authored
-tables. The attendee paths below describe the intended later delivery, not a
-claim that all integrations have passed.
-
 #### In a guided session
 
 If you're following along during a live session:
@@ -60,10 +22,12 @@ If you're following along during a live session:
 2. Open the [workshop instructions](instructions/README.md) and complete
    **Prepare your environment**. Locate the supplied Fabric SQL database
    operational source and its mirrored OneLake SQL endpoint, lakehouse,
-   Module 2 notebook, and SharePoint connection; confirm that the telemetry
-   replay, guarded temperature Copy pipeline deployment template, existing
-   authorized terminal, restricted test identities, and Recall Console starter
-   are available for later modules.
+   Module 2 notebook, and SharePoint connection; confirm that an authorized
+   terminal with Azure CLI, permission to create the Module 4 service
+   principal, and the
+   [Recall Console starter](src/console/README.md) are available for later
+   modules. Telemetry replay and pipeline deployment are optional supporting
+   exercises.
 3. Follow the instructor's checkpoints through the Contoso Fresh recall
    investigation for lot **YG-2291**. Use each exercise's completion check
    before moving to the next module.
@@ -83,62 +47,6 @@ If you're learning at your own pace:
    continuing. When resuming an exercise, inspect its existing state as
    directed rather than creating duplicate resources.
 
-### Workshop path and scope
-
-Use the [canonical workshop instructions](instructions/README.md) for both
-guided and self-paced delivery. Use only the accounts, connections, and
-resources supplied in the Skillable lab. If a required item, identity, or
-connection is missing, stop and notify the instructor or lab support; do not
-create personal replacements, additional capacities, tenants, or external
-accounts.
-
-This path uses a pre-provisioned SQL database in Fabric with automatic
-mirroring into OneLake, SharePoint document shortcuts and CSV transformation,
-Iceberg shipment history, Eventstream telemetry, OneLake governance, and
-Fabric Apps. The mirroring exercise investigates native SQL database-in-Fabric
-replication; it does not configure an external SQL or third-party source.
-In Exercise 3.3, the engineer deploys and runs the guarded Data Factory
-temperature Copy pipeline from the supplied deployment template. Deployment
-binds the source SQL, resource IDs, and target; the pipeline accepts no runtime
-query or target overrides. This is a learner pipeline deployment, not only
-an instructor refresh.
-
-Native validation matched every column of all **1,990 canonical current-state
-records** in both the source database and mirrored OneLake SQL endpoint to
-the committed CSVs. A separate probe demonstrated automatic insert, update,
-and delete replication with matching source timestamps, then returned to an
-empty state without changing canonical recall rows. The guarded temperature
-Copy pipeline has also been verified natively; these checks do not establish
-end-to-end workshop readiness.
-
-The target duration is **240 minutes**, including a 10-minute break; this is a
-planning target, not a measured completion time. End-to-end readiness remains
-under validation. Full-workshop runtime behavior and completion time,
-restricted-identity access, and the deployed Recall Console's governed data
-path have not been confirmed as passed. Follow the completion checks and record
-any skipped exercise rather than treating it as completed. Module 2 stays on
-the supplied notebook and dataset; it has no alternate-data completion path.
-
-The author workspace now also has a working SharePoint connection and document
-shortcut: all seven source files match the repository, and the native CSV
-transformation produced all four certificate records with matching source
-fields and no corrupt rows. This does not establish fresh learner access.
-
-The current author review is a Fabric deployment in the owner's selected
-workspace. Skillable provisioning, preview, resume, and reset checks are a
-separate phase after the owner approves the working Fabric lab; they are not
-prerequisites for continuing the Fabric deployment.
-
-The Module 2 contributor reports successful DuckDB and data-agent SDK runs,
-including the session-local `%pip` setup in cells 16 and 24. The independent
-selected-workspace validation has not replayed those paths; package absence
-before the install cells is expected, not evidence of a broken exercise.
-The actual Rayfin application, effective restricted-identity access, and
-the final integrated adversarial review remain unverified or incomplete.
-The [consolidation ledger](CONSOLIDATION-TODO.md#current-fabric-destination)
-records the current destination and its actual native results separately
-from earlier isolated-workspace evidence.
-
 ### 🎯 Learning outcomes
 
 By the end of this session, you will be able to:
@@ -157,13 +65,9 @@ By the end of this session, you will be able to:
 
 ### 💻 Technologies used
 
-- **Data estate:** SQL database in Microsoft Fabric with automatic OneLake
-  mirroring, OneLake, lakehouse, and SQL analytics endpoint.
+- **Data estate:** Microsoft Fabric (OneLake, lakehouse, and SQL analytics endpoint).
 - **Historical analysis:** Apache Spark, Apache Iceberg, and DuckDB.
 - **Supplier documents:** SharePoint document shortcuts and CSV transformation.
-- **Streaming telemetry:** Microsoft Fabric Eventstream.
-- **Temperature pipeline:** Data Factory in Microsoft Fabric, using the
-  supplied guarded Copy pipeline deployment template.
 - **Governance:** OneLake Security for row and column access.
 - **Recall application:** Fabric Apps (preview), built on Rayfin, and the OneLake Read API.
 - **AI-assisted investigation:** Microsoft Fabric AI Functions and data agent.
@@ -174,6 +78,12 @@ Pick your next step based on your learning style:
 
 | Resource | What you'll get |
 |----------|-----------------|
+| **[Microsoft Fabric](https://learn.microsoft.com/fabric/fundamentals/microsoft-fabric-overview)** | Learn more about Microsoft Fabric, including OneLake, lakehouse, and SQL analytics endpoint |
+| **[SharePoint document shortcuts](https://learn.microsoft.com/fabric/onelake/shortcuts/create-onedrive-sharepoint-shortcut)** | Learn more about using SharePoint document shortcuts and CSV transformation |
+| **[OneLake Security](https://learn.microsoft.com/fabric/onelake/security/get-started-security)** | Learn more about OneLake Security for row and column access |
+| **[Fabric Apps (preview)](https://learn.microsoft.com/fabric/apps/overview)** | Learn more about building applications with Fabric Apps (preview) |
+| **[Microsoft Fabric AI Functions](https://learn.microsoft.com/fabric/data-science/ai-functions/overview?tabs=pandas)** | Learn more about using AI Functions in Microsoft Fabric |
+| **[Data Agent](https://learn.microsoft.com/fabric/data-science/concept-data-agent)** | Learn more about using the Data Agent in Microsoft Fabric |
 | **[Ignite 2026 Next Steps](https://aka.ms/ignite26-next-steps)** | Additional session repos and materials from Microsoft Ignite 2026 |
 | **[Microsoft AI Skills Navigator](https://aka.ms/ignite26-asn)** | Discover AI skills, learning paths, and resources for your next step |
 | **[Microsoft Learn](https://aka.ms/ignite26-learn)** | Official documentation and guided learning paths on these topics |
@@ -198,17 +108,32 @@ For more information, visit the [Learn MCP Server repo](https://aka.ms/learnmcp)
 
 ### 👥 Content owners
 
-<!-- TODO: Add yourself as a content owner
-1. Change the src in the image tag to {your github url}.png
-2. Change INSERT NAME HERE to your name
-3. Change the github url in the final href to your url. -->
-
 <table>
 <tr>
-    <td align="center"><a href="http://github.com/yourGitHubHandle">
-        <img src="https://github.com/yourGitHubHandle.png" width="100px;" alt="INSERT NAME HERE"/><br />
-        <sub><b>INSERT NAME HERE</b></sub></a><br />
-            <a href="https://github.com/yourGitHubHandle" title="talk">📢</a>
+    <td align="center"><a href="http://github.com/dikodev">
+        <img src="https://github.com/dikodev.png" width="100px;" alt="Diko Lezediko"/><br />
+        <sub><b>Someleze Diko</b></sub></a><br />
+            <a href="https://github.com/dikodev" title="talk">📢</a>
+    </td>
+    <td align="center"><a href="http://github.com/cmaneu">
+            <img src="https://github.com/cmaneu.png" width="100px;" alt="Carlos Maneu"/><br />
+            <sub><b>Christopher Maneu</b></sub></a><br />
+                <a href="https://github.com/cmaneu" title="talk">📢</a>
+        </td>
+    <td align="center"><a href="http://github.com/rhasson">
+        <img src="https://github.com/rhasson.png" width="100px;" alt="Roy Hanson"/><br />
+        <sub><b>Roy Hasson</b></sub></a><br />
+            <a href="https://github.com/rhasson" title="talk">📢</a>
+    </td>
+    <td align="center"><a href="http://github.com/aamerril">
+        <img src="https://github.com/aamerril.png" width="100px;" alt="Aamer Il"/><br />
+        <sub><b>Aaron Merrill</b></sub></a><br />
+            <a href="https://github.com/aamerril" title="talk">📢</a>
+    </td>
+    <td align="center"><a href="http://github.com/toolboc">
+        <img src="https://github.com/toolboc.png" width="100px;" alt="Paul DeCarlo"/><br />
+        <sub><b>Paul DeCarlo</b></sub></a><br />
+            <a href="https://github.com/toolboc" title="talk">📢</a>
     </td>
 </tr></table>
 

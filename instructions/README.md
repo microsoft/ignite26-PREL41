@@ -16,6 +16,18 @@ use it to answer five recall questions:
 
 **Duration:** Approximately 4 hours, including a 10-minute break.
 
+## Workshop modules
+
+1. [SharePoint shortcuts and transformations](#module-1-sharepoint-shortcuts-and-transformations)
+1. [Use a Spark notebook with OneLake Table APIs](#module-2-use-a-spark-notebook-with-onelake-table-apis)
+1. [Build a data app with Rayfin](#module-3-build-a-data-app-with-rayfin)
+1. [Apply OneLake Security, then revisit the app](#module-4-apply-onelake-security-then-revisit-the-app)
+1. [Query Fabric with DuckDB and ClickHouse](#module-5-query-fabric-with-duckdb-and-clickhouse)
+
+Module 5 is a title-only handoff; its exercises are not implemented here.
+The [optional telemetry path](optional-telemetry.md) retains the original
+replay and pipeline exercises outside this core sequence.
+
 Use these elapsed-time checkpoints in both delivery paths. They are planning
 targets, not measured service guarantees:
 
@@ -25,9 +37,9 @@ targets, not measured service guarantees:
 | 01:05 | Operational mirroring and supplier certificates complete |
 | 01:55 | Shipment-history exercises complete |
 | 02:05 | Ten-minute break complete |
-| 02:30 | Complete-recall telemetry and deployed refresh pipeline checked |
-| 03:05 | Restricted-identity checks complete |
-| 03:45 | Deployed console verified |
+| 02:30 | Plain console and supplied temperature snapshot inspected |
+| 03:05 | Recall Console deployed as a Fabric App and verified with your token |
+| 03:45 | Service principal created and compared with your account in the app |
 | 04:00 | Recall evidence and handoff complete |
 
 If a service delay prevents a checkpoint, keep the error and ask the instructor
@@ -66,9 +78,10 @@ complete each check before moving on.
 
 Before continuing, locate the operational data source, the schema-enabled
 lakehouse, the Module 2 notebook, and the supplied SharePoint connection.
-Later modules also require the telemetry replay, restricted test identities,
-and Recall Console starter. If an item or identity is missing, notify the
-instructor; do not create a personal replacement or use your own account.
+Later modules also require the Recall Console starter and permission to
+create the Module 4 service principal. Telemetry replay is optional
+supporting material. If an item is missing, notify the instructor; do not
+create a personal replacement.
 
 ## Exercise 0.2: Review the recall
 
@@ -81,7 +94,9 @@ access.
 
 ===
 
-# Unify operational data
+<a id="unify-operational-data"></a>
+
+# Module 1: SharePoint shortcuts and transformations
 
 In this module, you will bring operational and unstructured data into a single
 OneLake view without building a copy pipeline.
@@ -338,7 +353,13 @@ North and one in East, and all quantities are positive.
 
 ===
 
-# Add shipment history
+<a id="add-shipment-history"></a>
+
+# Module 2: Use a Spark notebook with OneLake Table APIs
+
+Continue with the existing authored notebook and its catalog/engine paths
+below. This module title does not introduce a replacement Table API notebook
+or change the contributed exercises.
 
 In this module, you will write five years of shipment history as Apache Iceberg
 tables in OneLake. You will then read the same tables with Spark, DuckDB, AI
@@ -369,262 +390,51 @@ completion check passes.
 
 ===
 
-# Check temperature telemetry
+# Module 3: Build a data app with Rayfin
 
-In this module, you will add the real-time signal needed to determine whether
-affected products remained within the cold-chain threshold.
+Build the Recall Console, a React, TypeScript, Tailwind, Vite, and DuckDB-Wasm
+app that reads OneLake through the Table API, and deploy it as a Fabric App
+with Rayfin. Start from **src/console/**. The independent
+**src/console-final/** folder is the completed reference.
 
-## Exercise 3.1: Replay truck telemetry
+> **Why bearer tokens?** The console doesn't sign you in through Microsoft
+> Entra for you. You paste an access token that you generate with Azure CLI,
+> and OneLake applies that token's identity, roles, and row- and column-level
+> security to every read. Because each token is one identity, the same app can
+> compare identities. In this module you use **your own account**. In
+> Module 4 you add a **service principal** and switch between the two.
 
-Start the supplied Eventstream and observe new truck telemetry arriving in the
-lakehouse.
+The dashboard shows the affected lot, current inventory, lots by supplier,
+the tables the signed-in identity can read, and supplier certificates. A
+**DevTools** bar, docked at the bottom and collapsed by default, shows the
+tables, local SQL, every Table API request, and the active token's claims.
 
-1. Locate **contoso_truck_telemetry** and confirm that its lakehouse destination
-   is **dbo.truck_temperature_events** in the supplied lakehouse.
-1. Start the Eventstream and use the replay control supplied by the lab,
-   or [run the supplied replay utility](#run-the-supplied-replay-utility)
-   in its authorized terminal.
-   If the control or producer is missing, stop and notify the instructor or lab
-   support; do not create a personal connection or paste endpoint keys into
-   browser code.
-1. Confirm that the destination is running, then use the lakehouse SQL
-   analytics endpoint to inspect:
+The original
+telemetry and pipeline exercises remain [optional supporting material](optional-telemetry.md).
 
-   ```sql
-   SELECT
-       COUNT(*) AS raw_rows,
-       COUNT(DISTINCT event_id) AS distinct_events,
-       COUNT(DISTINCT shipment_id) AS shipments
-   FROM dbo.truck_temperature_events;
-   ```
+Complete the exercises in order for guided and self-paced delivery:
 
-1. If the supplied replay uses the workshop boundary fixture, expect **34
-   distinct events for six shipments**. Its 35 input messages contain an
-   intentional retry. Replaying can increase raw rows without changing the
-   distinct events or their meaning.
-1. Confirm that records contain `event_id`, `shipment_id`, `truck_id`,
-   `event_time_utc`, and numeric `temperature_c`.
+1. [Exercise 3.1: Get your token and run the console](module-3/exercise-3-1-run-the-plain-console.md)
+1. [Exercise 3.2: Initialize Rayfin and the Fabric App](module-3/exercise-3-2-initialize-rayfin.md)
+1. [Exercise 3.3: Deploy and verify the app](module-3/exercise-3-3-deploy-and-verify.md)
 
-The first write can take longer than an ordinary batch. A **Running** inlet or
-an accepted send is not proof that the destination table exists. If the table
-is missing, have the instructor check actual sink output and SQL metadata
-registration; do not substitute a local file upload.
-
-**Completion check:** The destination contains actual replay observations,
-with the expected distinct IDs, shipment IDs, observation times, and
-temperatures.
-
-### Run the supplied replay utility
-
-Use this path only in the lab's authorized terminal with an existing Python
-3.9 or newer interpreter, Fabio, and supplied account. Do not install tools or sign in
-with a personal account to compensate for missing lab provisioning.
-
-From the repository root, first validate the complete input:
-
-```bash
-python3 src/telemetry/replay.py \
-  --input data/telemetry/replay-contract.jsonl --validate-only
-```
-
-Expect `validated_messages: 35`. Set `WORKSPACE_ID`, `EVENTSTREAM_ID`, and
-`SOURCE_ID` to the supplied workspace, **contoso_truck_telemetry** item, and
-**truck_replay** inlet IDs. Check the destination is **Running** before
-publishing:
-
-```bash
-fabio eventstream get-topology \
-  --workspace "$WORKSPACE_ID" --id "$EVENTSTREAM_ID" \
-  --query 'destinations[].{name:name,status:status}'
-```
-
-Pipe the source connection directly into the producer. Never print, save,
-or paste this response into application code:
-
-```bash
-set -o pipefail
-fabio eventstream get-source-connection \
-  --workspace "$WORKSPACE_ID" --id "$EVENTSTREAM_ID" --source-id "$SOURCE_ID" \
-  --query '{fullyQualifiedNamespace:fullyQualifiedNamespace,eventHubName:eventHubName,accessKeys:{primaryConnectionString:accessKeys.primaryConnectionString}}' \
-  | python3 src/telemetry/replay.py \
-      --input data/telemetry/replay-contract.jsonl
-```
-
-Expect `accepted_messages: 35`. The accompanying
-`destination_verified: false` is intentional: return to the SQL check above
-to verify actual output. If publishing fails partway through, resolve the
-reported problem and replay the same file. Do not change retry IDs or delete
-the destination table. Do not enable shell tracing or verbose HTTP logging.
-
-## Exercise 3.2: Identify temperature breaches
-
-Find shipments that remained above **4 C** for more than 20 minutes and join
-them to the affected lots.
-
-The rule is strict: **4 C is not above 4 C**, and **20 minutes is not more
-than 20 minutes**.
-
-Open [the supplied temperature-status SQL](../src/sql/module-3-temperature-status.sql)
-and run the complete batch in the lakehouse's SQL analytics endpoint.
-It validates input before producing a result. If it reports an error, stop
-and investigate that message rather than deleting its validation statements.
-Run it outside an existing transaction: it uses its own read transaction so
-validation and calculation see the same snapshot while new events arrive.
-This is the engineer's investigation query; it does not grant reader
-identities access to the raw telemetry table.
-
-1. Deduplicate exact event retries before calculating duration. Conflicting
-   payloads for one event ID, or different readings at the same journey
-   timestamp, require investigation rather than an arbitrary choice.
-1. Order readings by `event_time_utc` within each shipment and truck, not by
-   arrival order. The boundary fixture uses a five-minute cadence.
-1. Treat a reading as applying until the next observation only when the gap
-   is at most five minutes. A larger gap breaks continuity. A final reading
-   without a successor has no demonstrated duration.
-1. Measure each uninterrupted above-threshold interval separately. A cooling
-   reading closes the interval; never sum separate hot intervals to cross
-   the twenty-minute threshold.
-1. Join journey context from shipment history using both `shipment_id` and
-   `truck_id`, checking observation times against the delivery interval.
-   Deduplicate the shipment's line-level context first so a reading is not
-   multiplied by the number of lots on that shipment.
-1. Compare the boundary fixture's observed-window results:
-
-   | Shipment | Longest confirmed hot interval | Expected window result |
-   |---|---:|---|
-   | SHP-209403 | 25 minutes | Breach |
-   | SHP-209404 | 20 minutes | No observed breach |
-   | SHP-209408 | 0 minutes | No observed breach; readings are exactly 4 C |
-   | SHP-209410 | 15 minutes | No observed breach; do not add its separate hot intervals |
-   | SHP-209414 | 5 minutes | Insufficient data across its observation gap |
-   | SHP-209415 | 25 minutes | Breach, despite out-of-order arrival and a retry |
-
-The fixture does not cover complete journeys. A confirmed breach is sufficient
-to flag a shipment, but a partial window without a breach does not prove that
-the entire delivery stayed cold. For these fixtures, **SHP-209403** and
-**SHP-209415** are breached; the other four shipments have **Insufficient
-data** for a whole-journey conclusion.
-
-The query includes **all 13 shipments carrying YG-2291**, including the seven
-without any fixture observations. Those seven also report **Insufficient
-data**, with zero readings and no calculated hot duration. A shipment must
-not disappear from the recall investigation just because its sensor is
-missing.
-
-### Complete the recall delivery coverage
-
-After checking the boundary cases, replay the supplied
-[coverage supplement](../data/telemetry/recall-coverage-supplement.jsonl)
-through the same Eventstream. Use the replay procedure above with
-`--input data/telemetry/recall-coverage-supplement.jsonl`. Validate first,
-then expect **404 accepted messages**. Do not delete the original fixture.
-
-1. Verify actual output now has **438 distinct event IDs for 13 shipments**.
-   Raw counts can be higher after retries.
-1. Run the complete temperature-status SQL again. Every affected delivery
-   should now have observations at its start and end, without a gap exceeding
-   five minutes.
-1. Confirm **two breaches**—SHP-209403 and SHP-209415—and **eleven
-   no-breach journeys**. SHP-209414 now has explicit readings in its formerly
-   missing window; its longest hot interval is ten minutes. SHP-209416
-   shares its truck's exactly-twenty-minute hot period and is not breached.
-1. Continue with Exercise 3.3 to deploy the guarded refresh pipeline and
-   verify the governed snapshot before continuing to the console.
-
-These are additional synthetic observations, not a fallback that assumes
-missing temperatures were safe. Without the supplement's actual persisted
-records, preserve the original insufficient-data results.
-
-**Completion check:** Your investigation distinguishes a confirmed breach,
-no breach over a fully observed journey, and insufficient data. It does not
-silently label missing telemetry as compliant.
-
-## Exercise 3.3: Deploy the guarded refresh pipeline
-
-Use Data Factory to transform the persisted raw observations with the
-validated SQL and load a curated Delta snapshot. This is a real SQL-to-Delta
-Copy pipeline, not a live streaming view or a local CSV upload.
-
-Use the supplied engineer account and authorized terminal, with the existing
-Python 3.9+ and Fabio. The Lab Profile supplies `WORKSPACE_ID`, `LAKEHOUSE_ID`,
-`SQL_ENDPOINT_ID`, and `SQL_ENDPOINT_HOST`. These must identify
-**contoso_fresh and its SQL endpoint**, not the operational SQL database or
-its mirror. Do not install tools, choose a replacement runtime, or sign in
-with a personal account.
-
-1. Inspect the workspace for **contoso_temperature_refresh**. If it exists,
-   verify that it is this workshop's pipeline, with the guarded temperature
-   query and destination lakehouse. Reuse it only when those settings match.
-   Check that no earlier run is active before rebinding it.
-1. If it is absent, create it in the supplied workspace:
-
-   ```bash
-   fabio data-pipeline create \
-     --workspace "$WORKSPACE_ID" --name contoso_temperature_refresh \
-     --description "PREL41 guarded temperature snapshot refresh; no schedule"
-   ```
-
-1. Set `PIPELINE_ID` to that item's ID. Start with the isolated candidate:
-   `export OUTPUT_TABLE=recall_temperature_pipeline_candidate`.
-1. From the repository root, bind, deploy, run, and check the provided
-   definition:
-
-   ```bash
-   (
-     set -eu
-     definition_dir=$(mktemp -d)
-     trap 'rm -f "$definition_dir/pipeline-content.json" "$definition_dir/snapshot-checks.sql"; rmdir "$definition_dir"' EXIT
-     python3 infra/pipelines/temperature-refresh/bind.py \
-       --workspace "$WORKSPACE_ID" --lakehouse "$LAKEHOUSE_ID" \
-       --sql-endpoint "$SQL_ENDPOINT_ID" --sql-host "$SQL_ENDPOINT_HOST" \
-       --output-table "$OUTPUT_TABLE" \
-       --output "$definition_dir/pipeline-content.json"
-     fabio item validate-definition --type DataPipeline --dir "$definition_dir"
-     fabio data-pipeline update-definition \
-       --workspace "$WORKSPACE_ID" --id "$PIPELINE_ID" \
-       --file "$definition_dir/pipeline-content.json"
-     fabio data-pipeline run \
-       --workspace "$WORKSPACE_ID" --id "$PIPELINE_ID" \
-       --wait --timeout 600 --cancel-on-timeout
-     fabio sql-endpoint refresh-metadata \
-       --workspace "$WORKSPACE_ID" --id "$SQL_ENDPOINT_ID"
-     sed "s/dbo[.]recall_temperature_status/dbo.$OUTPUT_TABLE/g" \
-       src/sql/temperature-snapshot-checks.sql > "$definition_dir/snapshot-checks.sql"
-     fabio sql-endpoint query \
-       --workspace "$WORKSPACE_ID" --id "$SQL_ENDPOINT_ID" \
-       --sql @"$definition_dir/snapshot-checks.sql"
-   )
-   ```
-
-1. Inspect the pipeline's Copy activity: SQL source, guarded transformation
-   query, Delta sink, and overwrite behavior. Its source SQL and item IDs are
-   fixed at deployment, not editable run-time parameters.
-1. Confirm a **Completed** job and accepted candidate output: **13 shipments,
-   two breaches, eleven no-breach**, with an analysis timestamp inside that
-   job's recorded UTC start/end interval. The acceptance checks also validate
-   each shipment's readings, duration, coverage, history context, and schema.
-1. If the production table already exists, inspect its fourteen columns and
-   confirm that it is this workshop's derived snapshot, not an unrelated
-   authored table. Set `OUTPUT_TABLE=recall_temperature_status`, repeat the
-   same block, and verify the production result again.
-1. Keep the candidate as engineer-only validation evidence. Do not add it,
-   raw telemetry, or local deployment files to the manager or partner roles.
-   The Lab Profile reset owns cleanup of learner-created validation tables.
-
-SQL registration can lag a completed write. If the table is not registered,
-repeat metadata refresh and acceptance after registration; do not repeatedly
-start new writes. A failed or timed-out run can still have written rows:
-neither a job result alone nor correct-looking rows alone establish success.
-Inspect the actual job state before an explicit retry, keep its error, and
-require both a completed run and fresh accepted output.
-
-**Completion check:** You deployed the guarded Data Factory pipeline,
-validated a candidate, and promoted a verified production snapshot without
-copying a local CSV, bypassing source guards, or expanding reader permissions.
+The console calls the Table API directly from the browser and streams Arrow
+results incrementally; there is no proxy or server-side code. Rayfin hosts the
+built app as a Fabric App, so users sign in to Fabric to open it, but OneLake
+always sees the bearer token you paste.
 
 ===
 
-# Govern recall access
+<a id="govern-recall-access"></a>
+
+# Module 4: Apply OneLake Security, then revisit the app
+
+> **Revisit the app.** Exercise 4.3 creates a service principal, adds it
+> directly to the **RecallSupplierReader** role, signs in to the Recall
+> Console with its token, queries what OneLake returns, then compares it
+> with your own account. Switching
+> between your account and the service principal shows OneLake returning
+> different rows and tables for each identity, with no filtering in the app.
 
 In this module, you will apply OneLake Security so regional managers and a
 logistics partner see only the data required for their roles.
@@ -825,129 +635,7 @@ shipments, supplier costs, or ungoverned raw files.
 
 ===
 
-# Build the recall console
-
-In this module, you will build the application that regional managers use to
-investigate the recall.
-
-## Exercise 5.1: Start the application
-
-Create a Rayfin application from the supplied starter template.
-
-Fabric Apps (preview) is built on Rayfin. In this lab, use only the supplied
-starter and its configured workspace/item; do not scaffold a new project or
-install a different framework.
-
-1. Open the starter's own instructions and confirm its project manifest,
-   `rayfin/rayfin.yml`, and existing start/deploy tooling are present.
-1. Check that the supplied configuration enables both `services.auth.enabled`
-   and `services.auth.fabric.enabled`. Deployed Fabric Apps use Fabric-brokered
-   Entra SSO; a local email/password sign-in is not a deployed authentication
-   path.
-1. Confirm its configured workspace and app item match the supplied lab
-   resources. If **contoso_recall_console** is already supplied, reuse that
-   item rather than creating a second app.
-1. Run the starter's documented start command and sign in using the supplied
-   account. Fabio authentication does not establish that the app's separate
-   sign-in has succeeded.
-1. From the prepared starter's project root, preview deployment. Proceed only
-   when it targets the supplied workspace/item with the expected configuration
-   and no unexpected schema removals. Use the already supplied CLI and
-   dependencies; these commands must not install a replacement toolchain:
-
-   ```bash
-   npx --no-install rayfin up --dry-run
-   npx --no-install rayfin up
-   npx --no-install rayfin up status --json
-   ```
-
-   If the CLI is unavailable, return to the missing-toolchain handoff rather
-   than removing `--no-install`. Do not force destructive schema changes.
-1. Open the actual app URL and check that its authenticated session is visible.
-   An AppBackend item in the workspace, without deployed application content,
-   is not a running starter.
-
-If the starter, toolchain, or app URL is missing, stop and notify the
-instructor or lab support. Do not paste the engineer's tokens into a browser,
-enable anonymous recall-data access, or substitute an owner-authenticated
-mock application.
-
-**Completion check:** The starter application runs in the lab environment.
-
-## Exercise 5.2: Read OneLake data
-
-Connect the application through the OneLake Read API and display affected
-stores, truck temperature status, and supplier certificate links.
-
-Use only the starter's provisioned connector. Verify these results separately:
-
-| Console area | Engineer's expected result |
-|---|---|
-| Current inventory | Nine stores currently hold YG-2291. |
-| Shipment history | Thirteen stores received YG-2291, including the correction-file shipment. |
-| Related products | Thirteen related lots reached 45 stores. |
-| Temperature investigation | After complete-recall replay, SHP-209403 and SHP-209415 have confirmed breaches and the other 11 affected shipments have complete no-breach coverage. With only the boundary fixture, those 11 must remain insufficient data. |
-| Supplier documents | Certificate links open the matching files through the supplied document access, not a public URL or embedded credential. |
-
-The OneLake table read API returns Apache Arrow streams, not a JSON row array.
-The supplied connector must allocate a read, retrieve **every** returned
-stream, and process its batches without loading the entire shipment-history
-table into browser memory. A missing or failed stream is an incomplete read,
-not an empty or compliant result. Its data token must represent the signed-in
-user and target the Azure Storage audience; the app's publishable key or a
-Fabric management token is not a substitute.
-
-Keep raw telemetry and supplier costs out of the application response unless
-the signed-in identity is explicitly authorized. The engineer's investigation
-SQL is not a deployed governed-result service. The console must read a
-provisioned governed result, or a verified user-identity query path, rather
-than broadening the existing roles just to make a page load.
-
-The provisioned derived table is **dbo.recall_temperature_status**. It contains
-all 13 affected shipments with no raw events or supplier costs. Display its
-`analysis_time_utc` as the analysis timestamp: this is a snapshot, not a
-continuously refreshed feed. Use the accepted production output from
-Exercise 3.3. After any subsequent replay, have the engineer run and verify
-**contoso_temperature_refresh** again before checking the console. A successful
-replay alone does not update this table; the instructor can help recover a
-failed refresh without granting readers write access.
-The North and CAR-02 roles have separate row rules for the snapshot, but
-their actual application identity propagation still requires the next
-exercise's checks.
-
-**Completion check:** The console displays the current recall data from
-OneLake.
-
-## Exercise 5.3: Verify governed results
-
-Use the supplied manager and partner identities to verify that the application
-respects the security configured in the previous module.
-
-1. Use separate signed-in sessions for the engineer, North manager, and
-   CAR-02 partner. Confirm the displayed identity each time.
-1. Check the manager sees only eight North current stores and its permitted
-   North shipment history. Check the partner sees only CAR-02 shipments and
-   never supplier costs.
-1. Check the governed temperature snapshot separately: the North manager sees
-   eight North shipments with two breaches; the partner sees eight CAR-02
-   shipments with one breach. Neither may receive the other five rows.
-1. Inspect the app's network responses, not only visible table cells. Hidden
-   columns, other carriers' rows, or out-of-region records must not arrive
-   in the browser for the app to filter away.
-1. Repeat the relevant denied-access checks from Exercise 4.3 through the
-   application's actual data path. App sign-in or **Run and interact**
-   permission alone is not proof of downstream OneLake authorization.
-   For the table read API, an unauthorized table or explicitly forbidden
-   column returns not found; the engineer must first confirm that same
-   resource exists. A permitted table with no in-scope rows instead returns
-   a successful empty Arrow result. An expired sign-in or failed read is
-   neither a denial pass nor evidence of no affected stores.
-1. Switch identities and refresh. Results from an earlier session must not
-   remain in shared caches or appear after a lower-privilege sign-in.
-   Do not reuse read-session stream IDs across identities.
-
-**Completion check:** The console changes its rows and columns for each
-identity without application-specific filtering.
+# Module 5: Query Fabric with DuckDB and ClickHouse
 
 ===
 
@@ -967,7 +655,7 @@ scenario.
 | Where else has the supplier's product traveled? | Thirteen stores received YG-2291 after the carrier corrections. The thirteen related production lots reached forty-five stores across five regions. |
 | Were the trucks kept within the cold-chain rule? | After complete-recall replay, SHP-209403 and SHP-209415 have a confirmed continuous breach; the other eleven deliveries have full no-breach coverage. Exactly 4 C and exactly twenty minutes are not breaches. Before the supplement, preserve insufficient-data results. |
 | Which users can see each part? | The North manager sees eight permitted current stores and eight derived shipment results. The CAR-02 partner sees only its carrier's shipments and eight derived results, without supplier costs or raw-event access. Demonstrate denied reads, not only visible page filters. |
-| Can managers investigate through one console? | The deployed app shows the signed-in identity, governed inventory/history/temperature results, analysis timestamp, and authorized supplier-document links. A workspace app item without deployed content does not satisfy this question. |
+| Can managers investigate through one console? | The deployed Recall Console shows inventory, lots by supplier, table access, and authorized supplier-document links. Switching between your account and the service principal shows OneLake returning only SUP-014 lots to the service principal and blocking the tables outside its role, with no filtering in the app. A workspace app item without deployed content is not a running app. |
 
 Use the fixed investigation clock, **2026-10-13 04:00 UTC**, when explaining
 the historical recall. Keep the temperature snapshot's actual analysis time
@@ -988,7 +676,8 @@ separate from observation time and from that fixed scenario clock.
    supplied document path.
 1. Switch to each supplied restricted identity and repeat the positive and
    negative access checks. Confirm that the browser receives no out-of-scope
-   rows or hidden costs.
+   rows or hidden costs. In the Recall Console, switch between **My account**
+   and **Service principal** to show the same comparison.
 1. Record any skipped exercise, missing resource, failed sign-in, or
    unverified integration. Do not mark the workshop complete if the app or
    effective-identity checks were replaced by engineer-only queries.
@@ -1002,6 +691,9 @@ If the instructor confirms that the optional resources are available, explore
 one of these paths:
 
 - Query the governed OneLake data from the supplied external analytics service.
+- Follow the [optional telemetry and pipeline exercises](optional-telemetry.md)
+  when the instructor supplies those resources. Their historical exercise
+  numbers and technical asset names remain unchanged.
 - Ask a question about the governed data using the supplied AI or productivity
   experience.
 
