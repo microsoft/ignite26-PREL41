@@ -41,8 +41,10 @@ Spark session startup and other variable service delays must be measured during
 fresh-instance testing. Record actual start/end times and time waiting for
 Spark, transformations, SQL refresh, telemetry persistence, security
 synchronization, and application deployment. Optional telemetry/pipeline
-work is outside this core allowance. Module 5 has only a handoff title; no
-engine exercises or measured runtime are implied. The rebalanced allowances
+work is outside this core allowance. Module 5 now contains an optional
+ClickHouse workload extension. Allow an additional 45-60 minutes, plus workload
+approval, provisioning, and sync time; this estimate is not a measured runtime.
+The rebalanced allowances
 remain unmeasured planning targets, not evidence that the new sequence fits.
 
 If a checkpoint is missed, repair the supplied environment and record the
@@ -55,7 +57,24 @@ outside this core allowance and do not replace a required exercise.
 ## Environment and permissions
 
 The lab uses Microsoft Fabric and SharePoint. The optional external analytics
-service is outside the required learner path.
+service in Module 5 is outside the required learner path.
+
+Before offering Module 5, provide an approved ClickHouse workload installation
+and trial or funding, an administrator with billing rights for first-time
+installation/terms, permission to create the item and read the selected
+OneLake tables, and organization-level AI enablement and authorized consent.
+Verify that the preview can discover and sync the Module 2 schema-enabled
+Iceberg tables; the published workload walkthrough alone does not establish
+this lab's compatibility. Do not substitute CSV exports or change the authored
+tables to hide an unsupported-format failure.
+
+The extension creates `contoso_clickhouse` and a dedicated ClickHouse
+Cloud service, with five snapshot tables in its `default` database and an
+AI-assisted ordinary reporting view. It does not configure direct catalog SQL,
+continuous replication, MCP, or write-back. OneLake granular permissions do
+not automatically protect the copies. Keep this engineer-only service separate
+from Module 4 restricted-reader demonstrations. Validate the ClickHouse access
+model before any sharing.
 
 The current author review runs directly in the owner's selected Fabric
 workspace, using the [recorded resource inventory](../../CONSOLIDATION-TODO.md#current-fabric-destination)
@@ -150,7 +169,10 @@ Exercises are ordered so each module contributes data or policy used later:
 1. Add shipment history through Iceberg.
 1. Build the Rayfin data app with **My account**, using the supplied verified temperature snapshot.
 1. Apply OneLake Security, then revisit the app with a service principal in `RegionalManagerNorth`.
-1. Hand off to Module 5: Query Fabric with DuckDB and ClickHouse (title only).
+1. Optionally complete Module 5: install/open the ClickHouse workload, discover
+   and sync five OneLake tables, verify SQL recall answers, then use ClickHouse
+   Assistant Agent mode for quality checks, a reporting view, and a regional
+   report. DuckDB's direct-read comparison remains in Exercise 2.4.
 
 The original [telemetry and pipeline exercises](../../instructions/optional-telemetry.md)
 remain optional with unchanged exercise numbers and technical assets.
@@ -178,6 +200,14 @@ Learners use only pre-provisioned accounts and resources. Instructions must not
 expose reusable credentials, require external account creation, or create
 unapproved cloud resources. The lab should reset learner-created Fabric items
 between launches.
+
+Module 5 is an explicit instructor-approved exception for workload-managed
+ClickHouse provisioning, not permission to create personal external accounts
+or purchase subscriptions. Preview ingestion is free, but dedicated compute
+and storage consume trial credits or funding. Keep idling enabled and assign
+the instructor responsibility for item/service cleanup and checking remaining
+organization, trial, and billing resources at lab close. Deleting the Fabric
+ClickHouse item deletes its backing service; do not delete it during resume.
 
 ## Completion
 

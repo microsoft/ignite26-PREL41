@@ -71,6 +71,8 @@ By the end of this session, you will be able to:
 - **Governance:** OneLake Security for row and column access.
 - **Recall application:** Fabric Apps (preview), built on Rayfin, and the OneLake Read API.
 - **AI-assisted investigation:** Microsoft Fabric AI Functions and data agent.
+- **Optional acceleration (Module 5):** ClickHouse workload for Microsoft
+  Fabric (public preview), OneLake snapshot sync, and ClickHouse Assistant.
 
 ### 📚 Continue your learning
 
@@ -84,6 +86,7 @@ Pick your next step based on your learning style:
 | **[Fabric Apps (preview)](https://learn.microsoft.com/fabric/apps/overview)** | Learn more about building applications with Fabric Apps (preview) |
 | **[Microsoft Fabric AI Functions](https://learn.microsoft.com/fabric/data-science/ai-functions/overview?tabs=pandas)** | Learn more about using AI Functions in Microsoft Fabric |
 | **[Data Agent](https://learn.microsoft.com/fabric/data-science/concept-data-agent)** | Learn more about using the Data Agent in Microsoft Fabric |
+| **[ClickHouse workload for Microsoft Fabric](https://clickhouse.com/blog/clickhouse-for-microsoft-fabric)** | Accelerate OneLake snapshot copies and explore the optional Module 5 SQL and AI-agent exercises |
 | **[Ignite 2026 Next Steps](https://aka.ms/ignite26-next-steps)** | Additional session repos and materials from Microsoft Ignite 2026 |
 | **[Microsoft AI Skills Navigator](https://aka.ms/ignite26-asn)** | Discover AI skills, learning paths, and resources for your next step |
 | **[Microsoft Learn](https://aka.ms/ignite26-learn)** | Official documentation and guided learning paths on these topics |
