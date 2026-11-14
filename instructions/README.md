@@ -24,7 +24,10 @@ use it to answer five recall questions:
 1. [Apply OneLake Security, then revisit the app](#module-4-apply-onelake-security-then-revisit-the-app)
 1. [Query Fabric with DuckDB and ClickHouse](#module-5-query-fabric-with-duckdb-and-clickhouse)
 
-Module 5 is a title-only handoff; its exercises are not implemented here.
+Module 5 is an instructor-approved extension with implemented exercises,
+outside the four-hour core schedule. Allow approximately 45-60 additional
+minutes, plus workload approval, provisioning, and sync time; this allowance
+has not been measured in a learner run.
 The [optional telemetry path](optional-telemetry.md) retains the original
 replay and pipeline exercises outside this core sequence.
 
@@ -55,7 +58,9 @@ console that combines the affected stores, shipment history, temperature
 status, and supplier documents while respecting OneLake Security.
 
 > [!Note] This workshop uses pre-provisioned resources. Do not create additional
-> capacities, tenants, or external accounts.
+> capacities, tenants, or external accounts. For Module 5 only, the instructor
+> must approve the ClickHouse workload's automatically provisioned organization
+> and service, its trial or funding, and AI data processing before you begin.
 
 ===
 
@@ -637,6 +642,40 @@ shipments, supplier costs, or ungoverned raw files.
 
 # Module 5: Query Fabric with DuckDB and ClickHouse
 
+Extend the recall investigation with the **ClickHouse workload for Microsoft
+Fabric (public preview)**. You already queried OneLake directly with DuckDB
+in Exercise 2.4. Now discover the same lakehouse tables, sync selected tables
+into ClickHouse for acceleration, and use SQL and ClickHouse Assistant to
+prepare a regional delivery report.
+
+This extension requires workload approval, an approved ClickHouse trial or
+funding, and permission to read the Module 2 tables. Its AI exercise also
+requires enabled AI features and approved consent. Use only the synthetic
+lab data and your engineer account; OneLake's row and column security does
+not automatically transfer to accelerated copies.
+
+Complete the exercises in order:
+
+1. [Exercise 5.1: Add the ClickHouse workload](module-5/exercise-5-1-add-the-clickhouse-workload.md)
+1. [Exercise 5.2: Discover and sync OneLake tables](module-5/exercise-5-2-sync-onelake-tables.md)
+1. [Exercise 5.3: Query the accelerated recall data](module-5/exercise-5-3-query-the-accelerated-data.md)
+1. [Exercise 5.4: Engineer and report with the ClickHouse AI agent](module-5/exercise-5-4-use-the-clickhouse-ai-agent.md)
+
+**Completion check:** Five tables have completed point-in-time syncs.
+ClickHouse returns 9 current holders and 13 historical receiving stores,
+and the reviewed AI-assisted reporting view reconciles to 13 stores.
+
+> [!Note] This preview uses dedicated ClickHouse Cloud compute and storage,
+> not Fabric capacity. Sync is a snapshot copy, not zero-copy querying or
+> continuous replication. Keep the recorded sync time with your results.
+> If approval or preview support is missing, record Module 5 as not run;
+> it does not replace any incomplete core exercise.
+
+For product background, see the
+[public-preview announcement](https://clickhouse.com/blog/clickhouse-for-microsoft-fabric),
+[workload documentation](https://clickhouse.com/docs/integrations/microsoft-fabric),
+and [ClickHouse Assistant guide](https://clickhouse.com/docs/products/cloud/features/ai-ml/agents/assistant/using-ai-chat).
+
 ===
 
 # Complete the workshop
@@ -690,7 +729,7 @@ Module 2 exercises.
 If the instructor confirms that the optional resources are available, explore
 one of these paths:
 
-- Query the governed OneLake data from the supplied external analytics service.
+- Complete Module 5 with the approved ClickHouse workload and AI features.
 - Follow the [optional telemetry and pipeline exercises](optional-telemetry.md)
   when the instructor supplies those resources. Their historical exercise
   numbers and technical asset names remain unchanged.
@@ -698,3 +737,7 @@ one of these paths:
   experience.
 
 > [!Note] Optional extensions are not required to complete the workshop.
+> Leave ClickHouse service idling enabled. At lab close, ask the instructor
+> to confirm cleanup of the Fabric ClickHouse item and its backing service,
+> organization/trial, and billing resources. Closing the browser does not
+> delete resources; deleting the item deletes its service and copied data.

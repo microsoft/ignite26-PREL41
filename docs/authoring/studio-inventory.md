@@ -393,8 +393,44 @@ the browsers used for delivery before launch.
 
 ## Module 5 configuration
 
-Title-only handoff: **Query Fabric with DuckDB and ClickHouse**. No new
-exercises, environments, or provisioning steps are defined.
+**Query Fabric with DuckDB and ClickHouse** is an optional extension beyond
+the four-hour core. Exercises 5.1-5.4 add the native ClickHouse workload,
+OneLake snapshot sync, SQL verification, and ClickHouse Assistant Agent mode.
+DuckDB's direct OneLake exercise remains in Module 2.
+
+Before delivery, arrange:
+
+- Workload availability in the tenant and an administrator with billing
+  rights to install it and accept terms.
+- An approved ClickHouse trial or funded organization. The workload provisions
+  an organization for the workspace and a dedicated Azure service for
+  `contoso_clickhouse`; do not ask learners to create personal accounts
+  or purchase subscriptions.
+- Engineer-account permission to create/open the item and read the selected
+  lakehouse tables, plus approved AI data handling and enabled Assistant.
+- Native picker and sync compatibility with the schema-enabled Module 2
+  Iceberg tables. This remains a release check, not a verified capability of
+  this lab. Do not silently substitute CSV or Delta copies.
+- Five destination tables in the ClickHouse `default` database:
+  `products`, `locations`, `store_inventory`, `lot_history`, and `shipment_history`.
+  The AI exercise adds the ordinary `recall_delivery_summary` view.
+
+These are point-in-time copies, not continuous replication. Preserve sync
+completion times and validate the carrier corrections before querying.
+OneLake granular permissions do not automatically transfer; keep the service
+engineer-only and separate from Module 4 identities.
+
+On resume, reuse the existing item and verified table copies. For stale or
+failed syncs, verify the preview's retry/replacement behavior before writing
+to an existing destination. At close/reset, the instructor must verify
+cleanup of the item and backing service and check remaining organization,
+trial, and billing resources. Item deletion deletes the service and its data.
+Keep idling enabled while the lab is active.
+
+Provisioning, sync, Assistant consent, Cloud-console navigation, cleanup, and
+the additional time allowance still need live verification. Use the
+[Module 5 test matrix](test-matrix.md#module-5-clickhouse-preview-checks) to
+record evidence before enabling this extension in a Lab Profile.
 
 ## Tokens and variables
 

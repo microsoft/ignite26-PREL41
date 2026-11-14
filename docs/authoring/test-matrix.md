@@ -8,7 +8,7 @@ Record evidence for every completed test.
 
 The canonical path now builds Rayfin in Module 3, revisits the app after
 OneLake Security in Module 4 with a learner-created service principal, and
-has a title-only Module 5 handoff. Original telemetry/pipeline exercises are
+includes an optional Module 5 ClickHouse workload extension. Original telemetry/pipeline exercises are
 [optional supporting material](../../instructions/optional-telemetry.md).
 Historical test records below retain their original exercise numbers and
 scopes; they do **not** validate the new apps.
@@ -45,6 +45,31 @@ bundle, whose production dependencies report no advisories.
 
 The table specifies pending integration work, not new passes. Documentation
 checks do not perform Fabric operations or rerun historical tests.
+
+## Module 5 ClickHouse preview checks
+
+The exercises were authored against the published workload and Assistant
+guides. No ClickHouse service was provisioned and no live sync, SQL, or AI run
+is claimed. Complete these checks in the delivery tenant before offering
+the extension; the 45-60-minute allowance excludes approval/provisioning/sync
+and remains unmeasured.
+
+Local documentation checks on 2026-11-12 validated link targets, balanced code
+fences, and the new exercise format. The exact current-holder SELECT from
+Exercise 5.3 also ran in SQLite against the committed reference CSVs and
+returned nine distinct positive-inventory stores: eight North and one East.
+This checks the portable query and fixture, not ClickHouse dialect execution
+or live integration. `git diff --check` passed.
+
+| Check | Status | Required evidence |
+|---|---|---|
+| Workload installation and SSO | Needs Fabric verification | Authorized administrator installs/accepts terms; the lab account opens one item and its matching Cloud service with Microsoft SSO. Record trial/funding approval without personal billing. |
+| OneLake discovery and Iceberg support | Needs Fabric verification | The native Sync picker discovers the schema-enabled SupplierQuality lakehouse and all five selected Module 2 Iceberg tables. Retain any unsupported-format/schema error; no alternate export path. |
+| Snapshot sync and resume | Needs Fabric verification | Five completed source/destination mappings into default, completion times, inferred types, and supported failed/stale-sync recovery without duplicate appends. Source stays unchanged during sync. |
+| Corrected SQL answers | Needs Fabric verification | 16,961 lots; 1,165,374 shipment lines and distinct composite keys; SHP-207158 line 1 points to STR-042; removed shipment IDs have zero rows; 9 current holders (8 North, 1 East); 13 receiving stores including STR-013. |
+| Regional SQL and observed latency | Needs Fabric verification | Saved personal query; regional store counts sum to 13; record observed timings including wake-up, without claiming a controlled benchmark. |
+| Assistant engineering and report | Needs Fabric verification | Approved consent and Agent mode in the same service; zero duplicate dimension/shipment keys and unmatched references; reviewed ordinary view with 13 rows/13 stores; report SQL and available chart reconcile to manual regional results, with recorded snapshot time. |
+| Copy access and cleanup | Needs Fabric verification | No claim that OneLake granular policies transfer. Engineer-only service is not shared with Module 4 identities. Instructor verifies item/service deletion and remaining organization/trial/billing resources at close. |
 
 The owner selected a Fabric-only review on 2026-10-21. Skillable provisioning
 and learner delivery follow approval of the working Fabric lab. Rows marked
