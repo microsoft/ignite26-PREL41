@@ -66,7 +66,7 @@ In Exercise 3.1, **Load data** loaded all 5 tables. You need the workspace ID yo
     notepad rayfin\rayfin.yml
     ```
 
-1. Check that auth and data are `enabled: false`, and that `staticHosting` is `enabled: true` and uses `folder: dist`, `buildCommand: npm run build`, and `assetAccess: protected`. Then close Notepad.
+1. Check that auth is `enabled: true` and data is `enabled: false`, and that `staticHosting` is `enabled: true` and uses `folder: dist`, `buildCommand: npm run build`, and `assetAccess: protected`. Then close Notepad.
 
 ## Task 3: Build the app
 
