@@ -1,0 +1,20 @@
+id: contoso-recall-console
+name: contoso-recall-console
+version: 1.0.0
+services:
+  auth:
+    enabled: true
+    fabric:
+      enabled: true
+    password:
+      enabled: false
+    allowedRedirectUris:
+      - http://localhost:5173
+  data:
+    enabled: false
+  staticHosting:
+    enabled: true
+    folder: dist
+    buildCommand: npm run build
+    indexDocument: index.html
+    assetAccess: protected

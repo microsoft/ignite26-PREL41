@@ -18,6 +18,7 @@
     "react-dom": "19.3.1"
   },
   "devDependencies": {
+    "@microsoft/rayfin-cli": "1.37.0-alpha.2159",
     "@playwright/test": "1.58.2",
     "@tailwindcss/vite": "4.3.4",
     "@types/react": "19.2.14",
