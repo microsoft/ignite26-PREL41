@@ -1,0 +1,9 @@
+apiVersion: v1
+metadata:
+  name: ignite26-prel41
+  displayName: Ignite 2026 PREL41 templates
+  description: Rayfin templates for the Contoso Fresh recall lab
+entries:
+  - path: src/console
+    name: contoso-recall-console
+    description: Recall Console hosted as a protected Fabric App

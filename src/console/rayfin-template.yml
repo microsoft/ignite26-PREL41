@@ -1,0 +1,8 @@
+apiVersion: v1
+metadata:
+  name: contoso-recall-console
+  displayName: Contoso Fresh Recall Console
+  description: Recall Console for the PREL41 lab, a React, Vite, and DuckDB-Wasm app that reads OneLake through the Table API with a pasted bearer token, hosted as a protected Fabric App
+entries:
+  - path: .
+    name: contoso-recall-console

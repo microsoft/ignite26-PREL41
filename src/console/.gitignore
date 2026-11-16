@@ -3,3 +3,12 @@ dist/
 test-results/
 playwright-report/
 *.local
+.env
+.env.fabric-*
+*.tsbuildinfo
+
+# Rayfin generated and secret-bearing files
+rayfin/.env*
+rayfin/.deployments.json
+rayfin/.*.tmp
+rayfin/.temp/
