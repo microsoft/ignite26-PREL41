@@ -6,8 +6,9 @@ and DuckDB-Wasm. It reads OneLake tables through the
 imports the returned Apache Arrow streams into an in-browser DuckDB database,
 and shows the recall evidence for a lot.
 
-This is the Module 3 starter. The completed Rayfin version is in
-[`../console-final`](../console-final/README.md).
+This is the Module 3 starter. It is also a Rayfin template: see
+[Create a Fabric App project](#create-a-fabric-app-project). The completed
+Rayfin version is in [`../console-final`](../console-final/README.md).
 
 ## Why bearer tokens
 
@@ -207,8 +208,50 @@ npm run preview
 
 Serve `dist/` with its DuckDB worker and WASM assets from the same root. The
 hosted app calls the Table API directly from the browser, exactly as in
-development. [`../console-final`](../console-final/README.md) packages the same
-app for Fabric App hosting.
+development. To host it as a Fabric App, create a project from this template
+(below); [`../console-final`](../console-final/README.md) is the completed
+result.
+
+## Create a Fabric App project
+
+This folder is a Rayfin template. `rayfin-template.yml` describes it, and
+`rayfin/rayfin.yml` enables Fabric sign-in and static hosting of `dist/`
+with `assetAccess: protected`. Data, storage, and functions are disabled. The
+Rayfin CLI is a dev dependency pinned to `1.37.0-alpha.2159`.
+
+From this folder, after `npm ci`:
+
+```bash
+npx --no-install rayfin init ../contoso-recall-console --template .
+```
+
+Or from any folder, through the repository's root `rayfin-template.yml`
+(append `#<branch-or-tag>` to the URL to pin a ref):
+
+```bash
+npx -y -p @microsoft/rayfin-cli@1.37.0-alpha.2159 rayfin init contoso-recall-console --template https://github.com/microsoft/ignite26-PREL41.git
+```
+
+`rayfin init` asks no questions. It:
+
+- copies this folder, except `node_modules`, `.git`, and
+  `rayfin-template.yml`, sets the `package.json` name to the project name,
+  and runs `npm install`;
+- keeps `rayfin/rayfin.yml`, changing only `id` and `name` when the project
+  name differs (for example with `--project-name`);
+- adds Rayfin agent files (`AGENTS.md`, `.agents/`, `.mcp.json`,
+  `rayfin/.lockfile.json`) and merges Rayfin's patterns into `.gitignore`.
+
+It adds no Rayfin client packages and keeps the npm scripts, so `npm run dev`
+still starts Vite. Ignore the `npx rayfin dev` hint it prints: that starts a
+Rayfin backend, which this app doesn't use. Deploy from the new folder with
+`npx --no-install rayfin up`, as in
+[Exercise 3.3](../../instructions/module-3/exercise-3-3-deploy-and-verify.md).
+
+Scaffold from a clean folder: `dist/`, `.env.local`, and test reports are
+copied too when present. The pinned prerelease CLI brings transitive npm
+advisories; it is a development tool, and none of it ships in the browser
+bundle.
 
 ## Validation boundaries
 
