@@ -295,8 +295,9 @@ Product behavior is described in:
   application services, authentication configuration, or data connectors.
 - Supply [the plain starter](../../src/console/README.md) and
   [completed Rayfin reference](../../src/console-final/README.md).
-  Learners initialize Rayfin around the starter with the installed pinned
-  CLI; they do not choose a new framework or replace the dashboard.
+  The starter is a Rayfin template: learners create their Fabric App project
+  from it with the pinned CLI the starter installs; they do not choose a new
+  framework or replace the dashboard.
   Generic Fabio item-definition retrieval is not a substitute deployment path.
 - The first-party source and published CLI are available:
   [Rayfin CLI installation](https://github.com/microsoft/rayfin/blob/0979439a7a0806abd0ee48c2619b37f297ae1324/packages/guide/assets/docs/cli/installation.md)
@@ -316,17 +317,18 @@ Product behavior is described in:
   selected experimental `1.37.0-alpha.2159`. Verified tags were
   `preview=1.36.0-beta.0`, `latest=1.36.2`, and
   `experimental=1.37.0-alpha.2159`; a tag is not an exact pin. The app uses
-  no Rayfin runtime packages. Learners run `npx --no-install rayfin init`,
-  clear every service so only static hosting remains, and then remove what
-  `init` adds but the app doesn't use, as listed in the reference README.
+  no Rayfin runtime packages. Learners run
+  `npx --no-install rayfin init ..\contoso-recall-console --template .` from
+  the starter folder. The CLI keeps the template's `rayfin/rayfin.yml` and
+  adds no runtime packages, so there are no prompts and no cleanup.
   Inspect the deployment preview before updating the existing app, then
   verify deployment status and the actual hosted URL. Do not force schema
   removals.
-- `rayfin/rayfin.yml` enables static hosting only, with
+- `rayfin/rayfin.yml` enables Fabric sign-in and static hosting, with
   `assetAccess: protected`: users need permission on the Fabric App item and
-  sign in to Fabric before the page loads. Rayfin auth, data, storage, and
-  functions stay disabled. Keep generated environment/session material out
-  of version control.
+  sign in to Fabric before the page loads. Rayfin data, storage, and
+  functions stay disabled, and the app code doesn't call Rayfin auth. Keep
+  generated environment/session material out of version control.
   Repository ignore rules cover `.env` and Rayfin's `.env.fabric-*` files,
   including nested starter directories, without excluding `rayfin/rayfin.yml`.
 - Keep Fabric SSO and end-user data authorization distinct. An app's

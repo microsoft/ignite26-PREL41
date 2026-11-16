@@ -28,6 +28,19 @@ endpoints:
   token: Chromium 145 and Firefox 146 both returned **401**, not a CORS
   block. Firefox logged a CORS warning.
 
+Local validation on 2026-11-16 of the starter as a Rayfin template, with the
+pinned CLI on macOS:
+
+- `src/console` with the pinned CLI dev dependency: **65 unit and protocol
+  tests** and **9 Chromium browser tests** passed; type-checking and build
+  passed. Both `rayfin.yml` files validated against the CLI's config schema.
+- `npx --no-install rayfin init ../contoso-recall-console --template .` from
+  a clean copy finished in a terminal with no prompts. The generated project
+  kept `rayfin/rayfin.yml` and `package.json` byte-for-byte, added only agent
+  files and `.gitignore` patterns, and passed the same 65 unit and 9 browser
+  tests and the build. `--project-name` rewrote only `id` and `name`, and a
+  `file://` git URL scaffolded through the root `rayfin-template.yml`.
+
 None of this is live Fabric, real-token, service principal creation,
 deployment, or real OneLake permission evidence. No Fabric resources were
 created or changed. The pinned `1.37.0-alpha.2159` CLI has transitive npm

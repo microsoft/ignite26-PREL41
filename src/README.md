@@ -5,11 +5,15 @@
   React, TypeScript, Tailwind, Vite, and DuckDB-Wasm. It opens on a bearer
   sign-in page, reads the OneLake Table API directly with incremental Arrow
   streaming, and docks a DevTools bar (Tables, SQL, Network, Identity) at
-  the bottom, collapsed by default.
+  the bottom, collapsed by default. It is also a Rayfin template: learners
+  create their Fabric App project from it with `rayfin init --template`.
+  The repository's root `rayfin-template.yml` points to it, so the
+  repository URL works as a template source too.
 - [Completed Rayfin console](console-final/README.md) is the independent
   reference, not the learner starting folder. It packages the same app code
-  as a Fabric App with Rayfin static hosting (protected assets, no Rayfin
-  services or functions); reads still go directly to the Table API.
+  as a Fabric App with Rayfin Fabric sign-in and protected static hosting (no
+  Rayfin data, storage, or functions); reads still go directly to the Table
+  API.
 - Both apps use Azure CLI bearer tokens for **My account** and the Module 4
   **Service principal**, keep each identity's data in its own in-memory
   DuckDB database, and require a supplied, verified

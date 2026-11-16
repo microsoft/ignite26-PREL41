@@ -1,6 +1,6 @@
 # Exercise 3.3: Deploy and verify the app
 
-In Exercise 3.2, you turned the console into a Rayfin project and previewed the deployment to your workspace.
+In Exercise 3.2, you created the **contoso-recall-console** Rayfin project from the console template and previewed the deployment to your workspace.
 
 In this exercise, you deploy the console as the **contoso_recall_console** Fabric App, open it from its hosted address, and load the data again with your own token.
 
@@ -8,7 +8,7 @@ In this exercise, you deploy the console as the **contoso_recall_console** Fabri
 
 The hosted app has a different address from the console you ran on the lab VM, so it doesn't have the IDs you saved in Exercise 3.1. You can build your workspace and lakehouse IDs into the app so that its sign-in page fills them in.
 
-1. In the first Terminal tab, copy the example settings file:
+1. In the first Terminal tab, in the **Downloads\contoso-recall-console** folder, copy the example settings file:
 
     ```powershell
     Copy-Item .env.example .env.local

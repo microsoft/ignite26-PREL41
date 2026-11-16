@@ -1,15 +1,19 @@
 # Recall Console (completed Rayfin app)
 
 The completed Module 3 app: the [Module 3 starter](../console/README.md)
-packaged as a **Fabric App** with Rayfin static hosting. Start Module 3 from
-the starter; use this folder as the reference solution.
+packaged as a **Fabric App** with Rayfin. Start Module 3 from the starter;
+use this folder as the reference solution.
 
-The app code is the same as the starter. This folder adds only:
+It matches what `rayfin init` creates from the starter template: the same
+app code with the template's Rayfin files.
 
 | File | Purpose |
 |---|---|
-| [`rayfin/rayfin.yml`](rayfin/rayfin.yml) | Static hosting of `dist/` as a Fabric App, with `assetAccess: protected` |
+| [`rayfin/rayfin.yml`](rayfin/rayfin.yml) | Fabric sign-in and static hosting of `dist/` as a Fabric App, with `assetAccess: protected` |
 | `@microsoft/rayfin-cli` (dev dependency) | Pinned `1.37.0-alpha.2159` CLI used to initialize and deploy |
+
+It omits the template manifest (`rayfin-template.yml`) and the AI assistant
+files that `rayfin init` adds (`AGENTS.md`, `.agents/`, `.mcp.json`).
 
 ## How the app reads data
 
@@ -38,11 +42,12 @@ Tokens stay in the tab's memory and are never stored, logged, or put in a
 
 ## What Rayfin hosting adds
 
-`rayfin.yml` enables only static hosting. Auth, data, storage, and functions
-are disabled. With `assetAccess: protected`, only users who can view the Fabric
-App item can load the app, so visitors sign in to Fabric before the page
-opens. That sign-in controls **who can open the app**; it is not used to read
-OneLake. The data identity is always the pasted bearer token.
+`rayfin.yml` enables Fabric sign-in and static hosting. Data, storage, and
+functions are disabled, and the app code never calls Rayfin auth. With
+`assetAccess: protected`, only users who can view the Fabric App item can load
+the app, so visitors sign in to Fabric before the page opens. That sign-in
+controls **who can open the app**; it is not used to read OneLake. The data
+identity is always the pasted bearer token.
 
 ## Run locally
 
@@ -87,37 +92,21 @@ PLAYWRIGHT_BROWSERS_PATH="$PWD/node_modules/.cache/ms-playwright" npx --no-insta
 The build output is about 76 MiB uncompressed, mostly the two DuckDB-Wasm
 engines. It compresses well below Rayfin's 100 MB deployment limit.
 
-## Initialize Rayfin in your own copy
+## Create this app from the starter
 
-This folder is already initialized. To turn the starter into this app, add the
-pinned CLI and run `rayfin init` in the starter's folder:
-
-```bash
-npm install --save-dev --save-exact @microsoft/rayfin-cli@1.37.0-alpha.2159
-npx --no-install rayfin init
-```
-
-When asked which services to enable, clear every option: the app only needs
-static hosting. Check that the generated `rayfin/rayfin.yml` matches this
-folder's file.
-
-`rayfin init` also adds things this app doesn't use. To match this folder,
-remove them:
+The starter is a Rayfin template. From the starter's folder, after `npm ci`:
 
 ```bash
-npm uninstall @microsoft/rayfin-client @microsoft/rayfin-core @microsoft/rayfin-data
-npm install --save-dev --save-exact @microsoft/rayfin-cli@1.37.0-alpha.2159
-npm pkg set scripts.dev="vite --host 127.0.0.1"
-npm pkg delete scripts.dev:frontend
-rm -rf AGENTS.md .agents .mcp.json rayfin/.lockfile.json rayfin/tsconfig.json
+npx --no-install rayfin init ../contoso-recall-console --template .
 ```
 
-- The Rayfin client packages are for apps that call Rayfin services.
-- `init` installs the latest CLI release; reinstalling keeps it pinned.
-- `init` points `npm run dev` at `rayfin dev`, which starts a Rayfin backend.
-  This app only needs Vite.
-- The agent files and `rayfin/tsconfig.json` support AI assistants, data
-  entities, and functions, which this app doesn't use.
+`rayfin init` asks no questions. It copies the starter into the new folder,
+keeps its `rayfin/rayfin.yml`, and installs the packages. It doesn't add
+Rayfin client packages or change `npm run dev`. Ignore the `npx rayfin dev`
+hint at the end of its output: that starts a Rayfin backend, which this app
+doesn't use. See the
+[starter README](../console/README.md#create-a-fabric-app-project) for the
+repository-URL form and what the command adds.
 
 ## Deploy to Fabric (lab steps)
 
